@@ -1,0 +1,142 @@
+#!/usr/bin/python
+# nerd: Network Entropy & Randomness Daemon
+
+from contextlib import closing
+from dbus import DBusException
+from dbus.mainloop.glib import DBusGMainLoop
+import avahi
+import dbus
+import gobject
+import hashlib
+import socket
+import sys
+import threading
+import time
+
+PKG = "nerd"
+TYPE = "_%s._udp" % PKG
+UDP_IP = ""
+UDP_PORT = 12345
+MSG_SIZE = 4096
+RND_DEVICE = "/dev/urandom"
+
+class ZeroconfService:
+	"""Publish service with zeroconf using avahi."""
+
+	def __init__(self, name, port, stype=TYPE,
+			domain="", host="", text=""):
+		self.name = name
+		self.stype = stype
+		self.domain = domain
+		self.host = host
+		self.port = port
+		self.text = text
+
+	def publish(self):
+		bus = dbus.SystemBus()
+		server = dbus.Interface(
+				bus.get_object(avahi.DBUS_NAME,
+						avahi.DBUS_PATH_SERVER),
+				avahi.DBUS_INTERFACE_SERVER)
+		g = dbus.Interface(
+				bus.get_object(avahi.DBUS_NAME,
+						server.EntryGroupNew()),
+				avahi.DBUS_INTERFACE_ENTRY_GROUP)
+		g.AddService(avahi.IF_UNSPEC, avahi.PROTO_UNSPEC,dbus.UInt32(0),
+				self.name, self.stype, self.domain, self.host,
+				dbus.UInt16(self.port), self.text)
+		g.Commit()
+		self.group = g
+
+	def unpublish(self):
+		self.group.Reset()
+
+class NerdServer(threading.Thread):
+	"""Network entropy and randomness server."""
+
+	def __init__(self):
+		"""Open Socket, publish service, respond to requests."""
+		threading.Thread.__init__(self)
+		self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+		self.sock.bind((UDP_IP, UDP_PORT))
+		self.service = ZeroconfService(name=PKG, port=UDP_PORT)
+		self.service.publish()
+		self.is_running = True
+
+	def run(self):
+		# Listen and respond to incoming requests
+		while self.is_running:
+			try:
+				# Receive message
+				data, addr = self.sock.recvfrom(MSG_SIZE)
+				print "Received [%s] bytes from [%s], checksum [%s]" % (len(data), addr, hashlib.md5(data).hexdigest())
+				# Reply with as much entropy as we recevied,
+				# up to MSG_SIZE maximum
+				with closing(open(RND_DEVICE, "r")) as f:
+					response = f.read(len(data))
+				print "Sending [%s] bytes to [%s], checksum [%s]" % (len(response), addr, hashlib.md5(response).hexdigest())
+				self.sock.sendto(response, addr)
+				# Add the incoming entropy to the pool
+				with closing(open(RND_DEVICE, "w")) as f:
+					f.write(data)
+			except KeyboardInterrupt:
+				self.service.unpublish()
+				quit()
+
+
+class NerdClient(threading.Thread):
+	"""Network entropy and randomness client."""
+
+	def __init__(self):
+		threading.Thread.__init__(self)
+		self.loop = DBusGMainLoop()
+		self.bus = dbus.SystemBus(mainloop=self.loop)
+		self.server = dbus.Interface(self.bus.get_object(avahi.DBUS_NAME, '/'), 'org.freedesktop.Avahi.Server')
+		self.sbrowser = dbus.Interface(self.bus.get_object(avahi.DBUS_NAME, self.server.ServiceBrowserNew(avahi.IF_UNSPEC, avahi.PROTO_UNSPEC, TYPE, 'local', dbus.UInt32(0))), avahi.DBUS_INTERFACE_SERVICE_BROWSER)
+
+	def run(self):
+		self.sbrowser.connect_to_signal("ItemNew", self.handle)
+		gobject.MainLoop().run()
+
+	def fetch(self, *args):
+		if str(args[7]).find(":") >= 0:
+			# BUG: Skip IPv6 addresses for now
+			return
+		with closing(open(RND_DEVICE, "r")) as f:
+			request = f.read(MSG_SIZE)
+		print "Sending [%s] bytes to [%s], checksum [%s]" % (len(request), (str(args[7]), str(args[8])), hashlib.md5(request).hexdigest())
+		sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+		print (str(args[7]), str(args[8]))
+		sock.sendto(request, (args[7], args[8]))
+		data, addr = sock.recvfrom(MSG_SIZE)
+		print "Received [%s] bytes from [%s], checksum [%s]" % (len(data), addr, hashlib.md5(data).hexdigest())
+		with closing(open(RND_DEVICE, "w")) as f:
+			f.write(data)
+
+	def error(self, *args):
+		print "ERROR: %s" % args[0]
+
+	def handle(self, interface, protocol, name, stype, domain, flags):
+		if flags & avahi.LOOKUP_RESULT_LOCAL:
+			# skip local results
+			pass
+		self.server.ResolveService(interface, protocol, name, stype, domain, avahi.PROTO_UNSPEC, dbus.UInt32(0), reply_handler=self.fetch, error_handler=self.error)
+
+
+
+
+if sys.argv[1] == "client":
+	while True:
+		print "Starting client"
+		client = NerdClient()
+		client.start()
+		print "Client started"
+		client._Thread__stop()
+		print "Client stopped"
+		time.sleep(1)
+else:
+	server = NerdServer()
+	server.start()
+	print "Server started"
+	#server._Thread__stop()
+	#print "Server stopped"
