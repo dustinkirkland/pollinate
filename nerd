@@ -2,135 +2,75 @@
 # nerd: Network Exchanged Randomness Daemon
 
 from contextlib import closing
-from dbus import DBusException
-from dbus.mainloop.glib import DBusGMainLoop
-import avahi
-import dbus
-import gobject
 import hashlib
+import multiprocessing
+import signal
 import socket
 import sys
-import threading
 import time
 
 PKG = "nerd"
-TYPE = "_%s._udp" % PKG
 UDP_IP = ""
 UDP_PORT = 6373
 MSG_SIZE = 4096
 RND_DEVICE = "/dev/urandom"
+EXIT_FLAG = 0
+INTERVAL = 60
 
-class ZeroconfService(threading.Thread):
-	"""Publish/discover service with zeroconf using avahi."""
 
-	def __init__(self, name, port, stype=TYPE, domain="", host="", text=""):
-		threading.Thread.__init__(self)
-		# Publishing variables
-		self.name = "%s%s" % (name, port)
-		self.stype = stype
-		self.domain = domain
-		self.host = host
-		self.port = port
-		self.text = text
-		# Discovery variables
-		self.loop = DBusGMainLoop()
-		self.bus = dbus.SystemBus(mainloop=self.loop)
-		self.server = dbus.Interface(self.bus.get_object(avahi.DBUS_NAME, '/'), 'org.freedesktop.Avahi.Server')
-		self.sbrowser = dbus.Interface(self.bus.get_object(avahi.DBUS_NAME, self.server.ServiceBrowserNew(avahi.IF_UNSPEC, avahi.PROTO_UNSPEC, TYPE, 'local', dbus.UInt32(0))), avahi.DBUS_INTERFACE_SERVICE_BROWSER)
-		self.sbrowser.connect_to_signal("ItemNew", self.handle)
-		self.peers = []
-
-	def run(self):
-		server = dbus.Interface(
-				self.bus.get_object(avahi.DBUS_NAME,
-						avahi.DBUS_PATH_SERVER),
-				avahi.DBUS_INTERFACE_SERVER)
-		g = dbus.Interface(
-				self.bus.get_object(avahi.DBUS_NAME,
-						server.EntryGroupNew()),
-				avahi.DBUS_INTERFACE_ENTRY_GROUP)
-		g.AddService(avahi.IF_UNSPEC, avahi.PROTO_UNSPEC,dbus.UInt32(0),
-				self.name, self.stype, self.domain, self.host,
-				dbus.UInt16(self.port), self.text)
-		g.Commit()
-		self.group = g
-		gobject.MainLoop().run()
-
-	def stop(self):
-		self.group.Reset()
-		self._Thread__stop()
-
-	def fetch(self, *args):
-		if str(args[7]).find(":") >= 0:
-			# BUG: Skip IPv6 addresses for now
-			return
-		self.peers.append([str(args[7]), str(args[8])])
-		with closing(open(RND_DEVICE, "r")) as f:
-			request = f.read(MSG_SIZE)
-		print "Sending [%s] bytes to [%s], checksum [%s]" % (len(request), (str(args[7]), str(args[8])), hashlib.md5(request).hexdigest())
-		sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-		print (str(args[7]), str(args[8]))
-		sock.sendto(request, (args[7], args[8]))
+def nerd_server():
+	"""Exchange randomness upon request."""
+	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+	sock.bind((UDP_IP, UDP_PORT))
+	print "Started NerdServer"
+	# Listen and respond to incoming requests
+	while EXIT_FLAG == 0:
+		# Receive message
 		data, addr = sock.recvfrom(MSG_SIZE)
-		print "Received [%s] bytes from [%s], checksum [%s]" % (len(data), addr, hashlib.md5(data).hexdigest())
+		print "Received [%s] bytes from [%s], checksum [%s]" % (
+				len(data), addr, hashlib.md5(data).hexdigest())
+		# Add the incoming entropy to the pool
 		with closing(open(RND_DEVICE, "w")) as f:
 			f.write(data)
-
-	def error(self, *args):
-		print "ERROR: %s" % args[0]
-
-	def handle(self, interface, protocol, name, stype, domain, flags):
-		if flags & avahi.LOOKUP_RESULT_LOCAL:
-			# skip local results
-			pass
-		self.server.ResolveService(interface, protocol, name, stype, domain, avahi.PROTO_UNSPEC, dbus.UInt32(0), reply_handler=self.fetch, error_handler=self.error)
+		# Reply with as much entropy as we recevied,
+		# up to MSG_SIZE maximum
+		with closing(open(RND_DEVICE, "r")) as f:
+			response = f.read(len(data))
+		print "Sending [%s] bytes to [%s], checksum [%s]" % (
+				len(response), addr, hashlib.md5(response).hexdigest())
+		sock.sendto(response, addr)
 
 
-class NerdServer(threading.Thread):
-	"""Network entropy and randomness server."""
-
-	def __init__(self):
-		"""Open Socket, publish service, respond to requests."""
-		threading.Thread.__init__(self)
-		self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-		self.sock.bind((UDP_IP, UDP_PORT))
-		self.service = ZeroconfService(name=PKG, port=UDP_PORT)
-		self.zeroconf = self.service.start()
-
-	def run(self):
-		# Listen and respond to incoming requests
-		try:
-			# Receive message
-			data, addr = self.sock.recvfrom(MSG_SIZE)
-			print "Received [%s] bytes from [%s], checksum [%s]" % (len(data), addr, hashlib.md5(data).hexdigest())
-			# Reply with as much entropy as we recevied,
-			# up to MSG_SIZE maximum
-			with closing(open(RND_DEVICE, "r")) as f:
-				response = f.read(len(data))
-			print "Sending [%s] bytes to [%s], checksum [%s]" % (len(response), addr, hashlib.md5(response).hexdigest())
-			self.sock.sendto(response, addr)
-			# Add the incoming entropy to the pool
-			with closing(open(RND_DEVICE, "w")) as f:
-				f.write(data)
-		except KeyboardInterrupt:
-			self.service.stop()
-			quit()
-
-	def stop(self):
-		self._Thread__stop()
-
-	def peers(self):
-		return self.service.peers
+def nerd_client():
+	"""Periodically initiate randomness exchange with peers."""
+	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+	sock.bind(('', 0))
+	sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+	print "Started NerdClient"
+	while INTERVAL > 0 and EXIT_FLAG == 0:
+		with closing(open(RND_DEVICE, "r")) as f:
+			data = f.read(MSG_SIZE)
+		sock.sendto(data, ('<broadcast>', UDP_PORT))
+		print "Broadcasting [%s] bytes, checksum [%s]" % (
+				len(data), hashlib.md5(data).hexdigest())
+		time.sleep(INTERVAL)
 
 
-if len(sys.argv) == 2 and sys.argv[1]:
-	UDP_PORT = int(sys.argv[1])
+def signal_handler(signal, frame):
+	"""Set exit flag, and exit."""
+	EXIT_FLAG = 1
+	sys.exit(0)
 
-print "Starting server"
-server = NerdServer()
+
+# Handle signals appropriately
+signal.signal(signal.SIGINT, signal_handler)
+signal.signal(signal.SIGTERM, signal_handler)
+signal.signal(signal.SIGABRT, signal_handler)
+
+# Create server and client processes
+server = multiprocessing.Process(target=nerd_server, args=())
+client = multiprocessing.Process(target=nerd_client, args=())
 server.start()
-print "Server started"
-
-while True:
-	print server.peers()
-	time.sleep(1)
+client.start()
+server.join()
+client.join()
