@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # nerd: Network Entropy & Randomness Daemon
+# nerd: Network Exchange of Randomness Daemon
 
 from contextlib import closing
 from dbus import DBusException
@@ -16,7 +17,7 @@ import time
 PKG = "nerd"
 TYPE = "_%s._udp" % PKG
 UDP_IP = ""
-UDP_PORT = 12345
+UDP_PORT = 6373
 MSG_SIZE = 4096
 RND_DEVICE = "/dev/urandom"
 
@@ -83,6 +84,10 @@ class NerdServer(threading.Thread):
 				self.service.unpublish()
 				quit()
 
+	def stop(self):
+		self.is_running = False
+		self._Thread__stop()
+
 
 class NerdClient(threading.Thread):
 	"""Network entropy and randomness client."""
@@ -93,10 +98,23 @@ class NerdClient(threading.Thread):
 		self.bus = dbus.SystemBus(mainloop=self.loop)
 		self.server = dbus.Interface(self.bus.get_object(avahi.DBUS_NAME, '/'), 'org.freedesktop.Avahi.Server')
 		self.sbrowser = dbus.Interface(self.bus.get_object(avahi.DBUS_NAME, self.server.ServiceBrowserNew(avahi.IF_UNSPEC, avahi.PROTO_UNSPEC, TYPE, 'local', dbus.UInt32(0))), avahi.DBUS_INTERFACE_SERVICE_BROWSER)
+		self.is_running = True
 
 	def run(self):
-		self.sbrowser.connect_to_signal("ItemNew", self.handle)
-		gobject.MainLoop().run()
+		if self.is_running:
+			self.sbrowser.connect_to_signal("ItemNew", self.handle)
+			gobject.MainLoop().run()
+
+	def scan(self):
+		protocol = avahi.PROTO_INET
+		interface = avahi.IF_UNSPEC
+		self.b = dbus.Interface(bus.get_object(avahi.DBUS_NAME, server.ServiceBrowserNew(interface, protocol, self.stype, self.domain, dbus.UInt32(0))),  avahi.DBUS_INTERFACE_SERVICE_BROWSER)
+		self.b.connect_to_signal('ItemNew', self.new_service)
+		self.b.connect_to_signal('ItemRemove', self.remove_service)
+
+	def stop(self):
+		self.is_running = False
+		self._Thread__stop()
 
 	def fetch(self, *args):
 		if str(args[7]).find(":") >= 0:
@@ -131,12 +149,12 @@ if sys.argv[1] == "client":
 		client = NerdClient()
 		client.start()
 		print "Client started"
-		client._Thread__stop()
+		client.stop()
 		print "Client stopped"
 		time.sleep(1)
 else:
 	server = NerdServer()
 	server.start()
 	print "Server started"
-	#server._Thread__stop()
+	#server.stop()
 	#print "Server stopped"
