@@ -1,9 +1,9 @@
 #!/usr/bin/python
 #
-#    anerd: Asynchronous Network Exchanged Randomness Daemon
-#    Copyright (C) 2012 Dustin Kirkland <dustin.kirkland@gmail.com>
+#    anerd: Asynchronous Network Exchange Randomness Daemon
+#    Copyright (C) 2012 Dustin Kirkland <kirkland@ubuntu.com>
 #
-#    Authors: Dustin Kirkland <dustin.kirkland@gmail.com>
+#    Authors: Dustin Kirkland <kirkland@ubuntu.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by

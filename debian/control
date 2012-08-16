@@ -1,0 +1,14 @@
+Source: anerd
+Section: admin
+Priority: optional
+Maintainer: Dustin Kirkland <kirkland@ubuntu.com>
+Build-Depends: debhelper (>= 7)
+Standards-Version: 3.9.1
+Homepage: http://launchpad.net/anerd
+
+Package: anerd
+Architecture: all
+Depends: ${misc:Depends}, python
+Description: asynchronous network exchanged randomness daemon
+ This daemon will gather and respond to network requests for
+ entropy on UDP port 26373.
