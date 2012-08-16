@@ -1,37 +1,46 @@
 #!/usr/bin/python
-# nerd: Network Exchanged Randomness Daemon
+# anerd: Asynchronous Network Exchanged Randomness Daemon
 
 from contextlib import closing
+import datetime
 import hashlib
 import multiprocessing
+import os
+import random
 import signal
 import socket
 import sys
 import time
 
-PKG = "nerd"
+PKG = "anerd"
 UDP_IP = ""
-UDP_PORT = 6373
-MSG_SIZE = 4096
+UDP_PORT = 26373
+MSG_SIZE = 64
 RND_DEVICE = "/dev/urandom"
 EXIT_FLAG = 0
 INTERVAL = 60
 
 
-def nerd_server():
+def anerd_server():
 	"""Exchange randomness upon request."""
+	last = datetime.datetime.now()
 	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 	sock.bind((UDP_IP, UDP_PORT))
-	print "Started NerdServer"
+	print "Started aNerdServer"
 	# Listen and respond to incoming requests
 	while EXIT_FLAG == 0:
 		# Receive message
 		data, addr = sock.recvfrom(MSG_SIZE)
-		print "Received [%s] bytes from [%s], checksum [%s]" % (
-				len(data), addr, hashlib.md5(data).hexdigest())
+		# Calculate the microsecond delta between requests
+		delta = (datetime.datetime.now() - last).microseconds
+		# Unpredictably salt the non-secret network input
+		salt = hashlib.md5(str(delta) + os.urandom(MSG_SIZE/2)).digest()
+		print "Received [%s] bytes from [%s], checksum [%s], delta [%s]" % (
+				len(data), addr, hashlib.md5(data).hexdigest(), delta)
 		# Add the incoming entropy to the pool
 		with closing(open(RND_DEVICE, "w")) as f:
-			f.write(data)
+			f.write(salt + data)
+		last = datetime.datetime.now()
 		# Reply with as much entropy as we recevied,
 		# up to MSG_SIZE maximum
 		with closing(open(RND_DEVICE, "r")) as f:
@@ -41,19 +50,19 @@ def nerd_server():
 		sock.sendto(response, addr)
 
 
-def nerd_client():
+def anerd_client():
 	"""Periodically initiate randomness exchange with peers."""
 	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 	sock.bind(('', 0))
 	sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-	print "Started NerdClient"
+	print "Started aNerdClient"
 	while INTERVAL > 0 and EXIT_FLAG == 0:
 		with closing(open(RND_DEVICE, "r")) as f:
 			data = f.read(MSG_SIZE)
 		sock.sendto(data, ('<broadcast>', UDP_PORT))
 		print "Broadcasting [%s] bytes, checksum [%s]" % (
 				len(data), hashlib.md5(data).hexdigest())
-		time.sleep(INTERVAL)
+		time.sleep(INTERVAL + random.random())
 
 
 def signal_handler(signal, frame):
@@ -68,8 +77,8 @@ signal.signal(signal.SIGTERM, signal_handler)
 signal.signal(signal.SIGABRT, signal_handler)
 
 # Create server and client processes
-server = multiprocessing.Process(target=nerd_server, args=())
-client = multiprocessing.Process(target=nerd_client, args=())
+server = multiprocessing.Process(target=anerd_server, args=())
+client = multiprocessing.Process(target=anerd_client, args=())
 server.start()
 client.start()
 server.join()
