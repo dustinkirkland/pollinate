@@ -5,5 +5,8 @@ anerd (1.0) unreleased; urgency=low
     anerd, debian/compat, debian/control, debian/copyright,
     debian/install, debian/rules, debian/source/format, debian/upstart:
     - added packaging
+  * anerd, anerd.conf, debian/install, debian/upstart:
+    - add a configuration file
+    - run as daemon (non-root) user
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 01 Aug 2011 12:02:23 -0500

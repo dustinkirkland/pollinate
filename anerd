@@ -20,6 +20,7 @@
 from contextlib import closing
 import datetime
 import hashlib
+import json
 import multiprocessing
 import os
 import random
@@ -28,38 +29,34 @@ import socket
 import sys
 import time
 
+
 PKG = "anerd"
-UDP_IP = ""
-UDP_PORT = 26373
-MSG_SIZE = 64
-RND_DEVICE = "/dev/urandom"
 EXIT_FLAG = 0
-INTERVAL = 60
 
 
 def anerd_server():
 	"""Exchange randomness upon request."""
 	last = datetime.datetime.now()
 	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-	sock.bind((UDP_IP, UDP_PORT))
+	sock.bind((CONFIG["UDP_IP"], CONFIG["UDP_PORT"]))
 	print "Started aNerdServer"
 	# Listen and respond to incoming requests
 	while EXIT_FLAG == 0:
 		# Receive message
-		data, addr = sock.recvfrom(MSG_SIZE)
+		data, addr = sock.recvfrom(CONFIG["MSG_SIZE"])
 		# Calculate the microsecond delta between requests
 		delta = (datetime.datetime.now() - last).microseconds
 		# Unpredictably salt the non-secret network input
-		salt = hashlib.md5(str(delta) + os.urandom(MSG_SIZE/2)).digest()
+		salt = hashlib.md5(str(delta) + os.urandom(CONFIG["MSG_SIZE"] / 2)).digest()
 		print "Received [%s] bytes from [%s], checksum [%s], delta [%s]" % (
 				len(data), addr, hashlib.md5(data).hexdigest(), delta)
 		# Add the incoming entropy to the pool
-		with closing(open(RND_DEVICE, "w")) as f:
+		with closing(open(CONFIG["RND_DEVICE"], "w")) as f:
 			f.write(salt + data)
 		last = datetime.datetime.now()
 		# Reply with as much entropy as we recevied,
 		# up to MSG_SIZE maximum
-		with closing(open(RND_DEVICE, "r")) as f:
+		with closing(open(CONFIG["RND_DEVICE"], "r")) as f:
 			response = f.read(len(data))
 		print "Sending [%s] bytes to [%s], checksum [%s]" % (
 				len(response), addr, hashlib.md5(response).hexdigest())
@@ -72,13 +69,13 @@ def anerd_client():
 	sock.bind(('', 0))
 	sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 	print "Started aNerdClient"
-	while INTERVAL > 0 and EXIT_FLAG == 0:
-		with closing(open(RND_DEVICE, "r")) as f:
-			data = f.read(MSG_SIZE)
-		sock.sendto(data, ('<broadcast>', UDP_PORT))
+	while CONFIG["INTERVAL"] > 0 and EXIT_FLAG == 0:
+		with closing(open(CONFIG["RND_DEVICE"], "r")) as f:
+			data = f.read(CONFIG["MSG_SIZE"])
+		sock.sendto(data, ('<broadcast>', CONFIG["UDP_PORT"]))
 		print "Broadcasting [%s] bytes, checksum [%s]" % (
 				len(data), hashlib.md5(data).hexdigest())
-		time.sleep(INTERVAL + random.random())
+		time.sleep(CONFIG["INTERVAL"] + random.random())
 
 
 def signal_handler(signal, frame):
@@ -91,6 +88,10 @@ def signal_handler(signal, frame):
 signal.signal(signal.SIGINT, signal_handler)
 signal.signal(signal.SIGTERM, signal_handler)
 signal.signal(signal.SIGABRT, signal_handler)
+
+f = open("/etc/%s.conf" % PKG)
+CONFIG = json.load(f)
+f.close()
 
 # Create server and client processes
 server = multiprocessing.Process(target=anerd_server, args=())
