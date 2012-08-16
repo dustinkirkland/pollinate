@@ -1,2 +1,2 @@
 anerd usr/sbin
-anerd.conf etc
+etc/default/anerd

@@ -9,4 +9,5 @@ stop on runlevel [!2345]
 respawn
 respawn limit 10 5
 
-exec sudo -u daemon anerd $OPTS
+# Modify default options here
+exec sudo -u daemon anerd -d /dev/urandom -s 64 -p 26373 -i 60
