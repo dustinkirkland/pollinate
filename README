@@ -1,0 +1,9 @@
+To build:
+	$ autoreconf -fvi
+	$ automake
+	$ ./configure
+	$ make
+	$ make install
+
+To run:
+	$ anerd

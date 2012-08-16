@@ -9,4 +9,4 @@ stop on runlevel [!2345]
 respawn
 respawn limit 10 5
 
-exec sudo -u daemon anerd
+exec sudo -u daemon anerd $OPTS

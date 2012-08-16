@@ -8,5 +8,12 @@ anerd (1.0) unreleased; urgency=low
   * anerd, anerd.conf, debian/install, debian/upstart:
     - add a configuration file
     - run as daemon (non-root) user
+  * anerd.c, AUTHORS, ChangeLog, configure.ac, COPYING,
+    debian/copyright, debian/upstart, INSTALL, Makefile.am, NEWS,
+    README:
+    - ported from python to C
+    - added autoconf/automake build
+    - changed license from GPLv3 to Apache2.0 for portability to other
+      UNIX platforms
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 01 Aug 2011 12:02:23 -0500
