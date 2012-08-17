@@ -60,8 +60,6 @@ int anerd_server(char *device, int size, int port) {
 	struct timeval tv;
 	struct timezone tz;
 	FILE *fp;
-	/* make process daemon */
-	daemonize();
 	/* Open the UDP socket */
 	if ((sock = socket(AF_INET, SOCK_DGRAM, 0)) == -1) {
 		perror("Socket");
@@ -87,6 +85,8 @@ int anerd_server(char *device, int size, int port) {
 		exit(1);
 	}
 	addr_len = sizeof(struct sockaddr);
+	/* Make process into a daemon */
+	daemonize();
 	/* Seed the local, time-based salt; peers won't know this */
 	gettimeofday(&tv, &tz);
 	last_usec = 1000000 * tv.tv_usec + tv.tv_usec;
@@ -131,8 +131,6 @@ int anerd_client(char *device, int size, int port, int interval) {
 	char *data;
 	FILE *fp;
 	int broadcast = 1;
-	/* make process daemon */
-	daemonize();
 	/* Allocate and zero a data buffer to the chosen size */
 	if ((data = calloc(size, sizeof(char))) == NULL) {
 		perror("calloc");
@@ -156,6 +154,8 @@ int anerd_client(char *device, int size, int port, int interval) {
 		close(sock);
 		exit(1);
 	}
+	/* Make process into a daemon */
+	daemonize();
 	/* Periodically trigger a network entropy exchange */
 	while (interval > 0) {
 		/* Donate some entropy to the local networks */
@@ -225,7 +225,7 @@ int main(int argc, char *argv[]) {
 		}
 	}
 	/* Set up syslog */
-	openlog ("anerd", LOG_CONS | LOG_PID | LOG_NDELAY, LOG_DAEMON);
+	openlog ("anerd", LOG_PERROR | LOG_CONS | LOG_PID | LOG_NDELAY, LOG_DAEMON);
 	/* fork off process */
 	int pid = fork();
 	if (pid == 0) {
