@@ -18,5 +18,7 @@ anerd (1.0) unreleased; urgency=low
   * anerd.conf, debian/control, debian/install, debian/upstart:
     - drop conf file, add options to upstart script
     - update build deps
+  * anerd.c:
+    - use syslog, open files/sockets only once per fork
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 01 Aug 2011 12:02:23 -0500
