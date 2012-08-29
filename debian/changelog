@@ -24,5 +24,7 @@ anerd (1.0) unreleased; urgency=low
     - catch all responses to a client broadcast
     - use a common function for salt calculation
     - implement a very simple checksum of random data
+    - use uint64_t for platform compatibility
+    - add entropy to pool in client read
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 01 Aug 2011 12:02:23 -0500
