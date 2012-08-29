@@ -34,6 +34,9 @@ anerd (1.0) unreleased; urgency=low
     - Modified code to fork twice then kill the parent process,
       freeing the terminal that spawns the daemons, added daemonize()
       function to safely daemonize the program.
+    - Improved entering into daemon status by moving daemon() call to
+      after intilization of server and client, so that errors
+      encountered in intilization are written to the terminal.
 
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 01 Aug 2011 12:02:23 -0500

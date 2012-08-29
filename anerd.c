@@ -91,8 +91,6 @@ int anerd_server(char *device, int size, int port) {
 	char *data;
 	struct sockaddr_in server_addr, client_addr;
 	FILE *fp;
-	/* make process daemon */
-	daemonize();
 	/* Open the UDP socket */
 	if ((sock = socket(AF_INET, SOCK_DGRAM, 0)) == -1) {
 		perror("Socket");
@@ -118,6 +116,8 @@ int anerd_server(char *device, int size, int port) {
 		exit(1);
 	}
 	addr_len = sizeof(struct sockaddr);
+	/* Make process into a daemon */
+	daemonize();
 	while (1) {
 		/* Receive data over our UDP socket */
 		bytes_read = recvfrom(sock, data, size, 0, (struct sockaddr *)&client_addr, &addr_len);
@@ -162,8 +162,6 @@ int anerd_client(char *device, int size, int port, int interval) {
 	struct pollfd ufds;
 	uint64_t salt = 0;
 	addr_len = sizeof(struct sockaddr);
-	/* make process daemon */
-	daemonize();
 	/* Allocate and zero a data buffer to the chosen size */
 	if ((data = calloc(size, sizeof(char))) == NULL) {
 		perror("calloc");
@@ -189,6 +187,8 @@ int anerd_client(char *device, int size, int port, int interval) {
 		close(sock);
 		exit(1);
 	}
+	/* Make process into a daemon */
+	daemonize();
 	/* Periodically trigger a network entropy exchange */
 	while (interval > 0) {
 		/* Donate some entropy to the local networks */
@@ -269,7 +269,7 @@ int main(int argc, char *argv[]) {
 		}
 	}
 	/* Set up syslog */
-	openlog ("anerd", LOG_CONS | LOG_PID | LOG_NDELAY, LOG_DAEMON);
+	openlog ("anerd", LOG_PERROR | LOG_CONS | LOG_PID | LOG_NDELAY, LOG_DAEMON);
 	/* fork off process */
 	int pid = fork();
 	if (pid == 0) {
