@@ -28,6 +28,7 @@ limitations under the License.
 #include <unistd.h>
 #include <errno.h>
 #include <poll.h>
+#include <pwd.h>
 #include <string.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -40,6 +41,10 @@ limitations under the License.
 #define DEFAULT_PORT 26373
 #define DEFAULT_INTERVAL 60
 #define DEFAULT_TIMEOUT 250
+#define DAEMON_USER "daemon"
+
+/* Daemonize process properly */
+void daemonize();
 
 /*
 anerd salt:
@@ -86,6 +91,8 @@ int anerd_server(char *device, int size, int port) {
 	char *data;
 	struct sockaddr_in server_addr, client_addr;
 	FILE *fp;
+	/* make process daemon */
+	daemonize();
 	/* Open the UDP socket */
 	if ((sock = socket(AF_INET, SOCK_DGRAM, 0)) == -1) {
 		perror("Socket");
@@ -155,6 +162,8 @@ int anerd_client(char *device, int size, int port, int interval) {
 	struct pollfd ufds;
 	uint64_t salt = 0;
 	addr_len = sizeof(struct sockaddr);
+	/* make process daemon */
+	daemonize();
 	/* Allocate and zero a data buffer to the chosen size */
 	if ((data = calloc(size, sizeof(char))) == NULL) {
 		perror("calloc");
@@ -260,12 +269,60 @@ int main(int argc, char *argv[]) {
 		}
 	}
 	/* Set up syslog */
-	openlog ("anerd", LOG_PERROR | LOG_CONS | LOG_PID | LOG_NDELAY, LOG_DAEMON);
-	if (fork() == 0) {
+	openlog ("anerd", LOG_CONS | LOG_PID | LOG_NDELAY, LOG_DAEMON);
+	/* fork off process */
+	int pid = fork();
+	if (pid == 0) {
+		/* if process is child */
 		/* Fork a client process */
 		anerd_client(device, size, port, interval);
-	} else {
-		/* Fork a server process */
-		anerd_server(device, size, port);
+	} else if (pid > 0) {
+		/* if process is parent */
+		/* fork off another process */
+		int pid2 = fork();
+		if (pid2 == 0) {
+			/* if process is child */
+			/* Fork a server process */
+			anerd_server(device, size, port);
+		} else if (pid2 > 0) {
+			/* if process is parent */
+			/* exit, freeing terminal that called program */
+			exit(0);
+		} else if (pid2 < 0) {
+			/* if the second fork() call failed */
+			/* exit because of error */
+			exit(1);
+		}
+	} else if (pid < 0) {
+		/* if the fork() call failed */
+		/* exit because of error */
+		exit(1);
 	}
+}
+
+void daemonize() {
+	/* Drop user priv if run as root */
+	if ((getuid() == 0) || (geteuid == 0)) {
+		struct passwd *pw = getpwnam(DAEMON_USER);
+		if (pw) {
+			syslog(LOG_NOTICE, "Setting User To: " DAEMON_USER);
+			setuid(pw->pw_uid);
+		}
+	}
+	/* Change current directory to / so current directory is not locked */
+	if ((chdir("/")) < 0) {
+		perror("chdir() failed");
+		exit(1);
+	}
+	/* Change file mode mask */
+	umask(0);
+	/* Run setsid() so that daemon is no longer child of spawning process */
+	if (setsid() < 0) {
+		perror("setsid() failed");
+		exit(1);
+	}
+	/* Close stdin, stdout, stderr */
+	close(STDIN_FILENO);
+	close(STDOUT_FILENO);
+	close(STDERR_FILENO);
 }
