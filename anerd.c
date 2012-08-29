@@ -27,6 +27,7 @@ limitations under the License.
 #include <stdio.h>
 #include <unistd.h>
 #include <errno.h>
+#include <poll.h>
 #include <string.h>
 #include <stdlib.h>
 #include <syslog.h>
@@ -37,6 +38,38 @@ limitations under the License.
 #define DEFAULT_DEVICE "/dev/urandom"
 #define DEFAULT_PORT 26373
 #define DEFAULT_INTERVAL 60
+#define DEFAULT_TIMEOUT 250
+
+/*
+anerd salt:
+*/
+double anerd_salt(double salt) {
+	struct timeval tv;
+	struct timezone tz;
+	double this_usec;
+	/* Update local timestamp, generate new salt */
+	gettimeofday(&tv, &tz);
+	this_usec = 1000000 * tv.tv_usec + tv.tv_usec;
+	if (salt == 0) {
+		srand((unsigned int)time(NULL));
+		salt = rand();
+	}
+	/* Let it wrap */
+	salt = salt * this_usec;
+	return salt;
+}
+
+/*
+anerd crc:
+*/
+int anerd_crc(char *data, int len) {
+	int i = 0;
+	int crc = 0;
+	for (i=0; i<len; i++) {
+		crc += (unsigned char)data[i];
+	}
+	return crc;
+}
 
 /*
 anerd server:
@@ -49,11 +82,8 @@ int anerd_server(char *device, int size, int port) {
 	int sock;
 	int addr_len, bytes_read;
 	double salt;
-	int last_usec, this_usec;
 	char *data;
 	struct sockaddr_in server_addr, client_addr;
-	struct timeval tv;
-	struct timezone tz;
 	FILE *fp;
 	/* Open the UDP socket */
 	if ((sock = socket(AF_INET, SOCK_DGRAM, 0)) == -1) {
@@ -76,34 +106,30 @@ int anerd_server(char *device, int size, int port) {
 	server_addr.sin_addr.s_addr = INADDR_ANY;
 	bzero(&(server_addr.sin_zero),8);
 	if (bind(sock,(struct sockaddr *)&server_addr, sizeof(struct sockaddr)) == -1) {
-		perror("Bind");
+		perror("bind");
 		exit(1);
 	}
 	addr_len = sizeof(struct sockaddr);
-	/* Seed the local, time-based salt; peers won't know this */
-	gettimeofday(&tv, &tz);
-	last_usec = 1000000 * tv.tv_usec + tv.tv_usec;
 	while (1) {
 		/* Receive data over our UDP socket */
 		bytes_read = recvfrom(sock, data, size, 0, (struct sockaddr *)&client_addr, &addr_len);
 		data[bytes_read] = '\0';
-		/* Update local timestamp, generate new salt */
-		gettimeofday(&tv, &tz);
-		this_usec = 1000000 * tv.tv_usec + tv.tv_usec;
-		salt = last_usec * this_usec;
-		last_usec = this_usec;
+		salt = anerd_salt(salt);
 		/* Logging/debug message */
-		syslog(LOG_INFO, "Received [%d] bytes from [%s:%d]\n", bytes_read, inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
+		syslog(LOG_INFO, "Server recv bcast [%d] bytes [%d] from [%s:%d]\n", bytes_read, anerd_crc(data, bytes_read), inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
 		fflush(stdout);
 		/* Mix incoming entropy + salt into pool */
 		fwrite(data, sizeof(char), bytes_read, fp);
 		fwrite(&salt, sizeof(double), 1, fp);
 		fflush(fp);
 		/* Obtain some entropy for transmission */
-		fread(data, sizeof(char), bytes_read, fp);
-		/* Return the favor, sending entropy back to the initiator */
-		sendto(sock, data, strlen(data), 0, (struct sockaddr *)&client_addr, sizeof(struct sockaddr));
-		syslog(LOG_INFO, "Transmit [%d] bytes to [%s:%d]\n", bytes_read, inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
+		if (fread(data, bytes_read, sizeof(char), fp) > 0) {
+			/* Return the favor, sending entropy back to the initiator */
+			sendto(sock, data, bytes_read, 0, (struct sockaddr *)&client_addr, sizeof(struct sockaddr));
+			syslog(LOG_INFO, "Server sent direct [%d] bytes [%d] to [%s:%d]\n", bytes_read, anerd_crc(data, bytes_read), inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
+		} else {
+			perror("fread");
+		}
 	}
 	/* Should never get here; clean up if we do */
 	free(data);
@@ -120,10 +146,13 @@ anerd client:
 */
 int anerd_client(char *device, int size, int port, int interval) {
 	int sock;
+	int addr_len, bytes_read;
 	struct sockaddr_in server_addr;
 	char *data;
 	FILE *fp;
 	int broadcast = 1;
+	struct pollfd ufds;
+	addr_len = sizeof(struct sockaddr);
 	/* Allocate and zero a data buffer to the chosen size */
 	if ((data = calloc(size, sizeof(char))) == NULL) {
 		perror("calloc");
@@ -133,6 +162,8 @@ int anerd_client(char *device, int size, int port, int interval) {
 	if ((sock = socket(AF_INET, SOCK_DGRAM, 0)) == -1) {
 		perror("socket");
 	}
+	ufds.fd = sock;
+	ufds.events = POLLIN | POLLPRI;
 	/* Configure the socket for broadcast */
 	if (setsockopt(sock, SOL_SOCKET, SO_BROADCAST, &broadcast, sizeof broadcast) == -1) {
 		perror("setsockopt (SO_BROADCAST)");
@@ -150,14 +181,20 @@ int anerd_client(char *device, int size, int port, int interval) {
 	/* Periodically trigger a network entropy exchange */
 	while (interval > 0) {
 		/* Donate some entropy to the local networks */
-		if (fread(data, 1, size, fp) > 0) {
-			syslog(LOG_INFO, "Donated  [%d] bytes to [%s:%d]\n", size, inet_ntoa(server_addr.sin_addr), ntohs(server_addr.sin_port));
+		if (fread(data, size, sizeof(char), fp) > 0) {
+			syslog(LOG_INFO, "Client sent bcast [%d] bytes [%d] to [%s:%d]\n", size, anerd_crc(data, size), inet_ntoa(server_addr.sin_addr), ntohs(server_addr.sin_port));
 			sendto(sock, data, size, 0, (struct sockaddr *)&server_addr, sizeof(struct sockaddr));
 		} else {
 			perror("fread");
 		}
-		/* Clean-up */
-		sleep(interval);
+		/* Poll for responses */
+		while (poll(&ufds, 1, interval*1000) > 0) {
+			/* Accept data over our UDP socket */
+			bytes_read = recvfrom(sock, data, size, 0, (struct sockaddr *)&server_addr, &addr_len);
+			data[bytes_read] = '\0';
+			/* Logging/debug message */
+			syslog(LOG_INFO, "Client recv direct [%d] bytes [%d] from [%s:%d]\n", bytes_read, anerd_crc(data, bytes_read), inet_ntoa(server_addr.sin_addr), ntohs(server_addr.sin_port));
+		}
 	}
 	/* Should never get here; clean up if we do */
 	close(sock);
