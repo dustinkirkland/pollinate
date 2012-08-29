@@ -52,16 +52,12 @@ anerd salt:
 uint64_t anerd_salt(uint64_t salt) {
 	struct timeval tv;
 	struct timezone tz;
-	uint64_t this_usec;
+	uint64_t salt;
 	/* Update local timestamp, generate new salt */
 	gettimeofday(&tv, &tz);
-	this_usec = 1000000 * tv.tv_usec + tv.tv_usec;
-	if (salt == 0) {
-		srand((unsigned int)time(NULL));
-		salt = rand();
-	}
-	/* Let it wrap */
-	salt = salt ^ this_usec;
+	/* XOR data together, mixing salt over time */
+	srandom(1000000 * tv.tv_sec + tv.tv_usec);
+	salt ^= random();
 	return salt;
 }
 

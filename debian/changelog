@@ -27,6 +27,7 @@ anerd (1.0) unreleased; urgency=low
     - implement a very simple checksum of random data
     - use uint64_t for platform compatibility
     - add entropy to pool in client read
+    - simplify salt generation
 
   [ Wesley Wiedenmeier ]
   * anerd.c:
@@ -37,6 +38,5 @@ anerd (1.0) unreleased; urgency=low
     - Improved entering into daemon status by moving daemon() call to
       after intilization of server and client, so that errors
       encountered in intilization are written to the terminal.
-
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 01 Aug 2011 12:02:23 -0500
