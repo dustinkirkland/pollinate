@@ -211,21 +211,52 @@ int anerd_client(char *device, int size, int port, int interval) {
 }
 
 int main(int argc, char *argv[]) {
-	int i;
+	int arg;
 	int interval = DEFAULT_INTERVAL;
 	int size = DEFAULT_SIZE;
 	int port = DEFAULT_PORT;
 	char *device = DEFAULT_DEVICE;
-	/* Very naive command-line argument handling */
-	for (i=0; i<argc; i++) {
-		if (strncmp(argv[i], "-d", 2) == 0) {
-			device = argv[++i];
-		} else if (strncmp(argv[i], "-i", 2) == 0) {
-			interval = atoi(argv[++i]);
-		} else if (strncmp(argv[i], "-p", 2) == 0) {
-			port = atoi(argv[++i]);
-		} else if (strncmp(argv[i], "-s", 2) == 0) {
-			size = atoi(argv[++i]);
+	/* Getopt command-line argument handling */
+	while ((arg = getopt(argc, argv, "d:i:p:s:")) != -1) {
+		switch (arg) {
+			case 'd':
+				device = optarg;
+				break;
+			case 'i':
+				if (isdigit(optarg[0])) {
+					interval = atoi(optarg);
+				} else {
+					fprintf(stderr, "Option -i requires a integer argument.\n");
+					return 1;
+				}
+				break;
+			case 'p':
+				if (isdigit(optarg[0])) {
+					port = atoi(optarg);
+				} else {
+					fprintf(stderr, "Option -p requires a integer argument.\n");
+					return 1;
+				}
+				break;
+			case 's':
+				if (isdigit(optarg[0])) {
+					size = atoi(optarg);
+				} else {
+					fprintf(stderr, "Option -p requires a integer argument.\n");
+					return 1;
+				}
+				break;
+			case '?':
+				if (
+						(optopt == 'd') || (optopt == 'i') ||
+						(optopt == 'p') || (optopt == 's')) {
+					fprintf(stderr, "Option -%c requires an argument.\n", optopt);
+				} else {
+					fprintf(stderr, "Unknown option -%c.\n", optopt);
+				}
+				return 1;
+			default:
+				abort();
 		}
 	}
 	/* Set up syslog */

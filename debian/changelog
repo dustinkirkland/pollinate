@@ -1,5 +1,6 @@
 anerd (1.0) unreleased; urgency=low
 
+  [ Dustin Kirkland ]
   * initial release
   * === added directory debian, === added directory debian/source,
     anerd, debian/compat, debian/control, debian/copyright,
@@ -26,5 +27,9 @@ anerd (1.0) unreleased; urgency=low
     - implement a very simple checksum of random data
     - use uint64_t for platform compatibility
     - add entropy to pool in client read
+
+  [ Wesley Wiedenmeier ]
+  * anerd.c:
+    - use getopt for command line parsing
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 01 Aug 2011 12:02:23 -0500
