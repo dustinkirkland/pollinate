@@ -28,6 +28,7 @@ anerd (1.0) unreleased; urgency=low
     - add entropy to pool in client read
     - simplify salt generation
     - simplify log printing
+    - whitespace changes only, 80 char width
 
   [ Wesley Wiedenmeier ]
   * anerd.c:
