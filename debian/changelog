@@ -21,13 +21,13 @@ anerd (1.0) unreleased; urgency=low
     - update build deps
   * anerd.c:
     - use syslog, open files/sockets only once per fork
-  * anerd.c:
     - catch all responses to a client broadcast
     - use a common function for salt calculation
     - implement a very simple checksum of random data
     - use uint64_t for platform compatibility
     - add entropy to pool in client read
     - simplify salt generation
+    - simplify log printing
 
   [ Wesley Wiedenmeier ]
   * anerd.c:

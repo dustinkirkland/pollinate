@@ -52,7 +52,6 @@ anerd salt:
 uint64_t anerd_salt(uint64_t salt) {
 	struct timeval tv;
 	struct timezone tz;
-	uint64_t salt;
 	/* Update local timestamp, generate new salt */
 	gettimeofday(&tv, &tz);
 	/* XOR data together, mixing salt over time */
@@ -119,18 +118,18 @@ int anerd_server(char *device, int size, int port) {
 		bytes_read = recvfrom(sock, data, size, 0, (struct sockaddr *)&client_addr, &addr_len);
 		data[bytes_read] = '\0';
 		/* Logging/debug message */
-		syslog(LOG_INFO, "Server recv bcast [%d] bytes [%d] from [%s:%d]\n", bytes_read, anerd_crc(data, bytes_read), inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
+		syslog(LOG_INFO, "Server recv bcast  [bytes=%d] [sum=%x] from [%s:%d]\n", bytes_read, anerd_crc(data, bytes_read), inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
 		fflush(stdout);
 		/* Mix incoming entropy + salt into pool */
 		salt = anerd_salt(salt);
-		fwrite(data, bytes_read, 1, fp);
 		fwrite(&salt, sizeof(uint64_t), 1, fp);
+		fwrite(data, bytes_read, 1, fp);
 		fflush(fp);
 		/* Obtain some entropy for transmission */
 		if (fread(data, bytes_read, sizeof(char), fp) > 0) {
 			/* Return the favor, sending entropy back to the initiator */
 			sendto(sock, data, bytes_read, 0, (struct sockaddr *)&client_addr, sizeof(struct sockaddr));
-			syslog(LOG_INFO, "Server sent direct [%d] bytes [%d] to [%s:%d]\n", bytes_read, anerd_crc(data, bytes_read), inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
+			syslog(LOG_INFO, "Server sent direct [bytes=%d] [sum=%x] to [%s:%d]\n", bytes_read, anerd_crc(data, bytes_read), inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
 		} else {
 			perror("fread");
 		}
@@ -189,7 +188,7 @@ int anerd_client(char *device, int size, int port, int interval) {
 	while (interval > 0) {
 		/* Donate some entropy to the local networks */
 		if (fread(data, size, sizeof(char), fp) > 0) {
-			syslog(LOG_INFO, "Client sent bcast [%d] bytes [%d] to [%s:%d]\n", size, anerd_crc(data, size), inet_ntoa(server_addr.sin_addr), ntohs(server_addr.sin_port));
+			syslog(LOG_INFO, "Client sent bcast  [bytes=%d] [sum=%x] to [%s:%d]\n", size, anerd_crc(data, size), inet_ntoa(server_addr.sin_addr), ntohs(server_addr.sin_port));
 			sendto(sock, data, size, 0, (struct sockaddr *)&server_addr, sizeof(struct sockaddr));
 		} else {
 			perror("fread");
@@ -200,11 +199,11 @@ int anerd_client(char *device, int size, int port, int interval) {
 			bytes_read = recvfrom(sock, data, size, 0, (struct sockaddr *)&server_addr, &addr_len);
 			data[bytes_read] = '\0';
 			/* Logging/debug message */
-			syslog(LOG_INFO, "Client recv direct [%d] bytes [%d] from [%s:%d]\n", bytes_read, anerd_crc(data, bytes_read), inet_ntoa(server_addr.sin_addr), ntohs(server_addr.sin_port));
+			syslog(LOG_INFO, "Client recv direct [bytes=%d] [sum=%x] from [%s:%d]\n", bytes_read, anerd_crc(data, bytes_read), inet_ntoa(server_addr.sin_addr), ntohs(server_addr.sin_port));
 			/* Mix incoming entropy + salt into pool */
 			salt = anerd_salt(salt);
-			fwrite(data, size, 1, fp);
 			fwrite(&salt, sizeof(salt), 1, fp);
+			fwrite(data, size, 1, fp);
 			fflush(fp);
 		}
 	}
