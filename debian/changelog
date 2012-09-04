@@ -1,4 +1,4 @@
-anerd (1.0) unreleased; urgency=low
+anerd (1.0-0ubuntu1) quantal; urgency=low
 
   [ Dustin Kirkland ]
   * initial release
@@ -42,4 +42,4 @@ anerd (1.0) unreleased; urgency=low
       after intilization of server and client, so that errors
       encountered in intilization are written to the terminal.
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 01 Aug 2011 12:02:23 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 04 Sep 2012 18:14:40 -0500
