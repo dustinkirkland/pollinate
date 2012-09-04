@@ -29,6 +29,8 @@ anerd (1.0) unreleased; urgency=low
     - simplify salt generation
     - simplify log printing
     - whitespace changes only, 80 char width
+  * debian/install:
+    - drop installation of default file
 
   [ Wesley Wiedenmeier ]
   * anerd.c:
