@@ -102,7 +102,7 @@ int anerd_server(char *device, int size, int port) {
 		exit(1);
 	}
 	/* Allocate and zero a data buffer to the chosen size */
-	if ((data = calloc(size, sizeof(char))) == NULL) {
+	if ((data = calloc(size + 1, sizeof(char))) == NULL) {
 		perror("calloc");
 		exit(1);
 	}
@@ -122,7 +122,6 @@ int anerd_server(char *device, int size, int port) {
 		/* Receive data over our UDP socket */
 		bytes_read = recvfrom(sock, data, size, 0, (struct sockaddr *)&client_addr,
 				&addr_len);
-		data[bytes_read] = '\0';
 		/* Logging/debug message */
 		syslog(LOG_DEBUG, "Server recv bcast  [bytes=%d] [sum=%x] from [%s:%d]\n",
 				bytes_read, anerd_crc(data, bytes_read),
@@ -164,14 +163,14 @@ int anerd_client(char *device, int size, int port, int interval) {
 	int sock, i;
 	int addr_len, bytes_read;
 	struct sockaddr_in server_addr;
-	char *data;
+	char *data, *ptr;
 	FILE *fp;
 	int broadcast = 1;
 	struct pollfd ufds;
 	uint64_t salt = 0;
 	addr_len = sizeof(struct sockaddr);
 	/* Allocate and zero a data buffer to the chosen size */
-	if ((data = calloc(size, sizeof(char))) == NULL) {
+	if ((data = calloc(size + 1, sizeof(char))) == NULL) {
 		perror("calloc");
 		exit(1);
 	}
@@ -201,17 +200,18 @@ int anerd_client(char *device, int size, int port, int interval) {
 	while (interval > 0) {
 		/* Donate some entropy to the local networks */
 		if (fread(data, size, sizeof(char), fp) > 0) {
+			ptr = data;
 			for (i=0; i<size/DEFAULT_PAYLOAD_SIZE; i++) {
 				syslog(LOG_DEBUG,
 						"Client sent bcast  [bytes=%d] [sum=%x] to [%s:%d]\n",
 						DEFAULT_PAYLOAD_SIZE,
-						anerd_crc(data, DEFAULT_PAYLOAD_SIZE),
+						anerd_crc(ptr, DEFAULT_PAYLOAD_SIZE),
 						inet_ntoa(server_addr.sin_addr),
 						ntohs(server_addr.sin_port));
-				sendto(sock, data, DEFAULT_PAYLOAD_SIZE, 0,
+				sendto(sock, ptr, DEFAULT_PAYLOAD_SIZE, 0,
 						(struct sockaddr *)&server_addr,
 						sizeof(struct sockaddr));
-				data += DEFAULT_PAYLOAD_SIZE;
+				ptr += DEFAULT_PAYLOAD_SIZE;
 			}
 		} else {
 			perror("fread");
@@ -221,7 +221,6 @@ int anerd_client(char *device, int size, int port, int interval) {
 			/* Accept data over our UDP socket */
 			bytes_read = recvfrom(sock, data, size, 0,
 					(struct sockaddr *)&server_addr, &addr_len);
-			data[bytes_read] = '\0';
 			/* Logging/debug message */
 			syslog(LOG_DEBUG,
 					"Client recv direct [bytes=%d] [sum=%x] from [%s:%d]\n",
