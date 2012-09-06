@@ -1,6 +1,12 @@
 anerd (1.1) unreleased; urgency=low
 
-  * UNRELEASED
+  * anerd.c:
+    - define the default total exchange size
+    - also define and use a default payload size
+    - break up the total exchange to a bunch of smaller payloads, to increase
+      the randomness of UDP packet ordering and timing
+    - improve some inline documentation
+    - lower logging to debug from info
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 04 Sep 2012 18:14:45 -0500
 

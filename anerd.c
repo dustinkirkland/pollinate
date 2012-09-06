@@ -36,25 +36,28 @@ limitations under the License.
 #include <time.h>
 #include <unistd.h>
 
-#define DEFAULT_SIZE 64
+#define DEFAULT_EXCHANGE_SIZE 64
+#define DEFAULT_PAYLOAD_SIZE 8
 #define DEFAULT_DEVICE "/dev/urandom"
 #define DEFAULT_PORT 26373
 #define DEFAULT_INTERVAL 60
-#define DEFAULT_TIMEOUT 250
 #define DAEMON_USER "daemon"
 
 /* Daemonize process properly */
 void daemonize();
 
 /*
-anerd salt:
+anerd salt():
+ - Generate a current local timestamp.
+ - Chain salts together over time, causing recreation to be increasingly difficult
+   over time.
 */
 uint64_t anerd_salt(uint64_t salt) {
 	struct timeval tv;
 	struct timezone tz;
 	/* Update local timestamp, generate new salt */
 	gettimeofday(&tv, &tz);
-	/* XOR data together, mixing salt over time */
+	/* XOR data together, chaining and mixing salt over time */
 	srandom(1000000 * tv.tv_sec + tv.tv_usec);
 	salt ^= random();
 	return salt;
@@ -62,6 +65,8 @@ uint64_t anerd_salt(uint64_t salt) {
 
 /*
 anerd crc:
+ - Create very simplistic checksum, adding the integer value of each byte.
+ - Useful when debugging, identifying exchanged packets.
 */
 int anerd_crc(char *data, int len) {
 	int i = 0;
@@ -75,8 +80,8 @@ int anerd_crc(char *data, int len) {
 /*
 anerd server:
  - Listen for communications on a UDP socket.
- - Take any received input, salt with a bit of local randomness (perhaps the
-   time in microseconds between transmissions), and add to the entropy pool.
+ - Take any received input, salt with some local randomness.
+ - Add to the entropy pool.
  - Transmit back to the initiator the same number of bytes of randomness.
 */
 int anerd_server(char *device, int size, int port) {
@@ -105,7 +110,7 @@ int anerd_server(char *device, int size, int port) {
 	server_addr.sin_family = AF_INET;
 	server_addr.sin_port = htons(port);
 	server_addr.sin_addr.s_addr = INADDR_ANY;
-	bzero(&(server_addr.sin_zero),8);
+	bzero(&(server_addr.sin_zero), 8);
 	if (bind(sock,(struct sockaddr *)&server_addr, sizeof(struct sockaddr)) == -1) {
 		perror("bind");
 		exit(1);
@@ -119,7 +124,7 @@ int anerd_server(char *device, int size, int port) {
 				&addr_len);
 		data[bytes_read] = '\0';
 		/* Logging/debug message */
-		syslog(LOG_INFO, "Server recv bcast  [bytes=%d] [sum=%x] from [%s:%d]\n",
+		syslog(LOG_DEBUG, "Server recv bcast  [bytes=%d] [sum=%x] from [%s:%d]\n",
 				bytes_read, anerd_crc(data, bytes_read),
 				inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
 		fflush(stdout);
@@ -133,7 +138,7 @@ int anerd_server(char *device, int size, int port) {
 			/* Return the favor, sending entropy back to the initiator */
 			sendto(sock, data, bytes_read, 0, (struct sockaddr *)&client_addr,
 					sizeof(struct sockaddr));
-			syslog(LOG_INFO,
+			syslog(LOG_DEBUG,
 					"Server sent direct [bytes=%d] [sum=%x] to [%s:%d]\n",
 					bytes_read, anerd_crc(data, bytes_read),
 					inet_ntoa(client_addr.sin_addr),
@@ -156,7 +161,7 @@ anerd client:
  - it trigger anerd exchanges with any anerd servers on the network
 */
 int anerd_client(char *device, int size, int port, int interval) {
-	int sock;
+	int sock, i;
 	int addr_len, bytes_read;
 	struct sockaddr_in server_addr;
 	char *data;
@@ -183,7 +188,7 @@ int anerd_client(char *device, int size, int port, int interval) {
 	server_addr.sin_family = AF_INET;
 	server_addr.sin_port = htons(port);
 	server_addr.sin_addr.s_addr = htonl(INADDR_BROADCAST);
-	bzero(&(server_addr.sin_zero),8);
+	bzero(&(server_addr.sin_zero), 8);
 	if ((fp = fopen(device, "a+")) == NULL) {
 		/* Error reading entropy; skip this round */
 		perror("fopen");
@@ -196,13 +201,18 @@ int anerd_client(char *device, int size, int port, int interval) {
 	while (interval > 0) {
 		/* Donate some entropy to the local networks */
 		if (fread(data, size, sizeof(char), fp) > 0) {
-			syslog(LOG_INFO,
-					"Client sent bcast  [bytes=%d] [sum=%x] to [%s:%d]\n",
-					size, anerd_crc(data, size),
-					inet_ntoa(server_addr.sin_addr),
-					ntohs(server_addr.sin_port));
-			sendto(sock, data, size, 0, (struct sockaddr *)&server_addr,
-					sizeof(struct sockaddr));
+			for (i=0; i<size/DEFAULT_PAYLOAD_SIZE; i++) {
+				syslog(LOG_DEBUG,
+						"Client sent bcast  [bytes=%d] [sum=%x] to [%s:%d]\n",
+						DEFAULT_PAYLOAD_SIZE,
+						anerd_crc(data, DEFAULT_PAYLOAD_SIZE),
+						inet_ntoa(server_addr.sin_addr),
+						ntohs(server_addr.sin_port));
+				sendto(sock, data, DEFAULT_PAYLOAD_SIZE, 0,
+						(struct sockaddr *)&server_addr,
+						sizeof(struct sockaddr));
+				data += DEFAULT_PAYLOAD_SIZE;
+			}
 		} else {
 			perror("fread");
 		}
@@ -213,7 +223,7 @@ int anerd_client(char *device, int size, int port, int interval) {
 					(struct sockaddr *)&server_addr, &addr_len);
 			data[bytes_read] = '\0';
 			/* Logging/debug message */
-			syslog(LOG_INFO,
+			syslog(LOG_DEBUG,
 					"Client recv direct [bytes=%d] [sum=%x] from [%s:%d]\n",
 					bytes_read, anerd_crc(data, bytes_read),
 					inet_ntoa(server_addr.sin_addr),
@@ -235,7 +245,7 @@ int anerd_client(char *device, int size, int port, int interval) {
 int main(int argc, char *argv[]) {
 	int arg;
 	int interval = DEFAULT_INTERVAL;
-	int size = DEFAULT_SIZE;
+	int size = DEFAULT_EXCHANGE_SIZE;
 	int port = DEFAULT_PORT;
 	char *device = DEFAULT_DEVICE;
 	/* Getopt command-line argument handling */
