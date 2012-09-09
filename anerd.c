@@ -167,7 +167,6 @@ int anerd_client(char *device, int size, int port, int interval) {
 	int broadcast = 1;
 	struct pollfd ufds;
 	uint64_t salt = 0;
-	struct rand_pool_info pool;
 	addr_len = sizeof(struct sockaddr);
 	/* Allocate and zero a data buffer to the chosen size */
 	if ((data = calloc(size + 1, sizeof(char))) == NULL) {
