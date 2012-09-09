@@ -11,6 +11,7 @@ anerd (1.1) unreleased; urgency=low
     - use a separate pointer for segmenting and moving through the data string
     - no need for null-bytes, since binary data could have null bytes within
     - alphabetize includes
+    - change perrors to syslog errors
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 04 Sep 2012 18:14:45 -0500
 

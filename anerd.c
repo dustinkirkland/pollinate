@@ -92,17 +92,17 @@ int anerd_server(char *device, int size, int port) {
 	FILE *fp;
 	/* Open the UDP socket */
 	if ((sock = socket(AF_INET, SOCK_DGRAM, 0)) == -1) {
-		perror("Socket");
+		syslog(LOG_ERR, "ERROR: socket");
 		exit(1);
 	}
 	/* Open the random device */
 	if ((fp = fopen(device, "a+")) == NULL) {
-		perror("fopen");
+		syslog(LOG_ERR, "ERROR: fopen");
 		exit(1);
 	}
 	/* Allocate and zero a data buffer to the chosen size */
 	if ((data = calloc(size + 1, sizeof(char))) == NULL) {
-		perror("calloc");
+		syslog(LOG_ERR, "ERROR: calloc");
 		exit(1);
 	}
 	/* Set up and bind the socket */
@@ -111,7 +111,7 @@ int anerd_server(char *device, int size, int port) {
 	server_addr.sin_addr.s_addr = INADDR_ANY;
 	bzero(&(server_addr.sin_zero), 8);
 	if (bind(sock,(struct sockaddr *)&server_addr, sizeof(struct sockaddr)) == -1) {
-		perror("bind");
+		syslog(LOG_ERR, "ERROR: bind");
 		exit(1);
 	}
 	addr_len = sizeof(struct sockaddr);
@@ -142,7 +142,7 @@ int anerd_server(char *device, int size, int port) {
 					inet_ntoa(client_addr.sin_addr),
 					ntohs(client_addr.sin_port));
 		} else {
-			perror("fread");
+			syslog(LOG_ERR, "ERROR: fread");
 		}
 	}
 	/* Should never get here; clean up if we do */
@@ -167,21 +167,22 @@ int anerd_client(char *device, int size, int port, int interval) {
 	int broadcast = 1;
 	struct pollfd ufds;
 	uint64_t salt = 0;
+	struct rand_pool_info pool;
 	addr_len = sizeof(struct sockaddr);
 	/* Allocate and zero a data buffer to the chosen size */
 	if ((data = calloc(size + 1, sizeof(char))) == NULL) {
-		perror("calloc");
+		syslog(LOG_ERR, "ERROR: calloc");
 		exit(1);
 	}
 	/* Setup the UDP socket */
 	if ((sock = socket(AF_INET, SOCK_DGRAM, 0)) == -1) {
-		perror("socket");
+		syslog(LOG_ERR, "ERROR: socket");
 	}
 	ufds.fd = sock;
 	ufds.events = POLLIN | POLLPRI;
 	/* Configure the socket for broadcast */
 	if (setsockopt(sock, SOL_SOCKET, SO_BROADCAST, &broadcast, sizeof broadcast) == -1) {
-		perror("setsockopt (SO_BROADCAST)");
+		syslog(LOG_ERR, "ERROR: setsockopt (SO_BROADCAST)");
 	}
 	server_addr.sin_family = AF_INET;
 	server_addr.sin_port = htons(port);
@@ -189,7 +190,7 @@ int anerd_client(char *device, int size, int port, int interval) {
 	bzero(&(server_addr.sin_zero), 8);
 	if ((fp = fopen(device, "a+")) == NULL) {
 		/* Error reading entropy; skip this round */
-		perror("fopen");
+		syslog(LOG_ERR, "ERROR: fopen");
 		close(sock);
 		exit(1);
 	}
@@ -213,7 +214,7 @@ int anerd_client(char *device, int size, int port, int interval) {
 				ptr += DEFAULT_PAYLOAD_SIZE;
 			}
 		} else {
-			perror("fread");
+			syslog(LOG_ERR, "ERROR: fread");
 		}
 		/* Poll for responses */
 		while (poll(&ufds, 1, interval*1000) > 0) {
@@ -332,14 +333,14 @@ void daemonize() {
 	}
 	/* Change current directory to / so current directory is not locked */
 	if ((chdir("/")) < 0) {
-		perror("chdir() failed");
+		syslog(LOG_ERR, "ERROR: chdir() failed");
 		exit(1);
 	}
 	/* Change file mode mask */
 	umask(0);
 	/* Run setsid() so that daemon is no longer child of spawning process */
 	if (setsid() < 0) {
-		perror("setsid() failed");
+		syslog(LOG_ERR, "ERROR: setsid() failed");
 		exit(1);
 	}
 	/* Close stdin, stdout, stderr */
