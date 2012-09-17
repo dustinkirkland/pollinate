@@ -13,6 +13,8 @@ anerd (1.1) unreleased; urgency=low
     - alphabetize includes
     - change perrors to syslog errors
     - move daemon() function
+  * Makefile.am:
+    - fix up the build, clean out the binary and log files
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 04 Sep 2012 18:14:45 -0500
 
