@@ -240,6 +240,33 @@ int anerd_client(char *device, int size, int port, int interval) {
 	return 0;
 }
 
+void daemonize() {
+	/* Drop user priv if run as root */
+	if ((getuid() == 0) || (geteuid == 0)) {
+		struct passwd *pw = getpwnam(DAEMON_USER);
+		if (pw) {
+			syslog(LOG_NOTICE, "Setting User To: " DAEMON_USER);
+			setuid(pw->pw_uid);
+		}
+	}
+	/* Change current directory to / so current directory is not locked */
+	if ((chdir("/")) < 0) {
+		syslog(LOG_ERR, "ERROR: chdir() failed");
+		exit(1);
+	}
+	/* Change file mode mask */
+	umask(0);
+	/* Run setsid() so that daemon is no longer child of spawning process */
+	if (setsid() < 0) {
+		syslog(LOG_ERR, "ERROR: setsid() failed");
+		exit(1);
+	}
+	/* Close stdin, stdout, stderr */
+	close(STDIN_FILENO);
+	close(STDOUT_FILENO);
+	close(STDERR_FILENO);
+}
+
 int main(int argc, char *argv[]) {
 	int arg;
 	int interval = DEFAULT_INTERVAL;
@@ -319,31 +346,4 @@ int main(int argc, char *argv[]) {
 		/* exit because of error */
 		exit(1);
 	}
-}
-
-void daemonize() {
-	/* Drop user priv if run as root */
-	if ((getuid() == 0) || (geteuid == 0)) {
-		struct passwd *pw = getpwnam(DAEMON_USER);
-		if (pw) {
-			syslog(LOG_NOTICE, "Setting User To: " DAEMON_USER);
-			setuid(pw->pw_uid);
-		}
-	}
-	/* Change current directory to / so current directory is not locked */
-	if ((chdir("/")) < 0) {
-		syslog(LOG_ERR, "ERROR: chdir() failed");
-		exit(1);
-	}
-	/* Change file mode mask */
-	umask(0);
-	/* Run setsid() so that daemon is no longer child of spawning process */
-	if (setsid() < 0) {
-		syslog(LOG_ERR, "ERROR: setsid() failed");
-		exit(1);
-	}
-	/* Close stdin, stdout, stderr */
-	close(STDIN_FILENO);
-	close(STDOUT_FILENO);
-	close(STDERR_FILENO);
 }
