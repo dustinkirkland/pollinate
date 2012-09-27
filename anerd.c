@@ -152,94 +152,6 @@ int anerd_server(char *device, int size, int port) {
 	return 0;
 }
 
-/*
-anerd client:
- - broadcast some randomness to the local network on the anerd UDP port
- - this is intended to "stir the pot", kicking up some randomness
- - it trigger anerd exchanges with any anerd servers on the network
-*/
-int anerd_client(char *device, int size, int port, int interval) {
-	int sock, i;
-	int addr_len, bytes_read;
-	struct sockaddr_in server_addr;
-	char *data, *ptr;
-	FILE *fp;
-	int broadcast = 1;
-	struct pollfd ufds;
-	uint64_t salt = 0;
-	addr_len = sizeof(struct sockaddr);
-	/* Allocate and zero a data buffer to the chosen size */
-	if ((data = calloc(size + 1, sizeof(char))) == NULL) {
-		syslog(LOG_ERR, "ERROR: calloc");
-		exit(1);
-	}
-	/* Setup the UDP socket */
-	if ((sock = socket(AF_INET, SOCK_DGRAM, 0)) == -1) {
-		syslog(LOG_ERR, "ERROR: socket");
-	}
-	ufds.fd = sock;
-	ufds.events = POLLIN | POLLPRI;
-	/* Configure the socket for broadcast */
-	if (setsockopt(sock, SOL_SOCKET, SO_BROADCAST, &broadcast, sizeof broadcast) == -1) {
-		syslog(LOG_ERR, "ERROR: setsockopt (SO_BROADCAST)");
-	}
-	server_addr.sin_family = AF_INET;
-	server_addr.sin_port = htons(port);
-	server_addr.sin_addr.s_addr = htonl(INADDR_BROADCAST);
-	bzero(&(server_addr.sin_zero), 8);
-	if ((fp = fopen(device, "a+")) == NULL) {
-		/* Error reading entropy; skip this round */
-		syslog(LOG_ERR, "ERROR: fopen");
-		close(sock);
-		exit(1);
-	}
-	/* Make process into a daemon */
-	daemonize();
-	/* Periodically trigger a network entropy exchange */
-	while (interval > 0) {
-		/* Donate some entropy to the local networks */
-		if (fread(data, size, sizeof(char), fp) > 0) {
-			ptr = data;
-			for (i=0; i<size/DEFAULT_PAYLOAD_SIZE; i++) {
-				syslog(LOG_DEBUG,
-						"Client sent bcast  [bytes=%d] [sum=%x] to [%s:%d]\n",
-						DEFAULT_PAYLOAD_SIZE,
-						anerd_crc(ptr, DEFAULT_PAYLOAD_SIZE),
-						inet_ntoa(server_addr.sin_addr),
-						ntohs(server_addr.sin_port));
-				sendto(sock, ptr, DEFAULT_PAYLOAD_SIZE, 0,
-						(struct sockaddr *)&server_addr,
-						sizeof(struct sockaddr));
-				ptr += DEFAULT_PAYLOAD_SIZE;
-			}
-		} else {
-			syslog(LOG_ERR, "ERROR: fread");
-		}
-		/* Poll for responses */
-		while (poll(&ufds, 1, interval*1000) > 0) {
-			/* Accept data over our UDP socket */
-			bytes_read = recvfrom(sock, data, size, 0,
-					(struct sockaddr *)&server_addr, &addr_len);
-			/* Logging/debug message */
-			syslog(LOG_DEBUG,
-					"Client recv direct [bytes=%d] [sum=%x] from [%s:%d]\n",
-					bytes_read, anerd_crc(data, bytes_read),
-					inet_ntoa(server_addr.sin_addr),
-					ntohs(server_addr.sin_port));
-			/* Mix incoming entropy + salt into pool */
-			salt = anerd_salt(salt);
-			fwrite(&salt, sizeof(salt), 1, fp);
-			fwrite(data, size, 1, fp);
-			fflush(fp);
-		}
-	}
-	/* Should never get here; clean up if we do */
-	close(sock);
-	free(data);
-	fclose(fp);
-	return 0;
-}
-
 void daemonize() {
 	/* Drop user priv if run as root */
 	if ((getuid() == 0) || (geteuid == 0)) {
@@ -322,25 +234,12 @@ int main(int argc, char *argv[]) {
 	int pid = fork();
 	if (pid == 0) {
 		/* if process is child */
-		/* Fork a client process */
-		anerd_client(device, size, port, interval);
+		/* Fork a server process */
+		anerd_server(device, size, port);
 	} else if (pid > 0) {
 		/* if process is parent */
-		/* fork off another process */
-		int pid2 = fork();
-		if (pid2 == 0) {
-			/* if process is child */
-			/* Fork a server process */
-			anerd_server(device, size, port);
-		} else if (pid2 > 0) {
-			/* if process is parent */
-			/* exit, freeing terminal that called program */
-			exit(0);
-		} else if (pid2 < 0) {
-			/* if the second fork() call failed */
-			/* exit because of error */
-			exit(1);
-		}
+		/* exit, freeing terminal that called program */
+		exit(0);
 	} else if (pid < 0) {
 		/* if the fork() call failed */
 		/* exit because of error */

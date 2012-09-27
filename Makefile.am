@@ -8,3 +8,5 @@ dist_doc_DATA = AUTHORS ChangeLog COPYING NEWS README
 
 bin_PROGRAMS = anerd
 anerd_SOURCES = anerd.c
+
+bin_SCRIPTS = anerd-client

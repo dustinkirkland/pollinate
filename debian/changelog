@@ -15,6 +15,18 @@ anerd (1.1) unreleased; urgency=low
     - move daemon() function
   * Makefile.am:
     - fix up the build, clean out the binary and log files
+  * anerd.c, anerd-client, debian/control, debian/cron.d,
+    debian/default, debian/install, Makefile.am:
+    - drop the anerd client in the C program entirely
+    - the C program is now the server exclusively
+    - add a bash script client, which can loop over a pool of anerd servers,
+      and broadcast to the local network
+    - recommend the socat package/utility, which is used to broadcast to the
+      local network from the bash script
+    - add a cron job to run the anerd-client regularly
+    - add a default configuration file for configuring the pool and other
+      tunables
+    - remove the unnessary install file
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 04 Sep 2012 18:14:45 -0500
 

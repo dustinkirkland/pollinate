@@ -1,0 +1,22 @@
+# POOL is a whitespace separated list of hostname/ip addresses (and ports)
+# for peers in your anerd pool.
+# Default: empty
+#POOL=""
+
+# PORT is the UDP port to communicate with each peer in the pool, if
+# otherwise unspecified.
+# Default: 26373
+#PORT=26373
+
+# DEVICE is the source of randomness for entropy donated to the pool,
+# and the destination for received and salted entropy.
+# Default: /dev/urandom
+#DEVICE="/dev/urandom"
+
+# BYTES is the size in bytes to transmit each time, to peers in the pool.
+# Default: 64
+#BYTES=64
+
+# HASH is the checksum utility used to "whiten" input received from peers.
+# Default: sha512sum
+#HASH="sha512sum"

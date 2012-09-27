@@ -1,0 +1,58 @@
+#!/bin/bash
+#
+# anerd-client: Asynchronous Network Exchange Randomness Daemon Client
+#
+# Copyright 2012 Dustin Kirkland <kirkland@ubuntu.com>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Source configuration
+PKG="anerd"
+[ -r "/etc/${PKG}/pool" ] && . "/etc/${PKG}/pool"
+[ -n "${POOL}" ] || exit 0
+[ -n "${PORT}" ] || PORT=26373
+[ -n "${DEVICE}" ] || DEVICE="/dev/urandom"
+[ -n "${BYTES}" ] || BYTES=64
+[ -n "${HASH}" ] || HASH="sha512sum"
+
+salt() {
+	local i=0
+	while [ ${i} -lt ${BYTES}]; do
+		n=$(date +%N | sed "s/^0\+//")
+		printf "%x" ${n}
+		i=$((i+1))
+	done
+}
+
+# Loop over servers configured into the pool
+for i in ${POOL}; do
+	# Get the hostname/ip
+	h=${i%%:*}
+	[ -n "${h}" ] || continue
+	# Get the port, or set to default
+	p=${i##*:}
+	[ "${h}" = "${p}" ] && p="${PORT}"
+	# Exchange entropy with the remote server
+	exec 3<>"/dev/udp/${h}/${p}"
+	head -c "${BYTES}" "${DEVICE}" >&3
+	# Whiten with a hash
+	input=$(head -c "${BYTES}" <&3 | ${HASH})
+	# Salt with the local nanoseconds, whiten with a hash, and write out
+	salt=$(salt | ${HASH})
+	printf "%s%s" "${salt%% *}" "${input%% *}" > "${DEVICE}"
+done
+
+# Broadcast to local network, if socat is available
+if type socat &>/dev/null; then
+	(head -c "${BYTES}" "${DEVICE}" | socat -t 0.01 - UDP-DATAGRAM:255.255.255.255:${PORT},broadcast) > "${DEVICE}"
+fi
