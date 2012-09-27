@@ -1,4 +1,4 @@
-anerd (1.1) unreleased; urgency=low
+anerd (1.1-0ubuntu1) quantal; urgency=low
 
   * anerd.c:
     - define the default total exchange size
@@ -28,7 +28,7 @@ anerd (1.1) unreleased; urgency=low
       tunables
     - remove the unnessary install file
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 04 Sep 2012 18:14:45 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 27 Sep 2012 15:40:23 -0500
 
 anerd (1.0-0ubuntu1) quantal; urgency=low
 
