@@ -39,7 +39,6 @@ limitations under the License.
 #define DEFAULT_PAYLOAD_SIZE 8
 #define DEFAULT_DEVICE "/dev/urandom"
 #define DEFAULT_PORT 26373
-#define DEFAULT_INTERVAL 60
 #define DAEMON_USER "daemon"
 
 /* Daemonize process properly */
@@ -213,27 +212,18 @@ void daemonize() {
 
 int main(int argc, char *argv[]) {
 	int arg;
-	int interval = DEFAULT_INTERVAL;
 	int size = DEFAULT_EXCHANGE_SIZE;
 	int port = DEFAULT_PORT;
 	char *device = DEFAULT_DEVICE;
 	int ipv6 = 0;
 	/* Getopt command-line argument handling */
-	while ((arg = getopt(argc, argv, "d:i:p:s:6")) != -1) {
+	while ((arg = getopt(argc, argv, "d:p:s:6")) != -1) {
 		switch (arg) {
 			case '6':
 				ipv6 = 1;
 				break;
 			case 'd':
 				device = optarg;
-				break;
-			case 'i':
-				if (isdigit(optarg[0])) {
-					interval = atoi(optarg);
-				} else {
-					fprintf(stderr, "Option -i requires a integer argument.\n");
-					return 1;
-				}
 				break;
 			case 'p':
 				if (isdigit(optarg[0])) {
