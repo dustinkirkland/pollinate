@@ -8,7 +8,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+	http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -86,7 +86,7 @@ anerd server:
 int anerd_server(char *device, int size, int port, int ipv6) {
 	int sock;
 	int addr_len = sizeof(struct sockaddr);
-    int bytes_read;
+	int bytes_read;
 	uint64_t salt;
 	char *data;
 	FILE *fp;
@@ -131,28 +131,28 @@ int anerd_server(char *device, int size, int port, int ipv6) {
 			syslog(LOG_ERR, "ERROR: setsockopt (IPV6_ADD_MEMBERSHIP)");
 		}
 	} else {
-        /* Open the UDP socket */
-        if ((sock = socket(AF_INET, SOCK_DGRAM, 0)) == -1) {
-            syslog(LOG_ERR, "ERROR: socket");
-            exit(1);
-        }
-        /* Set up and bind the socket */
-        server_addr.sin_family = AF_INET;
-        server_addr.sin_port = htons(port);
-        server_addr.sin_addr.s_addr = INADDR_ANY;
-        bzero(&(server_addr.sin_zero), 8);
-        if (bind(sock,(struct sockaddr *)&server_addr,
-                    sizeof(struct sockaddr)) == -1) {
-            syslog(LOG_ERR, "ERROR: bind");
-            exit(1);
-        }
-    }
+		/* Open the UDP socket */
+		if ((sock = socket(AF_INET, SOCK_DGRAM, 0)) == -1) {
+			syslog(LOG_ERR, "ERROR: socket");
+			exit(1);
+		}
+		/* Set up and bind the socket */
+		server_addr.sin_family = AF_INET;
+		server_addr.sin_port = htons(port);
+		server_addr.sin_addr.s_addr = INADDR_ANY;
+		bzero(&(server_addr.sin_zero), 8);
+		if (bind(sock,(struct sockaddr *)&server_addr,
+					sizeof(struct sockaddr)) == -1) {
+			syslog(LOG_ERR, "ERROR: bind");
+			exit(1);
+		}
+	}
 	/* Make process into a daemon */
 	daemonize();
 	while (1) {
 		/* Receive data over our UDP socket */
 		bytes_read = recvfrom(sock, data, size, 0,
-                (struct sockaddr *)&client_addr, &addr_len);
+				(struct sockaddr *)&client_addr, &addr_len);
 		/* Logging/debug message */
 		syslog(LOG_DEBUG, "Server recv bcast  [bytes=%d] [sum=%x] from [%s:%d]\n",
 				bytes_read, anerd_crc(data, bytes_read),
@@ -217,13 +217,13 @@ int main(int argc, char *argv[]) {
 	int size = DEFAULT_EXCHANGE_SIZE;
 	int port = DEFAULT_PORT;
 	char *device = DEFAULT_DEVICE;
-    int ipv6 = 0;
+	int ipv6 = 0;
 	/* Getopt command-line argument handling */
 	while ((arg = getopt(argc, argv, "d:i:p:s:6")) != -1) {
 		switch (arg) {
-            case '6':
-                ipv6 = 1;
-                break;
+			case '6':
+				ipv6 = 1;
+				break;
 			case 'd':
 				device = optarg;
 				break;
