@@ -27,7 +27,7 @@ PKG="anerd"
 
 salt() {
 	local i=0
-	while [ ${i} -lt ${BYTES}]; do
+	while [ ${i} -lt ${BYTES} ] ; do
 		n=$(date +%N | sed "s/^0\+//")
 		printf "%x" ${n}
 		i=$((i+1))
