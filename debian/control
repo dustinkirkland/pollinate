@@ -11,7 +11,7 @@ Homepage: http://launchpad.net/anerd
 
 Package: anerd
 Architecture: all
-Depends: ${misc:Depends}
+Depends: ${misc:Depends}, run-one
 Recommends: socat
 Description: asynchronous network exchanged randomness daemon
  This daemon will gather and respond to network requests for

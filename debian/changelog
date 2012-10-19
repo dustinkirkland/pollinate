@@ -1,6 +1,7 @@
 anerd (1.2) unreleased; urgency=low
 
-  * UNRELEASED
+  * debian/control, debian/cron.d:
+    - use run-one for cronjob
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 27 Sep 2012 15:40:25 -0500
 
