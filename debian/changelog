@@ -6,6 +6,12 @@ anerd (1.2) unreleased; urgency=low
   * anerd-client:
     - clean up client, make more modular, remove some variables, uses pipes
       to keep everything in memory
+  * debian/anerd-client.install, debian/anerd-server.install,
+    debian/control, debian/copyright, debian/cron.d => debian/anerd-
+    client.cron.d, debian/default => debian/anerd-client.default,
+    debian/upstart => debian/anerd-server.upstart:
+    - split package into a server and client package, with a meta
+      package depending on both
 
   [ Wesley Wiedenmeier ]
   * anerd.c, anerd-client, debian/default:

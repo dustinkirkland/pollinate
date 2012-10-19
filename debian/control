@@ -11,8 +11,24 @@ Homepage: http://launchpad.net/anerd
 
 Package: anerd
 Architecture: all
-Depends: ${misc:Depends}, run-one
-Recommends: socat
+Depends: ${misc:Depends}, anerd-server, anerd-client
 Description: asynchronous network exchanged randomness daemon
  This daemon will gather and respond to network requests for
- entropy on UDP port 26373.
+ entropy on UDP port 26373.  This is a metapackage that installs
+ both the client and server.
+
+Package: anerd-server
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Suggests: anerd-client
+Description: asynchronous network exchanged randomness daemon (server)
+ This daemon will gather and respond to network requests for
+ entropy on UDP port 26373.  This is the server package
+
+Package: anerd-client
+Architecture: all
+Depends: ${misc:Depends}, run-one, socat
+Suggests: anerd-server
+Description: asynchronous network exchanged randomness daemon (client)
+ This client will connect to anerd servers over UDP port 26373 and
+ exchange entropy.
