@@ -1,5 +1,10 @@
+# Ipv6 support
+# Defult: false
+#IPV6=false
+
 # POOL is a whitespace separated list of hostname/ip addresses (and ports)
-# for peers in your anerd pool.
+# for peers in your anerd pool. If ipv6 is enabled, please ensure that these
+# are ipv6 addresses.
 # Default: empty
 #POOL=""
 

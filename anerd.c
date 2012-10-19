@@ -8,7 +8,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+	http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -39,7 +39,6 @@ limitations under the License.
 #define DEFAULT_PAYLOAD_SIZE 8
 #define DEFAULT_DEVICE "/dev/urandom"
 #define DEFAULT_PORT 26373
-#define DEFAULT_INTERVAL 60
 #define DAEMON_USER "daemon"
 
 /* Daemonize process properly */
@@ -83,18 +82,18 @@ anerd server:
  - Add to the entropy pool.
  - Transmit back to the initiator the same number of bytes of randomness.
 */
-int anerd_server(char *device, int size, int port) {
+int anerd_server(char *device, int size, int port, int ipv6) {
 	int sock;
-	int addr_len, bytes_read;
+	int addr_len = sizeof(struct sockaddr);
+	int bytes_read;
 	uint64_t salt;
 	char *data;
-	struct sockaddr_in server_addr, client_addr;
 	FILE *fp;
-	/* Open the UDP socket */
-	if ((sock = socket(AF_INET, SOCK_DGRAM, 0)) == -1) {
-		syslog(LOG_ERR, "ERROR: socket");
-		exit(1);
-	}
+	/* Structures for ipv6 */
+	struct sockaddr_in6 server_addr6;
+	struct ipv6_mreq imreq;
+	/* Structures for ipv4 */
+	struct sockaddr_in server_addr, client_addr;
 	/* Open the random device */
 	if ((fp = fopen(device, "a+")) == NULL) {
 		syslog(LOG_ERR, "ERROR: fopen");
@@ -105,22 +104,54 @@ int anerd_server(char *device, int size, int port) {
 		syslog(LOG_ERR, "ERROR: calloc");
 		exit(1);
 	}
-	/* Set up and bind the socket */
-	server_addr.sin_family = AF_INET;
-	server_addr.sin_port = htons(port);
-	server_addr.sin_addr.s_addr = INADDR_ANY;
-	bzero(&(server_addr.sin_zero), 8);
-	if (bind(sock,(struct sockaddr *)&server_addr, sizeof(struct sockaddr)) == -1) {
-		syslog(LOG_ERR, "ERROR: bind");
-		exit(1);
+	if (ipv6) {
+		/* Zero data structures */
+		memset(&server_addr6, 0, sizeof(struct sockaddr_in6));
+		memset(&imreq, 0, sizeof(struct ipv6_mreq));
+		/* Open the UDP socket */
+		if ((sock = socket(AF_INET6, SOCK_DGRAM, 0)) == -1) {
+			syslog(LOG_ERR, "ERROR: socket");
+			exit(1);
+		}
+		/* Set up the socket */
+		server_addr6.sin6_family = AF_INET6;
+		server_addr6.sin6_port = htons(port);
+		server_addr6.sin6_addr = in6addr_any;
+		/* Bind socket */
+		if (bind(sock, (struct sockaddr *)&server_addr6,
+					sizeof(struct sockaddr_in6)) == -1) {
+			syslog(LOG_ERR, "ERROR: bind");
+			exit(1);
+		}
+		inet_pton(AF_INET6, "ff02::1", &imreq.ipv6mr_multiaddr);
+		/* Configure the socket for broadcast */
+		if (setsockopt(sock, 0, IPV6_ADD_MEMBERSHIP, (const void *)&imreq,
+					sizeof(struct ipv6_mreq)) == -1) {
+			syslog(LOG_ERR, "ERROR: setsockopt (IPV6_ADD_MEMBERSHIP)");
+		}
+	} else {
+		/* Open the UDP socket */
+		if ((sock = socket(AF_INET, SOCK_DGRAM, 0)) == -1) {
+			syslog(LOG_ERR, "ERROR: socket");
+			exit(1);
+		}
+		/* Set up and bind the socket */
+		server_addr.sin_family = AF_INET;
+		server_addr.sin_port = htons(port);
+		server_addr.sin_addr.s_addr = INADDR_ANY;
+		bzero(&(server_addr.sin_zero), 8);
+		if (bind(sock,(struct sockaddr *)&server_addr,
+					sizeof(struct sockaddr)) == -1) {
+			syslog(LOG_ERR, "ERROR: bind");
+			exit(1);
+		}
 	}
-	addr_len = sizeof(struct sockaddr);
 	/* Make process into a daemon */
 	daemonize();
 	while (1) {
 		/* Receive data over our UDP socket */
-		bytes_read = recvfrom(sock, data, size, 0, (struct sockaddr *)&client_addr,
-				&addr_len);
+		bytes_read = recvfrom(sock, data, size, 0,
+				(struct sockaddr *)&client_addr, &addr_len);
 		/* Logging/debug message */
 		syslog(LOG_DEBUG, "Server recv bcast  [bytes=%d] [sum=%x] from [%s:%d]\n",
 				bytes_read, anerd_crc(data, bytes_read),
@@ -181,23 +212,18 @@ void daemonize() {
 
 int main(int argc, char *argv[]) {
 	int arg;
-	int interval = DEFAULT_INTERVAL;
 	int size = DEFAULT_EXCHANGE_SIZE;
 	int port = DEFAULT_PORT;
 	char *device = DEFAULT_DEVICE;
+	int ipv6 = 0;
 	/* Getopt command-line argument handling */
-	while ((arg = getopt(argc, argv, "d:i:p:s:")) != -1) {
+	while ((arg = getopt(argc, argv, "d:p:s:6")) != -1) {
 		switch (arg) {
+			case '6':
+				ipv6 = 1;
+				break;
 			case 'd':
 				device = optarg;
-				break;
-			case 'i':
-				if (isdigit(optarg[0])) {
-					interval = atoi(optarg);
-				} else {
-					fprintf(stderr, "Option -i requires a integer argument.\n");
-					return 1;
-				}
 				break;
 			case 'p':
 				if (isdigit(optarg[0])) {
@@ -235,7 +261,7 @@ int main(int argc, char *argv[]) {
 	if (pid == 0) {
 		/* if process is child */
 		/* Fork a server process */
-		anerd_server(device, size, port);
+		anerd_server(device, size, port, ipv6);
 	} else if (pid > 0) {
 		/* if process is parent */
 		/* exit, freeing terminal that called program */
