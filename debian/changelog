@@ -3,8 +3,11 @@ anerd (1.2) unreleased; urgency=low
   [ Dustin Kirkland ]
   * debian/control, debian/cron.d:
     - use run-one for cronjob
+  * anerd-client:
+    - clean up client, make more modular, remove some variables, uses pipes
+      to keep everything in memory
 
-  [ Wesley Weidenmeier ]
+  [ Wesley Wiedenmeier ]
   * anerd.c, anerd-client, debian/default:
     - add ipv6 support
 

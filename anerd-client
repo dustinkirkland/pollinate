@@ -1,8 +1,12 @@
-#!/bin/bash
+#!/bin/sh
 #
 # anerd-client: Asynchronous Network Exchange Randomness Daemon Client
 #
 # Copyright 2012 Dustin Kirkland <kirkland@ubuntu.com>
+#
+# Authors:
+#	- Dustin Kirkland
+#	- Wesley Wiedenmeier
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,9 +20,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+set -e
+
 # Source configuration
 PKG="anerd"
 [ -r "/etc/${PKG}/pool" ] && . "/etc/${PKG}/pool"
+[ -n "${1}" ] && POOL="${1}"
 [ -n "${IPV6}" ] || IPV6=false
 [ -n "${POOL}" ] || exit 0
 [ -n "${PORT}" ] || PORT=26373
@@ -26,7 +33,14 @@ PKG="anerd"
 [ -n "${BYTES}" ] || BYTES=64
 [ -n "${HASH}" ] || HASH="sha512sum"
 
+random_bytes() {
+	# Read and print random bytes
+	head -c "${BYTES}" "${DEVICE}"
+}
+
 salt() {
+	# Append timestamp-based salt to input
+	cat
 	local i=0
 	while [ ${i} -lt ${BYTES} ] ; do
 		n=$(date +%N | sed "s/^0\+//")
@@ -35,70 +49,43 @@ salt() {
 	done
 }
 
-hash_and_write() {
-	# Whiten with a hash
-	input=$(echo $serverInput | ${HASH})
-	# Salt with the local nanoseconds, whiten with a hash, and write out
-	salt=$(salt | ${HASH})
-	printf "%s%s" "${salt%% *}" "${input%% *}" > "${DEVICE}"
+salt_hash_and_write() {
+	# Salt input, whiten with a hash, and write to device
+	salt | "${HASH}" > "${DEVICE}"
 }
 
-broadcast4() {
-	if type socat &>/dev/null; then
-		serverInput=$(head -c "${BYTES}" "${DEVICE}" | socat -t 0.01 - UDP-DATAGRAM:255.255.255.255:${PORT},broadcast)
-		hash_and_write
-	else
-		exit 1;
-	fi
+exchange_random_bytes() {
+	case "${IPV6}" in
+		true|TRUE|1)
+			(random_bytes | socat -t 0.01 - UDP6-DATAGRAM:[${1}]:${2}) | salt_hash_and_write
+		;;
+		*)
+			(random_bytes | socat -t 0.01 - UDP-DATAGRAM:${1}:${2}) | salt_hash_and_write
+		;;
+	esac
 }
 
-broadcast6() {
-	if type socat &>/dev/null; then
-		serverInput=$(head -c "${BYTES}" "${DEVICE}" | socat -t 0.01 - UDP6-DATAGRAM:[ff02::1]:${PORT})
-		hash_and_write
-	else
-		exit 1;
-	fi
+broadcast() {
+	case "${IPV6}" in
+		true|TRUE|1)
+			random_bytes | socat -t 0.01 - UDP6-DATAGRAM:[ff02::1]:${PORT} | salt_hash_and_write
+		;;
+		*)
+			random_bytes | socat -t 0.01 - UDP-DATAGRAM:255.255.255.255:${PORT},broadcast | salt_hash_and_write
+		;;
+	esac
 }
 
-# Loop over servers configured into the pool
+# Loop over servers configured in the pool
 for i in ${POOL}; do
 	# Get the hostname/ip
-	if [ $IPV6 == true ]; then
-		h=${i}
-		# Set port to default
-		p="${PORT}"
-	else
-		h=${i%%:*}
-		# Get the port, or set to default
-		p=${i##*:}
-		[ "${h}" = "${p}" ] && p="${PORT}"
-	fi
+	h=${i%%:*}
+	# Get the port, or set to default
+	p=${i##*:}
+	[ "${h}" = "${p}" ] && p="${PORT}"
 	[ -n "${h}" ] || continue
-	# Exchange entropy with the remote server
-	if [ $IPV6  == true ]; then
-		# For ipv6 transmission to each server socat is used, because bash does
-		# not support ipv6 sockets
-		if type socat &>/dev/null; then
-			serverInput=$(head -c "${BYTES}" "${DEVICE}" | socat -t 0.01 - UDP6-DATAGRAM:[${h}]:${p})
-			hash_and_write
-		else
-			exit 1;
-		fi
-	else
-		exec 3<>"/dev/udp/${h}/${p}"
-		head -c "${BYTES}" "${DEVICE}" >&3
-		serverInput=$(head -c "${BYTES}" <&3)
-		hash_and_write
-		# Close Socket
-		exec 3<&-
-		exec 3>&-
-	fi
+	exchange_random_bytes "${h}" "${p}"
 done
 
 # Use socat with appropriate args for ip version
-if [ $IPV6 == true ]; then
-	broadcast6
-else
-	broadcast4
-fi
+broadcast 2>/dev/null || true
