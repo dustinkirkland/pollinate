@@ -36,7 +36,6 @@ limitations under the License.
 #include <unistd.h>
 
 #define DEFAULT_EXCHANGE_SIZE 64
-#define DEFAULT_PAYLOAD_SIZE 8
 #define DEFAULT_DEVICE "/dev/urandom"
 #define DEFAULT_PORT 26373
 #define DAEMON_USER "daemon"
@@ -237,7 +236,7 @@ int main(int argc, char *argv[]) {
 				if (isdigit(optarg[0])) {
 					size = atoi(optarg);
 				} else {
-					fprintf(stderr, "Option -p requires a integer argument.\n");
+					fprintf(stderr, "Option -s requires a integer argument.\n");
 					return 1;
 				}
 				break;

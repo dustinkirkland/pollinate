@@ -16,6 +16,9 @@ anerd (1.2) unreleased; urgency=low
   [ Wesley Wiedenmeier ]
   * anerd.c, anerd-client, debian/default:
     - add ipv6 support
+  * anerd.1, anerd.c, anerd-client.1, debian/manpages:
+    - added manpages
+    - dropped unused global
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 27 Sep 2012 15:40:25 -0500
 
