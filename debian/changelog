@@ -22,6 +22,8 @@ anerd (1.2) unreleased; urgency=low
   * debian/anerd-server.manpages, debian/manpages => debian/anerd-
     client.manpages, Makefile.am:
     - install manpages (perhaps there's a better automake way of doing this?)
+  * anerd.c:
+    - rename "sum" to "crc"
 
   [ Wesley Wiedenmeier ]
   * anerd.c, anerd-client, debian/default:

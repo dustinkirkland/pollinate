@@ -152,7 +152,7 @@ int anerd_server(char *device, int size, int port, int ipv6) {
 		bytes_read = recvfrom(sock, data, size, 0,
 				(struct sockaddr *)&client_addr, &addr_len);
 		/* Logging/debug message */
-		syslog(LOG_DEBUG, "Server recv bcast  [bytes=%d] [sum=%x] from [%s:%d]\n",
+		syslog(LOG_DEBUG, "Server recv bcast  [bytes=%d] [crc=%x] from [%s:%d]\n",
 				bytes_read, anerd_crc(data, bytes_read),
 				inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
 		fflush(stdout);
@@ -167,7 +167,7 @@ int anerd_server(char *device, int size, int port, int ipv6) {
 			sendto(sock, data, bytes_read, 0, (struct sockaddr *)&client_addr,
 					sizeof(struct sockaddr));
 			syslog(LOG_DEBUG,
-					"Server sent direct [bytes=%d] [sum=%x] to [%s:%d]\n",
+					"Server sent direct [bytes=%d] [crc=%x] to [%s:%d]\n",
 					bytes_read, anerd_crc(data, bytes_read),
 					inet_ntoa(client_addr.sin_addr),
 					ntohs(client_addr.sin_port));
