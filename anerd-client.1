@@ -1,6 +1,6 @@
 .TH anerd\-client 1 "28 November 2012" anerd\-client "anerd-client"
 .SH NAME
-anerd \- asynchronous network exchanged randomness daemon client
+anerd-client \- asynchronous network exchanged randomness daemon client
 
 .SH SYNOPSIS
 \fBanerd\-client\fP
@@ -9,39 +9,30 @@ anerd \- asynchronous network exchanged randomness daemon client
 \fBanerd\-client\fP is the asynchronous network exchanged randomness daemon
 client.
 
-This client will broadcast random data to all servers listed in a pool and over
-either a ipv4 broadcast or a ipv6 multicast to all machines on the network.
-This will both give the anerd servers random data as well as prompting the
-servers to send random data to the client.
+This client will broadcast random data to all servers listed in a pool, and then over either a ipv4 broadcast or a ipv6 multicast to all machines on the network.  This will both give the anerd servers random data as well as prompting the servers to send random data to the client.
 
 .SH CONFIGURATION
-The anerd\-client configuration file should be located at /etc/anerd/pool. The
-configuration is read when the client is run. Most of the configuration can be
-left blank or commented out, however the POOL array must be populated with the
-ip address or hostname of least one server or the client will not run. The
-configuration file is read as a bash script.
+The anerd\-client configuration file should be located at \fI/etc/anerd/pool\fP. The configuration is read when the client is run. Most of the configuration can be left blank or commented out, however the POOL array must be populated with the ip address or hostname of least one server or the client will not run. The configuration file is read as a bash script.
 
 .SH CONFIGURATION VARIABLES
 .TP
 .B IPV6=\fItrue/false\fR
-enables or disables ipv6 support, by default support is disabled
+enables or disables ipv6 support, default is false
 .TP
-.B POOL="\fIservers\fR"
-the ip addresses or hostnames of the servers to broadcast to, separated by
-spaces
+.B POOL="\fIserver1 server2 1.2.3.4 anerd.us\fR"
+the ip addresses or hostnames of the servers to broadcast to, separated by spaces
 .TP
 .B PORT=\fIport\fR
-the port to broadcast on
+the port to broadcast on, default is 26373
 .TP
 .B DEVICE="\fIdevice\fR"
-the source of randomness for the entropy broadcast and the destination for
-entropy received.
+the source of randomness for the entropy broadcast and the destination for entropy received.
 .TP
 .B BYTES=\fIbytes\fR
-size of broadcast in bytes
+size of broadcast in bytes, default is 64 bytes
 
 .SH SEE ALSO
-\fBanerd(1)\fP
+\fBanerd\fP(1)
 
 .SH AUTHOR
 This utility was written by Dustin Kirkland <kirkland@ubuntu.com>. This man page
