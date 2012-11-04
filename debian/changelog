@@ -28,6 +28,8 @@ anerd (1.2) unreleased; urgency=low
     - upstart needs to expect the fork
     - upstart does not need to sudo to the daemon user because anerd does
       this automatically
+  * anerd-client:
+    - use a $cmd variable populated with correct parameters
 
   [ Wesley Wiedenmeier ]
   * anerd.c, anerd-client, debian/default:

@@ -55,25 +55,29 @@ salt_hash_and_write() {
 }
 
 exchange_random_bytes() {
+	local cmd
 	case "${IPV6}" in
 		true|TRUE|1)
-			(random_bytes | socat -t 0.01 - UDP6-DATAGRAM:[${1}]:${2}) | salt_hash_and_write
+			cmd="socat -t 0.01 - UDP6-DATAGRAM:[${1}]:${2}"
 		;;
 		*)
-			(random_bytes | socat -t 0.01 - UDP-DATAGRAM:${1}:${2}) | salt_hash_and_write
+			cmd="socat -t 0.01 - UDP-DATAGRAM:${1}:${2}"
 		;;
 	esac
+	(random_bytes | $cmd) | salt_hash_and_write
 }
 
 broadcast() {
+	local cmd
 	case "${IPV6}" in
 		true|TRUE|1)
-			random_bytes | socat -t 0.01 - UDP6-DATAGRAM:[ff02::1]:${PORT} | salt_hash_and_write
+			cmd="socat -t 0.01 - UDP6-DATAGRAM:[ff02::1]:${PORT}"
 		;;
 		*)
-			random_bytes | socat -t 0.01 - UDP-DATAGRAM:255.255.255.255:${PORT},broadcast | salt_hash_and_write
+			cmd="socat -t 0.01 - UDP-DATAGRAM:255.255.255.255:${PORT},broadcast"
 		;;
 	esac
+	(random_bytes | $cmd) | salt_hash_and_write
 }
 
 # Loop over servers configured in the pool
@@ -87,5 +91,5 @@ for i in ${POOL}; do
 	exchange_random_bytes "${h}" "${p}"
 done
 
-# Use socat with appropriate args for ip version
+# Now broadcast to the local network
 broadcast 2>/dev/null || true
