@@ -6,6 +6,8 @@ MAINTAINERCLEANFILES = \
 
 dist_doc_DATA = AUTHORS ChangeLog COPYING NEWS README
 
+dist_man_MANS = anerd.1 anerd-client.1
+
 bin_PROGRAMS = anerd
 anerd_SOURCES = anerd.c
 

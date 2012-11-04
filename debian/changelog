@@ -19,6 +19,9 @@ anerd (1.2) unreleased; urgency=low
     - use the default file for setting defaults (ie, uncomment)
   * debian/control:
     - bump standards
+  * debian/anerd-server.manpages, debian/manpages => debian/anerd-
+    client.manpages, Makefile.am:
+    - install manpages (perhaps there's a better automake way of doing this?)
 
   [ Wesley Wiedenmeier ]
   * anerd.c, anerd-client, debian/default:
