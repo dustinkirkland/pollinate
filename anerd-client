@@ -33,6 +33,16 @@ PKG="anerd"
 [ -n "${BYTES}" ] || BYTES=64
 [ -n "${HASH}" ] || HASH="sha512sum"
 
+# Detect the network tool
+if command -v socat >/dev/null; then
+	NET_TOOL="socat"
+elif command -v nc >/dev/null; then
+	NET_TOOL="nc"
+else
+	echo "ERROR: Please install socat or nc" 1>&2
+	exit 1
+fi
+
 random_bytes() {
 	# Read and print random bytes
 	head -c "${BYTES}" "${DEVICE}"
@@ -55,29 +65,47 @@ salt_hash_and_write() {
 }
 
 exchange_random_bytes() {
-	local cmd
+	local socat_cmd="" nc_cmd="" cmd=""
 	case "${IPV6}" in
 		true|TRUE|1)
-			cmd="socat -t 0.01 - UDP6-DATAGRAM:[${1}]:${2}"
+			socat_cmd="socat -t 0.01 UDP6-DATAGRAM:[${1}]:${2}"
+			nc_cmd="nc -6 -w 1 -u ${1} ${2}"
 		;;
 		*)
-			cmd="socat -t 0.01 - UDP-DATAGRAM:${1}:${2}"
+			socat_cmd="socat -t 0.01 - UDP-DATAGRAM:${1}:${2}"
+			nc_cmd="nc -4 -w 1 -u ${1} ${2}"
+		;;
+	esac
+	case "${NET_TOOL}" in
+		socat)
+			cmd="${socat_cmd}"
+		;;
+		nc)
+			cmd="${nc_cmd}"
 		;;
 	esac
 	(random_bytes | $cmd) | salt_hash_and_write
 }
 
 broadcast() {
-	local cmd
+	local socat_cmd="" nc_cmd="" cmd=""
 	case "${IPV6}" in
 		true|TRUE|1)
-			cmd="socat -t 0.01 - UDP6-DATAGRAM:[ff02::1]:${PORT}"
+			socat_cmd="socat -t 0.01 - UDP6-DATAGRAM:[ff02::1]:${1}"
 		;;
 		*)
-			cmd="socat -t 0.01 - UDP-DATAGRAM:255.255.255.255:${PORT},broadcast"
+			socat_cmd="socat -t 0.01 - UDP-DATAGRAM:255.255.255.255:${1},broadcast"
 		;;
 	esac
-	(random_bytes | $cmd) | salt_hash_and_write
+	case "${NET_TOOL}" in
+		socat)
+			cmd="${socat_cmd}"
+			(random_bytes | $cmd) | salt_hash_and_write
+		;;
+		nc)
+			echo "INFO: You must install socat for broadcat" 1>&2
+		;;
+	esac
 }
 
 # Loop over servers configured in the pool
@@ -92,4 +120,4 @@ for i in ${POOL}; do
 done
 
 # Now broadcast to the local network
-broadcast 2>/dev/null || true
+broadcast ${PORT} 2>/dev/null || true
