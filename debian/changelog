@@ -24,6 +24,10 @@ anerd (1.2) unreleased; urgency=low
     - install manpages (perhaps there's a better automake way of doing this?)
   * anerd.c:
     - rename "sum" to "crc"
+  * debian/anerd-server.upstart:
+    - upstart needs to expect the fork
+    - upstart does not need to sudo to the daemon user because anerd does
+      this automatically
 
   [ Wesley Wiedenmeier ]
   * anerd.c, anerd-client, debian/default:
