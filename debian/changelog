@@ -14,6 +14,9 @@ anerd (1.2) unreleased; urgency=low
       package depending on both
   * anerd.1, anerd-client.1:
     - manpage fixes
+  * debian/anerd-client.cron.d, debian/anerd-client.default:
+    - add some inline documentation
+    - use the default file for setting defaults (ie, uncomment)
 
   [ Wesley Wiedenmeier ]
   * anerd.c, anerd-client, debian/default:
