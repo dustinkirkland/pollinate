@@ -12,7 +12,7 @@ anerd (1.2) unreleased; urgency=low
     debian/upstart => debian/anerd-server.upstart:
     - split package into a server and client package, with a meta
       package depending on both
-  * anerd-client.1:
+  * anerd.1, anerd-client.1:
     - manpage fixes
 
   [ Wesley Wiedenmeier ]
