@@ -34,6 +34,8 @@ anerd (1.2) unreleased; urgency=low
     - reluctantly add support for netcat
   * anerd-client, anerd-client.1:
     - use a default file for configuration
+  * anerd-client:
+    - emulate the syslog printing from the server
 
   [ Wesley Wiedenmeier ]
   * anerd.c, anerd-client, debian/default:
