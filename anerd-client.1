@@ -12,7 +12,7 @@ client.
 This client will broadcast random data to all servers listed in a pool, and then over either a ipv4 broadcast or a ipv6 multicast to all machines on the network.  This will both give the anerd servers random data as well as prompting the servers to send random data to the client.
 
 .SH CONFIGURATION
-The anerd\-client configuration file should be located at \fI/etc/anerd/pool\fP. The configuration is read when the client is run. Most of the configuration can be left blank or commented out, however the POOL array must be populated with the ip address or hostname of least one server or the client will not run. The configuration file is read as a bash script.
+The anerd\-client configuration file is located at \fI/etc/default/anerd-client\fP. The configuration is read when the client is run. Most of the configuration can be left blank or commented out, however the POOL array must be populated with the ip address or hostname of least one server or the client will not run. The configuration file is read as a bash script.
 
 .SH CONFIGURATION VARIABLES
 .TP

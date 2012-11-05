@@ -32,6 +32,8 @@ anerd (1.2) unreleased; urgency=low
     - use a $cmd variable populated with correct parameters
   * anerd-client, debian/control:
     - reluctantly add support for netcat
+  * anerd-client, anerd-client.1:
+    - use a default file for configuration
 
   [ Wesley Wiedenmeier ]
   * anerd.c, anerd-client, debian/default:

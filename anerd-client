@@ -24,7 +24,7 @@ set -e
 
 # Source configuration
 PKG="anerd"
-[ -r "/etc/${PKG}/pool" ] && . "/etc/${PKG}/pool"
+[ -r "/etc/default/${PKG}-client" ] && . "/etc/default/${PKG}-client"
 [ -n "${1}" ] && POOL="${1}"
 [ -n "${IPV6}" ] || IPV6=false
 [ -n "${POOL}" ] || exit 0
