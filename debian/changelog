@@ -1,4 +1,4 @@
-anerd (1.2) unreleased; urgency=low
+anerd (1.2-0ubuntu1) raring; urgency=low
 
   [ Dustin Kirkland ]
   * debian/control, debian/cron.d:
@@ -44,7 +44,7 @@ anerd (1.2) unreleased; urgency=low
     - added manpages
     - dropped unused global
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 27 Sep 2012 15:40:25 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 22 Jan 2013 10:38:24 -0600
 
 anerd (1.1-0ubuntu1) quantal; urgency=low
 
