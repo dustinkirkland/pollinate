@@ -1,19 +1,19 @@
-This package was debianized by Dustin Kirkland <kirkland@ubuntu.com>
+This package was debianized by Dustin Kirkland <dustin.kirkland@gmail.com>
 Wed, 15 Aug 2012 23:08:23 -0600
 
 It was downloaded from: http://launchpad.net/anerd
 
 Upstream Authors:
- Dustin Kirkland <kirkland@ubuntu.com>
+ Dustin Kirkland <dustin.kirkland@gmail.com>
 
 Copyright:
- Copyright (C) 2012 Dustin Kirkland <kirkland@ubuntu.com>
+ Copyright (C) 2012 Dustin Kirkland <dustin.kirkland@gmail.com>
 
  All rights reserved.
 
 License:
 
-Copyright 2012 Dustin Kirkland <kirkland@ubuntu.com>
+Copyright 2012 Dustin Kirkland <dustin.kirkland@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 The Ubuntu packaging:
- Copyright (C) 2012 Dustin Kirkland <kirkland@ubuntu.com>
+ Copyright (C) 2012 Dustin Kirkland <dustin.kirkland@gmail.com>
  released under the GPL-3.
 
  On Debian systems, the complete text of the GNU General Public

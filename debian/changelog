@@ -1,6 +1,8 @@
 anerd (1.3) unreleased; urgency=low
 
-  * UNRELEASED
+  * anerd.1, anerd.c, anerd-client, anerd-client.1, AUTHORS,
+    debian/anerd-server.upstart, debian/copyright:
+    - updated email addresses and author information
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 22 Jan 2013 10:38:35 -0600
 

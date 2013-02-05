@@ -1,7 +1,7 @@
 # anerd - asynchronous network exchange randomness daemon
 
 description	"asynchronous network exchange randomness daemon"
-author		"Dustin Kirkland <kirkland@ubuntu.com>"
+author		"Dustin Kirkland <dustin.kirkland@gmail.com>"
 
 start on runlevel [2345]
 stop on runlevel [!2345]
