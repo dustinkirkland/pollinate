@@ -22,29 +22,29 @@ package main
 
 import (
 	"bytes"
+	"crypto/rand"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"crypto/rand"
 	"net/http"
 )
 
 var DEFAULT_SIZE int64 = 64
 
 type aNerdResponse struct {
-	Size int64
+	Size     int64
 	Encoding string
-	Data string
+	Data     string
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	data := make([]byte, DEFAULT_SIZE)
 	rand.Read(data)
 	buf := &bytes.Buffer{}
-	encoder := base64.NewEncoder(base64.StdEncoding, buf);
-	encoder.Write([]byte(data));
+	encoder := base64.NewEncoder(base64.StdEncoding, buf)
+	encoder.Write([]byte(data))
 	encoder.Close()
-	a := aNerdResponse{Size:DEFAULT_SIZE, Encoding:"base64", Data:buf.String()}
+	a := aNerdResponse{Size: DEFAULT_SIZE, Encoding: "base64", Data: buf.String()}
 	j, _ := json.Marshal(a)
 	fmt.Fprintf(w, "%s", j)
 }
