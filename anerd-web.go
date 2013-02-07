@@ -27,6 +27,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 )
 
 var DEFAULT_SIZE int64 = 64
@@ -51,5 +52,11 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.HandleFunc("/", handler)
-	http.ListenAndServe(":8080", nil)
+	port := fmt.Sprintf(":%s", os.Args[1])
+	if port == ":443" {
+		fmt.Printf("here\n")
+		http.ListenAndServeTLS(port, "/etc/anerd-webs/cert.pem", "/etc/anerd-webs/key.pem", nil)
+	} else {
+		http.ListenAndServe(port, nil)
+	}
 }

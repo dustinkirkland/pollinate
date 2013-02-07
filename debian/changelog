@@ -10,6 +10,17 @@ anerd (1.4) unreleased; urgency=low
     - drop crc from logging, change messages to info from debug
   * debian/anerd-client.default:
     - default to anerd.gazzang.net now that its up for good
+  * anerd-web, anerd-web.go, debian/anerd-web-common.install,
+    debian/anerd-webs.postinst, debian/anerd-webs.upstart, debian/anerd-
+    web.upstart, debian/control:
+    - create two small packages, one to launch anerd-web->80 and
+      anerd-webs->443
+      + both depend on anerd-web-common, which provides the go script
+    - add a postinst that generates a self-signed cert if there is none;
+      obviously, one would want to replace these with real certs if
+      security matters to you
+    - create two upstart scripts that start the web service on each port
+      + means you can install one, or the other, or both
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 05 Feb 2013 09:50:25 -0600
 

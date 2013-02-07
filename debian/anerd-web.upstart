@@ -1,0 +1,13 @@
+# anerd-web - asynchronous network exchange randomness daemon over http/https
+
+description	"asynchronous network exchange randomness daemon over http/https"
+author		"Dustin Kirkland <dustin.kirkland@gmail.com>"
+
+start on runlevel [2345]
+stop on runlevel [!2345]
+
+respawn
+respawn limit 10 5
+
+# Modify default options here
+exec anerd-web 80

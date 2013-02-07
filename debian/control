@@ -23,7 +23,7 @@ Depends: ${misc:Depends}, ${shlibs:Depends}
 Suggests: anerd-client
 Description: asynchronous network exchanged randomness daemon (server)
  This daemon will gather and respond to network requests for
- entropy on UDP port 26373.  This is the server package
+ entropy on UDP port 26373.  This is the server package.
 
 Package: anerd-client
 Architecture: all
@@ -33,3 +33,26 @@ Suggests: anerd-server
 Description: asynchronous network exchanged randomness daemon (client)
  This client will connect to anerd servers over UDP port 26373 and
  exchange entropy.
+
+Package: anerd-web-common
+Architecture: any
+Depends: ${misc:Depends}, golang-go
+Suggests: anerd-client, anerd-server, anerd-web, anerd-webs
+Description: asynchronous network exchanged randomness daemon (server)
+ Common files for the aNerd web server.
+
+Package: anerd-web
+Architecture: any
+Depends: ${misc:Depends}, anerd-web-common
+Suggests: anerd-client, anerd-server
+Description: asynchronous network exchanged randomness daemon (server)
+ This daemon will gather and respond to network requests for
+ entropy over HTTP (TCP/80).
+
+Package: anerd-webs
+Architecture: any
+Depends: ${misc:Depends}, anerd-web-common
+Suggests: anerd-client, anerd-server
+Description: asynchronous network exchanged randomness daemon (server)
+ This daemon will gather and respond to network requests for
+ entropy over HTTPS (TCP/443).
