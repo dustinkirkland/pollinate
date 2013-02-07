@@ -8,6 +8,8 @@ anerd (1.4) unreleased; urgency=low
     - adjust info messages slightly
   * anerd.c:
     - drop crc from logging, change messages to info from debug
+  * debian/anerd-client.default:
+    - default to anerd.gazzang.net now that its up for good
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 05 Feb 2013 09:50:25 -0600
 
