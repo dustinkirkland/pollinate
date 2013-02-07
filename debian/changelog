@@ -6,6 +6,8 @@ anerd (1.4) unreleased; urgency=low
   * anerd-client:
     - count the number of bytes received correctly using a tmpfile
     - adjust info messages slightly
+  * anerd.c:
+    - drop crc from logging, change messages to info from debug
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 05 Feb 2013 09:50:25 -0600
 
