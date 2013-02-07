@@ -3,6 +3,9 @@ anerd (1.4) unreleased; urgency=low
   * anerd-web.go:
     - add a very small, basic anerd-web server
     - clean up via gofmt
+  * anerd-client:
+    - count the number of bytes received correctly using a tmpfile
+    - adjust info messages slightly
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 05 Feb 2013 09:50:25 -0600
 

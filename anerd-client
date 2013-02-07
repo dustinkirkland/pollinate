@@ -61,8 +61,12 @@ salt() {
 
 salt_hash_and_write() {
 	# Salt input, whiten with a hash, and write to device
-	salt | "${HASH}" > "${DEVICE}"
-	printf "$(date '+%b %e %T') $(hostname) anerd[$$]: Client recv direct [bytes=${_COUNT}] to [${1}:${2}]\n" 1>&2
+	local f=$(mktemp -t "${PKG}.XXXXXXXXXXXX")
+	cat > "${f}"
+	local bytes=$(wc -c "${f}" | awk '{print $1}')
+	cat "${f}" | salt | "${HASH}" > "${DEVICE}"
+	rm -f "${f}"
+	printf "$(date '+%b %e %T') $(hostname) anerd[$$]: Client recv direct [bytes=${bytes}] from [${1}:${2}]\n" 1>&2
 }
 
 exchange_random_bytes() {
@@ -85,8 +89,8 @@ exchange_random_bytes() {
 			cmd="${nc_cmd}"
 		;;
 	esac
-	(random_bytes | $cmd) | salt_hash_and_write
-	printf "$(date '+%b %e %T') $(hostname) anerd[$$]: Client sent direct [bytes=${BYTES}] to [${1}:${2}]\n" 1>&2
+	printf "$(date '+%b %e %T') $(hostname) anerd[$$]: Client sent direct [bytes=${BYTES}] to   [${1}:${2}]\n" 1>&2
+	(random_bytes | $cmd) | salt_hash_and_write ${1} ${2}
 }
 
 broadcast() {
