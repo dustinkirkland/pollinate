@@ -32,6 +32,7 @@ PKG="anerd"
 [ -n "${DEVICE}" ] || DEVICE="/dev/urandom"
 [ -n "${BYTES}" ] || BYTES=64
 [ -n "${HASH}" ] || HASH="sha512sum"
+[ -n "${WAIT}" ] || WAIT="0.1"
 
 # Detect the network tool
 if command -v socat >/dev/null; then
@@ -73,11 +74,11 @@ exchange_random_bytes() {
 	local socat_cmd="" nc_cmd="" cmd=""
 	case "${IPV6}" in
 		true|TRUE|1)
-			socat_cmd="socat -t 0.01 UDP6-DATAGRAM:[${1}]:${2}"
+			socat_cmd="socat -t ${WAIT} UDP6-DATAGRAM:[${1}]:${2}"
 			nc_cmd="nc -6 -w 1 -u ${1} ${2}"
 		;;
 		*)
-			socat_cmd="socat -t 0.01 - UDP-DATAGRAM:${1}:${2}"
+			socat_cmd="socat -t ${WAIT} - UDP-DATAGRAM:${1}:${2}"
 			nc_cmd="nc -4 -w 1 -u ${1} ${2}"
 		;;
 	esac
@@ -90,23 +91,26 @@ exchange_random_bytes() {
 		;;
 	esac
 	printf "$(date '+%b %e %T') $(hostname) anerd[$$]: Client sent direct [bytes=${BYTES}] to   [${1}:${2}]\n" 1>&2
-	(random_bytes | $cmd) | salt_hash_and_write ${1} ${2}
+	random_bytes | $cmd | salt_hash_and_write ${1} ${2}
 }
 
 broadcast() {
-	local socat_cmd="" nc_cmd="" cmd=""
+	local socat_cmd="" nc_cmd="" cmd="" dest=""
 	case "${IPV6}" in
 		true|TRUE|1)
-			socat_cmd="socat -t 0.01 - UDP6-DATAGRAM:[ff02::1]:${1}"
+			dest="ff02::1"
+			socat_cmd="socat -t ${WAIT} - UDP6-DATAGRAM:[${dest}]:${1}"
 		;;
 		*)
-			socat_cmd="socat -t 0.01 - UDP-DATAGRAM:255.255.255.255:${1},broadcast"
+			dest="255.255.255.255"
+			socat_cmd="socat -t ${WAIT} - UDP-DATAGRAM:${dest}:${1},broadcast"
 		;;
 	esac
 	case "${NET_TOOL}" in
 		socat)
 			cmd="${socat_cmd}"
-			(random_bytes | $cmd) | salt_hash_and_write
+			printf "$(date '+%b %e %T') $(hostname) anerd[$$]: Client sent direct [bytes=${BYTES}] to   [${dest}:${1}]\n" 1>&2
+			random_bytes | $cmd | salt_hash_and_write ${dest} ${1}
 		;;
 		nc)
 			echo "INFO: You must install socat for broadcat" 1>&2
@@ -125,5 +129,7 @@ for i in ${POOL}; do
 	exchange_random_bytes "${h}" "${p}"
 done
 
-# Now broadcast to the local network
-broadcast ${PORT} 2>/dev/null || true
+if [ -z "${1}" ]; then
+	# Now broadcast to the local network if no server was specified
+	broadcast ${PORT} || true
+fi

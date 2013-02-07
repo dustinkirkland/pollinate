@@ -27,3 +27,8 @@ BYTES=64
 # HASH is the checksum utility used to "whiten" input received from peers.
 # Default: sha512sum
 HASH="sha512sum"
+
+# WAIT is the amount of time in seconds you're willing to wait for each
+# response from a remote aNerd server.
+# Default: 0.1
+WAIT="0.1"

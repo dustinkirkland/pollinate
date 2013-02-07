@@ -21,6 +21,11 @@ anerd (1.4) unreleased; urgency=low
       security matters to you
     - create two upstart scripts that start the web service on each port
       + means you can install one, or the other, or both
+  * anerd-client, debian/anerd-client.default:
+    - fix communication with remote servers
+    - make the wait time configurable, 0.1s by default
+    - only broadcast when no specific servers are specified
+    - add message on broadcast bytes sent
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 05 Feb 2013 09:50:25 -0600
 
