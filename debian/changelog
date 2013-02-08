@@ -34,6 +34,8 @@ anerd (1.4) unreleased; urgency=low
     - add an initramfs hook that fetches entropy at boot
   * anerd-web:
     - add interpreter
+  * anerd-web.1, debian/anerd-web-common.manpages:
+    - add documentation
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 05 Feb 2013 09:50:25 -0600
 

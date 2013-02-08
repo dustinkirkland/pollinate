@@ -1,0 +1,19 @@
+.TH anerd-web 1 "07 February 2013" anerd "anerd server"
+.SH NAME
+\fBanerd-web\fP \- asynchronous network exchanged randomness daemon web server
+
+.SH SYNOPSIS
+\fBanerd-web\fP [PORT]
+
+.SH DESCRIPTION
+\fBanerd-web\fP is a web version of the asynchronous network exchanged randomness daemon server.
+
+This daemon will gather and respond to network requests for entropy on a specified TCP port.
+
+If the port is 443, it will serve HTTPS requests, using the key at \fI/etc/anerd-webs/key.pem\fP and the cert at \fI/etc/anerd-webs/cert.pem\fP.  Otherwise, it will server HTTP requests.
+
+.SH SEE ALSO
+\fBanerd\fP(1), \fBanerd\-client\fP(1)
+
+.SH AUTHOR
+This utility and manpage was written by Dustin Kirkland <dustin.kirkland@gmail.com>.
