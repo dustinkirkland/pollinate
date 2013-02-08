@@ -1,0 +1,25 @@
+#!/bin/sh
+set -e
+
+PREREQS=""
+case $1 in
+        prereqs) echo "${PREREQS}"; exit 0;;
+esac
+
+. /usr/share/initramfs-tools/hook-functions
+
+copy_exec /usr/bin/curl /bin
+
+. /etc/default/anerd-client
+servers=
+for i in $POOL; do
+	# We need ip addresses to insert into the initramfs
+	# since we can't resolve hostnames there
+	if echo "$i" | grep -qs "^[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+$"; then
+		servers="$servers $i"
+	else
+		ip=$(host -4 $i | grep " has address " | sed -e "s%.* has address %http://%")
+		servers="$servers $ip"
+	fi
+done
+echo "$servers" > ${DESTDIR}/etc/anerd_server

@@ -1,0 +1,11 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+	configure)
+		dpkg-trigger update-initramfs;;
+	*) exit 0;;
+esac
+
+#DEBHELPER#
+exit 0

@@ -1,1 +1,3 @@
 anerd-client /usr/bin
+initramfs/hooks/anerd-client usr/share/initramfs-tools/hooks/
+initramfs/scripts/init-bottom/anerd-client usr/share/initramfs-tools/scripts/init-bottom/

@@ -1,0 +1,35 @@
+#!/bin/sh
+#
+# anerd-client-seed-rng: Seed RNG at boot with aNerd data
+#
+# Copyright 2012 Dustin Kirkland <dustin.kirkland@gmail.com>
+#
+# Authors:
+#	- Dustin Kirkland
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#	http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+case "$1" in
+	# no pre-reqs
+	prereqs) echo ""; exit 0;;
+esac
+
+. /scripts/functions
+configure_networking
+
+# Retrieve entropy from network source
+export PATH="$PATH:/bin"
+ANERD_URLS="$(cat /etc/anerd_server)"
+if [ -n "$ANERD_URLS" ]; then
+	curl -4 --connect-timeout 1 --max-time 1 --trace /dev/urandom --trace-time --output /dev/urandom --url $ANERD_URLS >/dev/urandom 2>/dev/.initramfs/anerd
+fi

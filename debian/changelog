@@ -26,6 +26,12 @@ anerd (1.4) unreleased; urgency=low
     - make the wait time configurable, 0.1s by default
     - only broadcast when no specific servers are specified
     - add message on broadcast bytes sent
+  * === added directory initramfs, === added directory initramfs/hooks,
+    === added directory initramfs/scripts, === added directory
+    initramfs/scripts/init-bottom, debian/anerd-client.install,
+    debian/anerd-client.postinst, debian/control, initramfs/hooks/anerd-
+    client, initramfs/scripts/init-bottom/anerd-client:
+    - add an initramfs hook that fetches entropy at boot
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 05 Feb 2013 09:50:25 -0600
 
