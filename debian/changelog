@@ -1,8 +1,13 @@
 anerd (1.4) unreleased; urgency=low
 
+  [ Dustin Kirkland ]
   * anerd-web.go:
     - add a very small, basic anerd-web server
     - clean up via gofmt
+
+  [ Hector Acosta ]
+  * anerd.c:
+    - Only call srandom() once
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 05 Feb 2013 09:50:25 -0600
 
