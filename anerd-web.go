@@ -26,35 +26,43 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"os"
 )
 
-var DEFAULT_SIZE int64 = 64
+var DEFAULT_SIZE int = 512
 
 type aNerdResponse struct {
-	Size     int64
+	Size     int
 	Encoding string
 	Data     string
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	data := make([]byte, DEFAULT_SIZE)
-	rand.Read(data)
+	for {
+		n, err := io.ReadAtLeast(rand.Reader, data, DEFAULT_SIZE)
+		if err == nil || n == DEFAULT_SIZE {
+			break
+		}
+
+	}
 	buf := &bytes.Buffer{}
 	encoder := base64.NewEncoder(base64.StdEncoding, buf)
 	encoder.Write([]byte(data))
 	encoder.Close()
 	a := aNerdResponse{Size: DEFAULT_SIZE, Encoding: "base64", Data: buf.String()}
-	j, _ := json.Marshal(a)
-	fmt.Fprintf(w, "%s", j)
+	j, err := json.Marshal(a)
+	if err == nil {
+		fmt.Fprintf(w, "%s", j)
+	}
 }
 
 func main() {
 	http.HandleFunc("/", handler)
 	port := fmt.Sprintf(":%s", os.Args[1])
 	if port == ":443" {
-		fmt.Printf("here\n")
 		http.ListenAndServeTLS(port, "/etc/anerd-webs/cert.pem", "/etc/anerd-webs/key.pem", nil)
 	} else {
 		http.ListenAndServe(port, nil)

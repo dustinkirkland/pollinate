@@ -37,10 +37,12 @@ anerd (1.4) unreleased; urgency=low
     - add interpreter
   * anerd-web.1, debian/anerd-web-common.manpages:
     - add documentation
+  * anerd-web.go:
+    - ensure that we read enough bytes
 
-  [ Hector Acosta ]
-  * anerd.c:
-    - Only call srandom() once
+  [ Hector Acosta ]
+  * anerd.c:
+    - Only call srandom() once
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 05 Feb 2013 09:50:25 -0600
 
