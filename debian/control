@@ -32,7 +32,7 @@ Description: asynchronous network exchanged randomness daemon (server)
 
 Package: anerd-client
 Architecture: all
-Depends: ${misc:Depends}, run-one, socat | netcat-openbsd, initramfs-tools,
+Depends: ${misc:Depends}, run-one, socat | netcat-openbsd,
 Recommends: socat
 Suggests: anerd-server, ent
 Description: asynchronous network exchanged randomness daemon (client)
