@@ -1,4 +1,4 @@
-anerd (1.4) unreleased; urgency=low
+anerd (1.4-0ubuntu1) raring; urgency=low
 
   [ Dustin Kirkland ]
   * anerd-tcp.go:
@@ -57,7 +57,7 @@ anerd (1.4) unreleased; urgency=low
   * anerd.c:
     - Only call srandom() once
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 05 Feb 2013 09:50:25 -0600
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 15 Feb 2013 13:02:50 -0600
 
 anerd (1.3-0ubuntu1) raring; urgency=low
 
