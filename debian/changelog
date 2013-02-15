@@ -50,6 +50,8 @@ anerd (1.4) unreleased; urgency=low
     - keep the initramfs code, but don't automatically update the initramfs
       for now, as this can render a machine without networking unbootable;
       re-enable this when we have a workaround for that
+  * debian/anerd-server.postinst:
+    - fix typo
 
   [ Hector Acosta ]
   * anerd.c:

@@ -2,7 +2,7 @@
 
 PKG="anerd-server"
 DIR="/etc/$PKG"
-mkdir -p 700 "$DIR"
+mkdir -p -m 700 "$DIR"
 PUB_CERT="$DIR/cert.pem"
 PK="$DIR/key.pem"
 CA="$DIR/ca.pem"
