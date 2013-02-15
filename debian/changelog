@@ -1,8 +1,8 @@
 anerd (1.4) unreleased; urgency=low
 
   [ Dustin Kirkland ]
-  * anerd-web.go:
-    - add a very small, basic anerd-web server
+  * anerd-tcp.go:
+    - add a very small, basic anerd-tcp server
     - clean up via gofmt
   * anerd-client:
     - count the number of bytes received correctly using a tmpfile
@@ -11,12 +11,12 @@ anerd (1.4) unreleased; urgency=low
     - drop crc from logging, change messages to info from debug
   * debian/anerd-client.default:
     - default to anerd.gazzang.net now that its up for good
-  * anerd-web, anerd-web.go, debian/anerd-web-common.install,
-    debian/anerd-webs.postinst, debian/anerd-webs.upstart, debian/anerd-
+  * anerd-tcp, anerd-tcp.go, debian/anerd-tcp-common.install,
+    debian/anerd-tcp.postinst, debian/anerd-tcp.upstart, debian/anerd-
     web.upstart, debian/control:
-    - create two small packages, one to launch anerd-web->80 and
-      anerd-webs->443
-      + both depend on anerd-web-common, which provides the go script
+    - create two small packages, one to launch anerd-tcp->80 and
+      anerd-tcp->443
+      + both depend on anerd-tcp-common, which provides the go script
     - add a postinst that generates a self-signed cert if there is none;
       obviously, one would want to replace these with real certs if
       security matters to you
@@ -33,12 +33,25 @@ anerd (1.4) unreleased; urgency=low
     debian/anerd-client.postinst, debian/control, initramfs/hooks/anerd-
     client, initramfs/scripts/init-bottom/anerd-client:
     - add an initramfs hook that fetches entropy at boot
-  * anerd-web:
+  * anerd-tcp:
     - add interpreter
-  * anerd-web.1, debian/anerd-web-common.manpages:
+  * anerd-tcp.1, debian/anerd-tcp-common.manpages:
     - add documentation
-  * anerd-web.go:
+  * anerd-tcp.go:
     - ensure that we read enough bytes
+  * anerd.1 => anerd-udp.1, anerd.c => anerd-udp.c, anerd-web.1 =>
+    anerd-tcp.1, anerd-web => anerd-tcp, anerd-web.go => anerd-tcp.go,
+    debian/anerd-server.anerd-udp.upstart, debian/anerd-server.default,
+    debian/anerd-server.install, debian/anerd-server.manpages,
+    debian/anerd-server.upstart => debian/anerd-server.anerd-
+    tcp.upstart, debian/anerd-web-common.install, debian/anerd-web-
+    common.manpages, debian/anerd-webs.postinst => debian/anerd-
+    server.postinst, debian/anerd-webs.upstart, debian/anerd-
+    web.upstart, debian/control, debian/rules, Makefile.am:
+    - rename the C program to anerd-udp
+    - create separate upstart scripts for anerd-tcp and anerd-udp
+    - update documentation
+    - drop anerd-web* packages
 
   [ Hector Acosta ]
   * anerd.c:

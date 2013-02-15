@@ -1,6 +1,6 @@
 /*
 
-anerd: Asynchronous Network Exchange Randomness Daemon
+anerd-udp: Asynchronous Network Exchange Randomness Daemon
 
 Copyright 2012 Dustin Kirkland <dustin.kirkland@gmail.com>
 

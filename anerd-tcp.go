@@ -1,6 +1,6 @@
 /*
 
-anerd-web: Asynchronous Network Exchange Randomness Daemon Web Server
+anerd-tcp: Asynchronous Network Exchange Randomness Daemon Web Server
 
 Copyright 2013 Dustin Kirkland <dustin.kirkland@gmail.com>
 
@@ -63,7 +63,7 @@ func main() {
 	http.HandleFunc("/", handler)
 	port := fmt.Sprintf(":%s", os.Args[1])
 	if port == ":443" {
-		http.ListenAndServeTLS(port, "/etc/anerd-webs/cert.pem", "/etc/anerd-webs/key.pem", nil)
+		http.ListenAndServeTLS(port, "/etc/anerd-server/cert.pem", "/etc/anerd-server/key.pem", nil)
 	} else {
 		http.ListenAndServe(port, nil)
 	}

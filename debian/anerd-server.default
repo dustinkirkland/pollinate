@@ -1,0 +1,24 @@
+# UDP is the UDP port on which the aNerd server should listen and respond.
+# Default: 26373
+# UDP="26373"
+UDP_PORT="26373"
+
+# TCP is the TCP port on which the aNerd server should listen and respond.
+# Default: 26373
+#TCP_PORT="26373"
+TCP_PORT="26373"
+
+# DEVICE is the source of randomness for entropy donated to the pool,
+# and the destination for received and salted entropy.
+# Default: /dev/urandom
+DEVICE="/dev/urandom"
+
+# BYTES is the size in bytes to transmit and receive each time, to peers
+# or neighbors listening for broadcast in the pool.  It is rude to set this
+# very high.
+# Default: 64
+BYTES=64
+
+# HASH is the checksum utility used to "whiten" input received from peers.
+# Default: sha512sum
+HASH="sha512sum"

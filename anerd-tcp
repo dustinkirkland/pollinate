@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# anerd-web: Asynchronous Network Exchange Randomness web server
+# anerd-tcp: Asynchronous Network Exchange Randomness web server
 #
 # Copyright 2012 Dustin Kirkland <dustin.kirkland@gmail.com>
 #
@@ -21,4 +21,4 @@
 # limitations under the License.
 
 set -e
-exec go run /usr/share/anerd/web/anerd-web.go ${1}
+exec go run /usr/share/anerd/web/anerd-tcp.go ${1}

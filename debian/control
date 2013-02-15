@@ -2,7 +2,7 @@ Source: anerd
 Section: admin
 Priority: optional
 Maintainer: Dustin Kirkland <kirkland@ubuntu.com>
-Build-Depends: debhelper (>= 7),
+Build-Depends: debhelper (>= 7.0.50~),
  autotools-dev,
  autoconf,
  automake,
@@ -19,11 +19,16 @@ Description: asynchronous network exchanged randomness daemon
 
 Package: anerd-server
 Architecture: any
-Depends: ${misc:Depends}, ${shlibs:Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}, golang-go
 Suggests: anerd-client
 Description: asynchronous network exchanged randomness daemon (server)
  This daemon will gather and respond to network requests for
- entropy on UDP port 26373.  This is the server package.
+ entropy.  This is the server package.
+ .
+ There is a UDP component which can listen on any UDP port (26373 by default),
+ as well as a TCP component, which can listen on an TCP Port and server web
+ requests.  If the TCP port is 443, it will serve over an encrypted TLS
+ connection.
 
 Package: anerd-client
 Architecture: all
@@ -33,26 +38,3 @@ Suggests: anerd-server, ent
 Description: asynchronous network exchanged randomness daemon (client)
  This client will connect to anerd servers over UDP port 26373 and
  exchange entropy.
-
-Package: anerd-web-common
-Architecture: any
-Depends: ${misc:Depends}, golang-go
-Suggests: anerd-client, anerd-server, anerd-web, anerd-webs
-Description: asynchronous network exchanged randomness daemon (server)
- Common files for the aNerd web server.
-
-Package: anerd-web
-Architecture: any
-Depends: ${misc:Depends}, anerd-web-common
-Suggests: anerd-client, anerd-server
-Description: asynchronous network exchanged randomness daemon (server)
- This daemon will gather and respond to network requests for
- entropy over HTTP (TCP/80).
-
-Package: anerd-webs
-Architecture: any
-Depends: ${misc:Depends}, anerd-web-common
-Suggests: anerd-client, anerd-server
-Description: asynchronous network exchanged randomness daemon (server)
- This daemon will gather and respond to network requests for
- entropy over HTTPS (TCP/443).

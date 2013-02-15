@@ -1,6 +1,6 @@
 #!/bin/sh -e
 
-PKG="anerd-webs"
+PKG="anerd-server"
 DIR="/etc/$PKG"
 mkdir -p 700 "$DIR"
 PUB_CERT="$DIR/cert.pem"
