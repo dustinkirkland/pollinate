@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# anerd-client: Asynchronous Network Exchange Randomness Daemon Client
+# anerd-client: a Network Exchange Randomness Daemon Client
 #
 # Copyright 2012 Dustin Kirkland <dustin.kirkland@gmail.com>
 #

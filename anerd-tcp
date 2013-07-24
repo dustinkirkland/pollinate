@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# anerd-tcp: Asynchronous Network Exchange Randomness web server
+# anerd-tcp: a Network Exchange Randomness web server
 #
 # Copyright 2012 Dustin Kirkland <dustin.kirkland@gmail.com>
 #

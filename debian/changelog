@@ -2,6 +2,11 @@ anerd (1.5) unreleased; urgency=low
 
   * anerd-tcp.go:
     - pretty print the json
+  * anerd-client, anerd-client.1, anerd-tcp, anerd-tcp.1, anerd-tcp.go,
+    anerd-udp.1, anerd-udp.c, debian/anerd-server.anerd-tcp.upstart,
+    debian/anerd-server.anerd-udp.upstart, debian/control:
+    - drop the "asynchronous" part of aNerd, this really isn't
+      necessary in the description anymore
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 15 Feb 2013 13:02:52 -0600
 
