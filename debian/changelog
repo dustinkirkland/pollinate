@@ -7,6 +7,13 @@ anerd (1.5) unreleased; urgency=low
     debian/anerd-server.anerd-udp.upstart, debian/control:
     - drop the "asynchronous" part of aNerd, this really isn't
       necessary in the description anymore
+  * anerd-tcp.go:
+    - reduce the default size to 64 bytes, which is sufficient to seed
+      any random number generator
+  * anerd-tcp.go, debian/anerd-server.default:
+    - change the default size to 64 bytes
+    - add some notes in the comments in the configuration file
+    - always uses TLS encryption for the TCP implementation
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 15 Feb 2013 13:02:52 -0600
 

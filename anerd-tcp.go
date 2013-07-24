@@ -31,7 +31,7 @@ import (
 	"os"
 )
 
-var DEFAULT_SIZE int = 512
+var DEFAULT_SIZE int = 64
 
 type aNerdResponse struct {
 	Size     int
@@ -62,9 +62,5 @@ func handler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	http.HandleFunc("/", handler)
 	port := fmt.Sprintf(":%s", os.Args[1])
-	if port == ":443" {
-		http.ListenAndServeTLS(port, "/etc/anerd-server/cert.pem", "/etc/anerd-server/key.pem", nil)
-	} else {
-		http.ListenAndServe(port, nil)
-	}
+	http.ListenAndServeTLS(port, "/etc/anerd-server/cert.pem", "/etc/anerd-server/key.pem", nil)
 }
