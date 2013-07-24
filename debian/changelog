@@ -14,6 +14,15 @@ anerd (1.5) unreleased; urgency=low
     - change the default size to 64 bytes
     - add some notes in the comments in the configuration file
     - always uses TLS encryption for the TCP implementation
+  * anerd-tcp.1 => anerd-server-tcp.1, anerd-tcp => anerd-server-tcp,
+    anerd-tcp.go => anerd-server-tcp.go, anerd-udp.1 => anerd-server-
+    udp.1, anerd-udp.c => anerd-server-udp.c, debian/anerd-server.anerd-
+    tcp.upstart => debian/anerd-server.anerd-server-tcp.upstart,
+    debian/anerd-server.anerd-udp.upstart => debian/anerd-server.anerd-
+    server-udp.upstart, debian/anerd-server.install, debian/anerd-
+    server.manpages, debian/rules, Makefile.am:
+    - rename anerd-tcp to anerd-server-tcp
+    - rename anerd-udp to anerd-server-udp
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 15 Feb 2013 13:02:52 -0600
 

@@ -4,6 +4,6 @@
 	dh $@
 
 override_dh_installinit:
-	dh_installinit --name=anerd-tcp
-	dh_installinit --name=anerd-udp
+	dh_installinit --name=anerd-server-tcp
+	dh_installinit --name=anerd-server-udp
 	dh_installinit

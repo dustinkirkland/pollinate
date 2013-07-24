@@ -1,6 +1,6 @@
 /*
 
-anerd-tcp: a Network Exchange Randomness Daemon Web Server
+anerd-server-tcp: a Network Exchange Randomness Daemon Web Server
 
 Copyright 2013 Dustin Kirkland <dustin.kirkland@gmail.com>
 
