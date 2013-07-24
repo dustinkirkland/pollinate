@@ -1,6 +1,7 @@
 anerd (1.5) unreleased; urgency=low
 
-  * UNRELEASED
+  * anerd-tcp.go:
+    - pretty print the json
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 15 Feb 2013 13:02:52 -0600
 

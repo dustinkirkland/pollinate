@@ -53,7 +53,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	encoder.Write([]byte(data))
 	encoder.Close()
 	a := aNerdResponse{Size: DEFAULT_SIZE, Encoding: "base64", Data: buf.String()}
-	j, err := json.Marshal(a)
+	j, err := json.MarshalIndent(a, "", "    ")
 	if err == nil {
 		fmt.Fprintf(w, "%s", j)
 	}
