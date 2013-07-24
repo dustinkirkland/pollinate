@@ -5,8 +5,8 @@ IPV6=false
 # POOL is a whitespace separated list of hostname/ip addresses (and ports)
 # for peers in your anerd pool. If ipv6 is enabled, please ensure that these
 # are ipv6 addresses.
-# Default: anerd.gazzang.net
-POOL="anerd.gazzang.net"
+# Default: anerd.us
+POOL="anerd.us"
 
 # PORT is the UDP port to communicate with each peer in the pool, if
 # otherwise unspecified.

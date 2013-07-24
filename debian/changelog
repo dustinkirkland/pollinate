@@ -23,6 +23,8 @@ anerd (1.5) unreleased; urgency=low
     server.manpages, debian/rules, Makefile.am:
     - rename anerd-tcp to anerd-server-tcp
     - rename anerd-udp to anerd-server-udp
+  * debian/anerd-client.default:
+    - change to the new anerd.us server, which supports TCP, TLS, and UDP
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 15 Feb 2013 13:02:52 -0600
 
