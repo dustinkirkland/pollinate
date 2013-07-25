@@ -20,7 +20,3 @@ DEVICE="/dev/urandom"
 # very high.
 # Default: 64
 BYTES=64
-
-# HASH is the checksum utility used to "whiten" input received from peers.
-# Default: sha512sum
-HASH="sha512sum"
