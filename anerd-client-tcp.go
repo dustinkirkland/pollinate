@@ -45,13 +45,14 @@ func main() {
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
 	client := &http.Client{Transport: tr}
-	resp, err := client.Get("https://localhost:26373")
+	resp, err := client.Get("https://anerd.us:26373")
 	if err != nil {
 		fmt.Println(err)
 	} else {
 		if body, err := ioutil.ReadAll(resp.Body); err == nil {
 			var j aNerdResponse
 			json.Unmarshal(body, &j)
+			//fmt.Println(j.Data)
 			data, _ := base64.StdEncoding.DecodeString(j.Data)
 			f, _ := os.Create("/dev/urandom")
 			f.Write(data)
