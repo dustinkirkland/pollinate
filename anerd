@@ -41,6 +41,7 @@ salt() {
 
 salt_hash_and_write() {
 	# Salt input, whiten with a hash, and write to device
+	[ "${DEBUG}" = "1" ] && cat "${1}" 1>&2
 	local bytes=$(wc -c "${1}" | awk '{print $1}')
 	cat "${1}" | salt | sha512sum > "${DEVICE}"
 	rm -f "${1}"
@@ -106,6 +107,10 @@ while [ ! -z "$1" ]; do
 		-d|--device)
 			DEVICE="$2"
 			shift 2
+		;;
+		--debug)
+			DEBUG="1"
+			shift
 		;;
 		-s|--server)
 			POOL="${POOL} $2"

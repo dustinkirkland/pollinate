@@ -2,6 +2,9 @@ anerd (2.1) unreleased; urgency=low
 
   * anerd-client-tcp.go:
     - default to anerd.us
+  * anerd, anerd-client-tcp.go, anerd-server-tcp.go, debian/anerd-
+    client.default:
+    - anerd.us is now serving on 443
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 25 Jul 2013 16:34:56 -0500
 

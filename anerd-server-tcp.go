@@ -56,6 +56,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	j, err := json.MarshalIndent(a, "", "    ")
 	if err == nil {
 		fmt.Fprintf(w, "%s", j)
+		LOG.Notice("howdy")
 	}
 }
 

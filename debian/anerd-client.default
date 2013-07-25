@@ -5,8 +5,8 @@ IPV6=false
 # POOL_TCP is a whitespace separated list of hostname/ip addresses (and ports)
 # for peers in your aNerd TCP pool. If ipv6 is enabled, please ensure that these
 # are ipv6 addresses.
-# Default: https://anerd.us:26373/
-POOL_TCP="https://anerd.us:26373/"
+# Default: https://anerd.us/
+POOL_TCP="https://anerd.us/"
 
 # POOL_UDP is a whitespace separated list of hostname/ip addresses (and ports)
 # for peers in your aNerd UDP pool. If ipv6 is enabled, please ensure that these

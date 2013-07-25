@@ -45,7 +45,7 @@ func main() {
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
 	client := &http.Client{Transport: tr}
-	resp, err := client.Get("https://anerd.us:26373")
+	resp, err := client.Get("https://anerd.us/")
 	if err != nil {
 		fmt.Println(err)
 	} else {
