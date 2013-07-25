@@ -1,4 +1,4 @@
-anerd (1.5) unreleased; urgency=low
+anerd (2.0) unreleased; urgency=low
 
   * anerd-tcp.go:
     - pretty print the json
@@ -35,6 +35,10 @@ anerd (1.5) unreleased; urgency=low
     Makefile.am:
     - major rework of client, combine udp/tcp clients into a single
       shell script
+  * anerd, anerd-client-tcp.go, anerd-server-tcp, anerd-server-tcp.go,
+    anerd-server-udp.c, COPYING, debian/copyright,
+    initramfs/scripts/init-bottom/anerd:
+    - changed license back to AGPL
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 15 Feb 2013 13:02:52 -0600
 
