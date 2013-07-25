@@ -6,9 +6,9 @@ MAINTAINERCLEANFILES = \
 
 dist_doc_DATA = AUTHORS ChangeLog COPYING NEWS README
 
-dist_man_MANS = anerd-server-udp.1 anerd-client.1
+dist_man_MANS = anerd-server-udp.1 anerd.1
 
 bin_PROGRAMS = anerd-server-udp
 anerd_SOURCES = anerd-server-udp.c
 
-bin_SCRIPTS = anerd-client
+bin_SCRIPTS = anerd

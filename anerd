@@ -1,0 +1,164 @@
+#!/bin/sh
+#
+# anerd: a Network Exchange Randomness Daemon client wrapper
+#
+# Copyright 2013 Dustin Kirkland <dustin.kirkland@gmail.com>
+#
+# Authors:
+#	- Dustin Kirkland
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#	http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+set -e
+
+error() {
+	echo "ERROR: $@" 1>&2
+	exit 1
+}
+
+random_bytes() {
+	# Read and print random bytes
+	head -c "${BYTES}" "${DEVICE}"
+}
+
+salt() {
+	# Append timestamp-based salt to input
+	cat
+	local i=0
+	while [ ${i} -lt ${BYTES} ] ; do
+		n=$(date +%N | sed "s/^0\+//")
+		printf "%x" ${n}
+		i=$((i+1))
+	done
+}
+
+salt_hash_and_write() {
+	# Salt input, whiten with a hash, and write to device
+	local bytes=$(wc -c "${1}" | awk '{print $1}')
+	cat "${1}" | salt | sha512sum > "${DEVICE}"
+	rm -f "${1}"
+	printf "$(date '+%b %e %T') $(hostname) anerd[$$]: ${PROTO} client recv from [${2}]\n" 1>&2
+}
+
+udp_exchange_random_bytes() {
+	local cmd=""
+	case "${IPV6}" in
+		true|TRUE|1)
+			cmd="socat -t ${WAIT} UDP6-DATAGRAM:[${1}]:${2}"
+		;;
+		*)
+			cmd="socat -t ${WAIT} - UDP-DATAGRAM:${1}:${2}"
+		;;
+	esac
+	local f=$(mktemp -t "${PKG}.XXXXXXXXXXXX")
+	printf "$(date '+%b %e %T') $(hostname) anerd[$$]: ${PROTO} client sent to [${1}:${2}]\n" 1>&2
+	(random_bytes | $cmd > "${f}") || error "UDP network communication failed [$?]"
+	salt_hash_and_write "${f}" ${1}:${2}
+}
+
+tcp_exchange_random_bytes() {
+	local url="${1}?r=$(cat /proc/sys/kernel/random/boot_id)__$(cat /proc/sys/kernel/random/uuid)"
+	local cmd="curl ${CURL_OPTS} -o- -v --trace-time ${url}"
+	printf "$(date '+%b %e %T') $(hostname) anerd[$$]: ${PROTO} client sent to [${1}]\n" 1>&2
+	local f=$(mktemp -t "${PKG}.XXXXXXXXXXXX")
+	($cmd >"${f}" 2>&1) || error "TCP network communication failed [$?]\n$(cat ${f})"
+	salt_hash_and_write "${f}" ${1}
+}
+
+broadcast() {
+	local cmd="" dest=""
+	case "${IPV6}" in
+		true|TRUE|1)
+			dest="ff02::1"
+			cmd="socat -t ${WAIT} - UDP6-DATAGRAM:[${dest}]:${1}"
+		;;
+		*)
+			dest="255.255.255.255"
+			cmd="socat -t ${WAIT} - UDP-DATAGRAM:${dest}:${1},broadcast"
+		;;
+	esac
+	printf "$(date '+%b %e %T') $(hostname) anerd[$$]: ${PROTO} client sent to [${dest}:${1}]\n" 1>&2
+	local f=$(mktemp -t "${PKG}.XXXXXXXXXXXX")
+	(random_bytes | $cmd > "${f}") || error "UDP network communication failed [$?]"
+	salt_hash_and_write "${f}" ${dest}:${1}
+}
+# Source configuration
+PKG="anerd"
+[ -r "/etc/default/${PKG}-client" ] && . "/etc/default/${PKG}-client"
+[ -r "${HOME}/.${PKG}rc" ] && . "${HOME}/.${PKG}rc"
+while [ ! -z "$1" ]; do
+	case "${1}" in
+		-b|--broadcast)
+			BROADCAST="1"
+			shift
+		;;
+		-c|--curl-opts)
+			CURL_OPTS="$2"
+			shift 2
+		;;
+		-d|--device)
+			DEVICE="$2"
+			shift 2
+		;;
+		-s|--server)
+			POOL="${POOL} $2"
+			shift 2
+		;;
+		-t|--tcp)
+			PROTO="tcp"
+			shift
+		;;
+		-u|--udp)
+			PROTO="udp"
+			shift
+		;;
+		-w|--wget-opts)
+			WGET_OPTS="$2"
+			shift 2
+		;;
+		*)
+			error "Unknown options [$1]"
+		;;
+	esac
+done
+[ -n "${DEVICE}" ] || DEVICE="/dev/urandom"
+[ -n "${IPV6}" ] || IPV6=false
+[ -n "${BYTES}" ] || BYTES=64
+[ -n "${WAIT}" ] || WAIT="0.1"
+[ -n "${PROTO}" ] || PROTO="tcp"
+if [ "${PROTO}" = "udp" ]; then
+	# Loop over servers configured in the pool
+	for i in ${POOL}; do
+		# Get the hostname/ip
+		h=${i%%:*}
+		# Get the port, or set to default
+		p=${i##*:}
+		[ "${h}" = "${p}" ] && p="26373"
+		[ -n "${h}" ] || continue
+		udp_exchange_random_bytes "${h}" "${p}"
+	done
+	if [ "${BROADCAST}" = "1" ]; then
+		# Now broadcast to the local network
+		broadcast 26373 || true
+	fi
+elif [ "${PROTO}" = "tcp" ]; then
+	if [ -z "${POOL}" ]; then
+		error "No servers configured in pool"
+	fi
+	# Default is TCP
+	for i in ${POOL}; do
+		tcp_exchange_random_bytes "${i}"
+	done
+else
+	error "Invalid protocol"
+fi

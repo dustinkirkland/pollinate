@@ -12,7 +12,7 @@ respawn limit 10 5
 script
 	. /etc/default/anerd-server
 	if [ -n "$TCP_PORT" ]; then
-		exec go run /usr/share/anerd/web/anerd-server-tcp.go $TCP_PORT
+		exec go run /usr/share/anerd/anerd-server-tcp.go $TCP_PORT
 	else
 		exec true
 	fi

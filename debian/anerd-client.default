@@ -2,16 +2,17 @@
 # Default: false
 IPV6=false
 
-# POOL is a whitespace separated list of hostname/ip addresses (and ports)
-# for peers in your anerd pool. If ipv6 is enabled, please ensure that these
+# POOL_TCP is a whitespace separated list of hostname/ip addresses (and ports)
+# for peers in your aNerd TCP pool. If ipv6 is enabled, please ensure that these
 # are ipv6 addresses.
-# Default: anerd.us
-POOL="anerd.us"
+# Default: https://anerd.us:26373/
+POOL_TCP="https://anerd.us:26373/"
 
-# PORT is the UDP port to communicate with each peer in the pool, if
-# otherwise unspecified.
-# Default: 26373
-PORT=26373
+# POOL_UDP is a whitespace separated list of hostname/ip addresses (and ports)
+# for peers in your aNerd UDP pool. If ipv6 is enabled, please ensure that these
+# are ipv6 addresses.
+# Default: anerd.us:26373
+POOL_UDP="anerd.us:26373"
 
 # DEVICE is the source of randomness for entropy donated to the pool,
 # and the destination for received and salted entropy.
@@ -30,5 +31,5 @@ HASH="sha512sum"
 
 # WAIT is the amount of time in seconds you're willing to wait for each
 # response from a remote aNerd server.
-# Default: 0.1
-WAIT="0.1"
+# Default: 1
+WAIT="1"

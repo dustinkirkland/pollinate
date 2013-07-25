@@ -25,6 +25,16 @@ anerd (1.5) unreleased; urgency=low
     - rename anerd-udp to anerd-server-udp
   * debian/anerd-client.default:
     - change to the new anerd.us server, which supports TCP, TLS, and UDP
+  * anerd, anerd-client, anerd-client.1 => anerd.1, anerd-client-tcp.go,
+    anerd-server-tcp, debian/anerd-client.cron.d, debian/anerd-
+    client.default, debian/anerd-client.install, debian/anerd-
+    client.manpages, debian/anerd-server.anerd-server-tcp.upstart,
+    debian/anerd-server.install, debian/control, initramfs/hooks/anerd-
+    client => initramfs/hooks/anerd-client-udp, initramfs/scripts/init-
+    bottom/anerd-client => initramfs/scripts/init-bottom/anerd,
+    Makefile.am:
+    - major rework of client, combine udp/tcp clients into a single
+      shell script
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 15 Feb 2013 13:02:52 -0600
 

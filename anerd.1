@@ -1,18 +1,17 @@
-.TH anerd\-client 1 "28 November 2012" anerd\-client "anerd-client"
+.TH anerd 1 "28 November 2012" anerd "anerd"
 .SH NAME
-anerd-client \- a network exchanged randomness daemon client
+anerd \- a network exchanged randomness daemon client
 
 .SH SYNOPSIS
-\fBanerd\-client\fP
+\fBanerd\fP
 
 .SH DESCRIPTION
-\fBanerd\-client\fP is a network exchanged randomness daemon
-client.
+\fBanerd\fP is a network exchanged randomness daemon client.
 
 This client will broadcast random data to all servers listed in a pool, and then over either a ipv4 broadcast or a ipv6 multicast to all machines on the network.  This will both give the anerd servers random data as well as prompting the servers to send random data to the client.
 
 .SH CONFIGURATION
-The anerd\-client configuration file is located at \fI/etc/default/anerd-client\fP. The configuration is read when the client is run. Most of the configuration can be left blank or commented out, however the POOL array must be populated with the ip address or hostname of least one server or the client will not run. The configuration file is read as a bash script.
+The anerd configuration file is located at \fI/etc/default/anerd\fP. The configuration is read when the client is run. Most of the configuration can be left blank or commented out, however the POOL array must be populated with the ip address or hostname of least one server or the client will not run. The configuration file is read as a bash script.
 
 .SH CONFIGURATION VARIABLES
 .TP
@@ -35,6 +34,4 @@ size of broadcast in bytes, default is 64 bytes
 \fBanerd\fP(1)
 
 .SH AUTHOR
-This utility was written by Dustin Kirkland <dustin.kirkland@gmail.com>. This man page
-was written by Wesley Wiedenmeier
-<magicalchicken@mail.magicalchicken.dnsdynamic.net>.
+This utility was written by Dustin Kirkland <dustin.kirkland@gmail.com>. This man page was written by Wesley Wiedenmeier <magicalchicken@mail.magicalchicken.dnsdynamic.net>.

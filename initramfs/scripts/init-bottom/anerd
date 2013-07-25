@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# anerd-client-seed-rng: Seed RNG at boot with aNerd data
+# anerd: Seed RNG at boot with aNerd data
 #
 # Copyright 2012 Dustin Kirkland <dustin.kirkland@gmail.com>
 #

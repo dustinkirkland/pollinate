@@ -10,7 +10,7 @@ esac
 
 copy_exec /usr/bin/curl /bin
 
-. /etc/default/anerd-client
+. /etc/default/anerd
 servers=
 for i in $POOL; do
 	# We need ip addresses to insert into the initramfs
