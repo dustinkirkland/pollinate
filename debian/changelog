@@ -40,7 +40,10 @@ anerd (2.0) unreleased; urgency=low
     initramfs/scripts/init-bottom/anerd:
     - changed license back to AGPL
   * debian/anerd-client.default, debian/anerd-server.default:
-    - deprecate HASH as a configurable; use sha512sum
+    - deprecate hash as a configurable; use sha512sum
+  * anerd:
+    - use socat in verbose mode, to add more timestamps to the log
+    - hash the timestamped log output
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 15 Feb 2013 13:02:52 -0600
 
