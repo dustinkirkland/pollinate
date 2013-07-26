@@ -65,11 +65,17 @@ udp_exchange_random_bytes() {
 }
 
 tcp_exchange_random_bytes() {
-	local url="${1}?r=$(cat /proc/sys/kernel/random/boot_id)__$(cat /proc/sys/kernel/random/uuid)"
-	local cmd="curl ${CURL_OPTS} -o- -v --trace-time ${url}"
+	local f1=$(mktemp -t "${PKG}.XXXXXXXXXXXX")
+	local f2=$(mktemp -t "${PKG}.XXXXXXXXXXXX")
+	printf "uuid=" > "${f1}"
+	printf "tip=" > "${f2}"
+	cat /proc/sys/kernel/random/boot_id >> "${f1}"
+	cat /proc/sys/kernel/random/uuid >> "${f2}"
+	local cmd="curl ${CURL_OPTS} -o- -v --trace-time --data @${f1} --data @${f2} ${1}"
 	printf "$(date '+%b %e %T') $(hostname) anerd[$$]: ${PROTO} client sent [16 bytes] to [${1}]\n" 1>&2
 	local f=$(mktemp -t "${PKG}.XXXXXXXXXXXX")
 	($cmd >"${f}" 2>&1) || error "TCP network communication failed [$?]\n$(cat ${f})"
+	rm "${f1}" "${f2}"
 	salt_hash_and_write "${f}" ${1}
 }
 

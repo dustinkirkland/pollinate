@@ -27,6 +27,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log/syslog"
 	"net/http"
 	"os"
 )
@@ -41,6 +42,10 @@ type aNerdResponse struct {
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	data := make([]byte, DEFAULT_SIZE)
+	log, _ := syslog.New(syslog.LOG_ERR, "anerd")
+	uuid := r.FormValue("uuid")
+	tip := r.FormValue("tip")
+	log.Info(fmt.Sprintf("TCP Server recv [%d bytes] from [%s, %s]", len(tip), r.RemoteAddr, uuid))
 	for {
 		n, err := io.ReadAtLeast(rand.Reader, data, DEFAULT_SIZE)
 		if err == nil || n == DEFAULT_SIZE {
@@ -56,7 +61,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	j, err := json.MarshalIndent(a, "", "    ")
 	if err == nil {
 		fmt.Fprintf(w, "%s", j)
-		LOG.Notice("howdy")
+		log.Info(fmt.Sprintf("TCP Server sent [%d bytes] to [%s, %s]", DEFAULT_SIZE, r.RemoteAddr, uuid))
 	}
 }
 

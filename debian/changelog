@@ -5,6 +5,9 @@ anerd (2.1) unreleased; urgency=low
   * anerd, anerd-client-tcp.go, anerd-server-tcp.go, debian/anerd-
     client.default:
     - anerd.us is now serving on 443
+  * anerd, anerd-server-tcp.go:
+    - add syslog logging to the anerd tcp server
+    - use post for the tip from the anerd tcp client
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 25 Jul 2013 16:34:56 -0500
 
