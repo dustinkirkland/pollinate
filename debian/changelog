@@ -26,6 +26,8 @@ anerd (2.1) unreleased; urgency=low
     - fix a lintian annoyance
   * anerd, anerd-server-tcp.go, anerd-server-udp.c:
     - drop byte counts in logging, as these can be misleading
+  * anerd-server-tcp.go:
+    - salt data with nanosecond timestamp
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 25 Jul 2013 16:34:56 -0500
 

@@ -29,6 +29,7 @@ import (
 	"log/syslog"
 	"net/http"
 	"os"
+	"time"
 )
 
 var DEFAULT_SIZE int = 64
@@ -47,8 +48,9 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	uuid := h.Sum(nil)
 	io.WriteString(h, r.FormValue("tip"))
 	tip := h.Sum(nil)
-	log.Info(fmt.Sprintf("TCP Server received and hashed data from [%s, %x]", len(r.FormValue("tip")), r.RemoteAddr, uuid))
+	log.Info(fmt.Sprintf("TCP Server received and hashed data from [%s, %x]", r.RemoteAddr, uuid))
 	f, _ := os.Create(DEVICE)
+	f.WriteString(fmt.Sprintf("%d", time.Now().UnixNano()))
 	f.Write(uuid)
 	f.Write(tip)
 	f.Close()
@@ -60,7 +62,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	j, err := json.MarshalIndent(a, "", "    ")
 	if err == nil {
 		fmt.Fprintf(w, "%s", j)
-		log.Info(fmt.Sprintf("TCP Server sent hashed entropy to [%s, %x]", DEFAULT_SIZE, r.RemoteAddr, uuid))
+		log.Info(fmt.Sprintf("TCP Server sent hashed entropy to [%s, %x]", r.RemoteAddr, uuid))
 	}
 }
 
