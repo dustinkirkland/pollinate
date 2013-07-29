@@ -31,8 +31,7 @@ import (
 )
 
 type aNerdResponse struct {
-	Size int
-	Encoding string
+	Format string
 	Data string
 }
 

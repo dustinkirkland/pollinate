@@ -23,9 +23,9 @@ error() {
 	exit 1
 }
 
-random_bytes() {
+random_hash() {
 	# Read and print random bytes
-	head -c "${BYTES}" "${DEVICE}"
+	head -c "${BYTES}" "${DEVICE}" | sha512sum | awk '{print $1}'
 }
 
 salt() {
@@ -60,7 +60,7 @@ udp_exchange_random_bytes() {
 	esac
 	local f=$(mktemp -t "${PKG}.XXXXXXXXXXXX")
 	printf "$(date '+%b %e %T') $(hostname) anerd[$$]: ${PROTO} client sent [${BYTES} bytes] to [${1}:${2}]\n" 1>&2
-	(random_bytes | $cmd >"${f}" 2>&1) || error "UDP network communication failed [$?]"
+	(random_hash | $cmd >"${f}" 2>&1) || error "UDP network communication failed [$?]"
 	salt_hash_and_write "${f}" ${1}:${2}
 }
 
@@ -70,9 +70,9 @@ tcp_exchange_random_bytes() {
 	printf "uuid=" > "${f1}"
 	printf "tip=" > "${f2}"
 	mkdir -p "${HOME}/.cache/${PKG}/"
-	[ -r "${HOME}/.cache/${PKG}/uuid" ] || uuidgen -r > "${HOME}/.cache/${PKG}/uuid"
+	[ -r "${HOME}/.cache/${PKG}/uuid" ] || random_hash > "${HOME}/.cache/${PKG}/uuid"
 	cat "${HOME}/.cache/${PKG}/uuid" >> "${f1}"
-	uuidgen -r >> "${f2}"
+	random_hash >> "${f2}"
 	local cmd="curl ${CURL_OPTS} -o- -v --trace-time --data @${f1} --data @${f2} ${1}"
 	printf "$(date '+%b %e %T') $(hostname) anerd[$$]: ${PROTO} client sent [16 bytes] to [${1}]\n" 1>&2
 	local f=$(mktemp -t "${PKG}.XXXXXXXXXXXX")
@@ -95,7 +95,7 @@ broadcast() {
 	esac
 	printf "$(date '+%b %e %T') $(hostname) anerd[$$]: ${PROTO} client sent to [${dest}:${1}]\n" 1>&2
 	local f=$(mktemp -t "${PKG}.XXXXXXXXXXXX")
-	(random_bytes | $cmd >"${f}" 2>&1) || error "UDP network communication failed [$?]"
+	(random_hash | $cmd >"${f}" 2>&1) || error "UDP network communication failed [$?]"
 	salt_hash_and_write "${f}" ${dest}:${1}
 }
 # Source configuration
