@@ -48,7 +48,7 @@ salt_hash_and_write() {
 	printf "$(date '+%b %e %T') $(hostname) anerd[$$]: ${PROTO} client hashed [${bytes} bytes] from [${2}]\n" 1>&2
 }
 
-udp_exchange_random_bytes() {
+udp_exchange() {
 	local cmd=""
 	case "${IPV6}" in
 		true|TRUE|1)
@@ -64,7 +64,7 @@ udp_exchange_random_bytes() {
 	salt_hash_and_write "${f}" ${1}:${2}
 }
 
-tcp_exchange_random_bytes() {
+tcp_exchange() {
 	local f1=$(mktemp -t "${PKG}.XXXXXXXXXXXX")
 	local f2=$(mktemp -t "${PKG}.XXXXXXXXXXXX")
 	printf "uuid=" > "${f1}"
@@ -165,7 +165,7 @@ if [ "${PROTO}" = "udp" ]; then
 		p=${i##*:}
 		[ "${h}" = "${p}" ] && p="26373"
 		[ -n "${h}" ] || continue
-		udp_exchange_random_bytes "${h}" "${p}"
+		udp_exchange "${h}" "${p}"
 	done
 	if [ "${BROADCAST}" = "1" ]; then
 		# Now broadcast to the local network
@@ -180,7 +180,7 @@ elif [ "${PROTO}" = "tcp" ]; then
 	fi
 	# Default is TCP
 	for i in ${POOL}; do
-		tcp_exchange_random_bytes "${i}"
+		tcp_exchange "${i}"
 	done
 else
 	error "Invalid protocol"

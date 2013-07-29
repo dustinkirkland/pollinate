@@ -16,6 +16,9 @@ anerd (2.1) unreleased; urgency=low
     - add --insecure option
   * anerd, anerd-client-tcp.go, anerd-server-tcp.go, debian/control:
     - use sha512sum rather than uuidgen
+  * anerd, debian/anerd-client.cron.d:
+    - run at reboot, and hourly thereafter
+    - shorten some function names
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 25 Jul 2013 16:34:56 -0500
 
