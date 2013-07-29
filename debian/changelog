@@ -1,4 +1,4 @@
-anerd (2.1) unreleased; urgency=low
+anerd (2.1-0ubuntu1) saucy; urgency=low
 
   * anerd-client-tcp.go:
     - default to anerd.us
@@ -29,7 +29,7 @@ anerd (2.1) unreleased; urgency=low
   * anerd-server-tcp.go:
     - salt data with nanosecond timestamp
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 25 Jul 2013 16:34:56 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 29 Jul 2013 15:24:29 -0500
 
 anerd (2.0-0ubuntu1) saucy; urgency=low
 
