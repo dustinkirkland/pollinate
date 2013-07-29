@@ -19,6 +19,9 @@ anerd (2.1) unreleased; urgency=low
   * anerd, debian/anerd-client.cron.d:
     - run at reboot, and hourly thereafter
     - shorten some function names
+  * debian/anerd-client.cron.d, debian/anerd-client.postinst:
+    - randomize the hourly cronjob to distribute load on the
+      server
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 25 Jul 2013 16:34:56 -0500
 
