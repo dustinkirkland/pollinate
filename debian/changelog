@@ -21,7 +21,7 @@ anerd (2.1) unreleased; urgency=low
     - shorten some function names
   * debian/anerd-client.cron.d, debian/anerd-client.postinst:
     - randomize the hourly cronjob to distribute load on the
-      server
+      server, if possible
   * debian/control:
     - fix a lintian annoyance
   * anerd, anerd-server-tcp.go, anerd-server-udp.c:

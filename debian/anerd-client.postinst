@@ -2,6 +2,6 @@
 
 # Randomize minute on which cronjob runs, so as not to overload server
 minute=$(expr $(hexdump -n 6 -e '/2 "%u"' /dev/urandom) % 60)
-sed -i -e "s/__RAND__/$minute/g" /etc/cron.d/anerd-client
+sed -i -e "s/__RAND__/$minute/g" /etc/cron.d/anerd-client || true
 
 #DEBHELPER#
