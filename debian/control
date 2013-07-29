@@ -32,7 +32,7 @@ Description: a network exchanged randomness daemon (server)
 
 Package: anerd-client
 Architecture: all
-Depends: ${misc:Depends}, run-one, socat, curl
+Depends: ${misc:Depends}, run-one, socat, curl, uuid-runtime
 Suggests: anerd-server, ent
 Description: a network exchanged randomness daemon (client)
  This client will connect to anerd servers over UDP port 26373 and

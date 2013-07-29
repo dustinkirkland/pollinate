@@ -69,8 +69,10 @@ tcp_exchange_random_bytes() {
 	local f2=$(mktemp -t "${PKG}.XXXXXXXXXXXX")
 	printf "uuid=" > "${f1}"
 	printf "tip=" > "${f2}"
-	cat /proc/sys/kernel/random/boot_id >> "${f1}"
-	cat /proc/sys/kernel/random/uuid >> "${f2}"
+	mkdir -p "${HOME}/.cache/${PKG}/"
+	[ -r "${HOME}/.cache/${PKG}/" ] || uuidgen -r > "${HOME}/.cache/${PKG}/uuid"
+	cat "${HOME}/.cache/${PKG}/uuid" >> "${f1}"
+	uuidgen -r >> "${f2}"
 	local cmd="curl ${CURL_OPTS} -o- -v --trace-time --data @${f1} --data @${f2} ${1}"
 	printf "$(date '+%b %e %T') $(hostname) anerd[$$]: ${PROTO} client sent [16 bytes] to [${1}]\n" 1>&2
 	local f=$(mktemp -t "${PKG}.XXXXXXXXXXXX")
