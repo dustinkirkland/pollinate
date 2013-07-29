@@ -10,6 +10,10 @@ anerd (2.1) unreleased; urgency=low
     - use post for the tip from the anerd tcp client
   * anerd, debian/control:
     - use uuidgen -r for uuid and tip
+  * anerd, anerd-server-udp.c:
+    - add UDP to syslog messages
+    - fix uuid related typo
+    - add --insecure option
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 25 Jul 2013 16:34:56 -0500
 

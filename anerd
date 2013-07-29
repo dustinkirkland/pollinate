@@ -70,7 +70,7 @@ tcp_exchange_random_bytes() {
 	printf "uuid=" > "${f1}"
 	printf "tip=" > "${f2}"
 	mkdir -p "${HOME}/.cache/${PKG}/"
-	[ -r "${HOME}/.cache/${PKG}/" ] || uuidgen -r > "${HOME}/.cache/${PKG}/uuid"
+	[ -r "${HOME}/.cache/${PKG}/uuid" ] || uuidgen -r > "${HOME}/.cache/${PKG}/uuid"
 	cat "${HOME}/.cache/${PKG}/uuid" >> "${f1}"
 	uuidgen -r >> "${f2}"
 	local cmd="curl ${CURL_OPTS} -o- -v --trace-time --data @${f1} --data @${f2} ${1}"
@@ -118,6 +118,10 @@ while [ ! -z "$1" ]; do
 		;;
 		--debug)
 			DEBUG="1"
+			shift
+		;;
+		--insecure)
+			CURL_OPTS="${CURL_OPTS} --insecure"
 			shift
 		;;
 		-s|--server)

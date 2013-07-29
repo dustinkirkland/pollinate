@@ -156,7 +156,7 @@ int anerd_server(char *device, int size, int port, int ipv6) {
 		bytes_read = recvfrom(sock, data, size, 0,
 				(struct sockaddr *)&client_addr, &addr_len);
 		/* Logging/debug message */
-		syslog(LOG_INFO, "Server recv [bytes=%d] from [%s:%d]\n",
+		syslog(LOG_INFO, "UDP Server recv [bytes=%d] from [%s:%d]\n",
 				bytes_read,
 				inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
 		fflush(stdout);
@@ -171,7 +171,7 @@ int anerd_server(char *device, int size, int port, int ipv6) {
 			sendto(sock, data, bytes_read, 0, (struct sockaddr *)&client_addr,
 					sizeof(struct sockaddr));
 			syslog(LOG_INFO,
-					"Server sent [bytes=%d] to [%s:%d]\n",
+					"UDP Server sent [bytes=%d] to [%s:%d]\n",
 					bytes_read, inet_ntoa(client_addr.sin_addr),
 					ntohs(client_addr.sin_port));
 		} else {
