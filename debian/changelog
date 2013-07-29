@@ -24,6 +24,8 @@ anerd (2.1) unreleased; urgency=low
       server
   * debian/control:
     - fix a lintian annoyance
+  * anerd, anerd-server-tcp.go, anerd-server-udp.c:
+    - drop byte counts in logging, as these can be misleading
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 25 Jul 2013 16:34:56 -0500
 

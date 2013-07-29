@@ -45,7 +45,7 @@ salt_hash_and_write() {
 	local bytes=$(wc -c "${1}" | awk '{print $1}')
 	cat "${1}" | salt | sha512sum > "${DEVICE}"
 	rm -f "${1}"
-	printf "$(date '+%b %e %T') $(hostname) anerd[$$]: ${PROTO} client hashed [${bytes} bytes] from [${2}]\n" 1>&2
+	printf "$(date '+%b %e %T') $(hostname) anerd[$$]: ${PROTO} client hashed data from [${2}]\n" 1>&2
 }
 
 udp_exchange() {
@@ -59,7 +59,7 @@ udp_exchange() {
 		;;
 	esac
 	local f=$(mktemp -t "${PKG}.XXXXXXXXXXXX")
-	printf "$(date '+%b %e %T') $(hostname) anerd[$$]: ${PROTO} client sent [${BYTES} bytes] to [${1}:${2}]\n" 1>&2
+	printf "$(date '+%b %e %T') $(hostname) anerd[$$]: ${PROTO} client sent hashed entropy to [${1}:${2}]\n" 1>&2
 	(random_hash | $cmd >"${f}" 2>&1) || error "UDP network communication failed [$?]"
 	salt_hash_and_write "${f}" ${1}:${2}
 }
@@ -74,7 +74,7 @@ tcp_exchange() {
 	cat "${HOME}/.cache/${PKG}/uuid" >> "${f1}"
 	random_hash >> "${f2}"
 	local cmd="curl ${CURL_OPTS} -o- -v --trace-time --data @${f1} --data @${f2} ${1}"
-	printf "$(date '+%b %e %T') $(hostname) anerd[$$]: ${PROTO} client sent [16 bytes] to [${1}]\n" 1>&2
+	printf "$(date '+%b %e %T') $(hostname) anerd[$$]: ${PROTO} client sent hashed entropy to [${1}]\n" 1>&2
 	local f=$(mktemp -t "${PKG}.XXXXXXXXXXXX")
 	($cmd >"${f}" 2>&1) || error "TCP network communication failed [$?]\n$(cat ${f})"
 	rm "${f1}" "${f2}"
@@ -93,7 +93,7 @@ broadcast() {
 			cmd="socat -v -t ${WAIT} - UDP-DATAGRAM:${dest}:${1},broadcast"
 		;;
 	esac
-	printf "$(date '+%b %e %T') $(hostname) anerd[$$]: ${PROTO} client sent to [${dest}:${1}]\n" 1>&2
+	printf "$(date '+%b %e %T') $(hostname) anerd[$$]: ${PROTO} client sent hashed entropy to [${dest}:${1}]\n" 1>&2
 	local f=$(mktemp -t "${PKG}.XXXXXXXXXXXX")
 	(random_hash | $cmd >"${f}" 2>&1) || error "UDP network communication failed [$?]"
 	salt_hash_and_write "${f}" ${dest}:${1}
