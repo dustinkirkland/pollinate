@@ -23,7 +23,6 @@ package main
 import (
 	"crypto/rand"
 	"crypto/sha512"
-	"encoding/json"
 	"fmt"
 	"io"
 	"log/syslog"
@@ -36,11 +35,6 @@ const (
 	DEFAULT_SIZE = 64
 	DEVICE       = "/dev/urandom"
 )
-
-type aNerdResponse struct {
-	Format string
-	Data   string
-}
 
 func handler(response http.ResponseWriter, request *http.Request) {
 	log, _ := syslog.New(syslog.LOG_ERR, "anerd")
@@ -58,13 +52,8 @@ func handler(response http.ResponseWriter, request *http.Request) {
 	data := make([]byte, DEFAULT_SIZE)
 	io.ReadAtLeast(rand.Reader, data, DEFAULT_SIZE)
 	io.WriteString(checksum, string(data[:DEFAULT_SIZE]))
-	hash := checksum.Sum(nil)
-	anerd := aNerdResponse{Format: "sha512", Data: fmt.Sprintf("%x", hash)}
-	data, err := json.MarshalIndent(anerd, "", "    ")
-	if err == nil {
-		fmt.Fprintf(response, "%s", data)
-		log.Info(fmt.Sprintf("TCP Server sent hashed entropy to [%s, %x]", request.RemoteAddr, uuid))
-	}
+	fmt.Fprintf(response, "%x", checksum.Sum(nil))
+	log.Info(fmt.Sprintf("TCP Server sent hashed entropy to [%s, %x]", request.RemoteAddr, uuid))
 }
 
 func main() {
