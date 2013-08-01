@@ -32,37 +32,38 @@ import (
 	"time"
 )
 
-var DEFAULT_SIZE int = 64
-
-var DEVICE string = "/dev/urandom"
+const (
+	DEFAULT_SIZE = 64
+	DEVICE       = "/dev/urandom"
+)
 
 type aNerdResponse struct {
 	Format string
 	Data   string
 }
 
-func handler(w http.ResponseWriter, r *http.Request) {
+func handler(response http.ResponseWriter, request *http.Request) {
 	log, _ := syslog.New(syslog.LOG_ERR, "anerd")
-	h := sha512.New()
-	io.WriteString(h, r.FormValue("uuid"))
-	uuid := h.Sum(nil)
-	io.WriteString(h, r.FormValue("tip"))
-	tip := h.Sum(nil)
-	log.Info(fmt.Sprintf("TCP Server received and hashed data from [%s, %x]", r.RemoteAddr, uuid))
-	f, _ := os.Create(DEVICE)
-	f.WriteString(fmt.Sprintf("%d", time.Now().UnixNano()))
-	f.Write(uuid)
-	f.Write(tip)
-	f.Close()
+	checksum := sha512.New()
+	io.WriteString(checksum, request.FormValue("uuid"))
+	uuid := checksum.Sum(nil)
+	io.WriteString(checksum, request.FormValue("tip"))
+	tip := checksum.Sum(nil)
+	log.Info(fmt.Sprintf("TCP Server received and hashed data from [%s, %x]", request.RemoteAddr, uuid))
+	dev, _ := os.Create(DEVICE)
+	dev.WriteString(fmt.Sprintf("%d", time.Now().UnixNano()))
+	dev.Write(uuid)
+	dev.Write(tip)
+	dev.Close()
 	data := make([]byte, DEFAULT_SIZE)
 	io.ReadAtLeast(rand.Reader, data, DEFAULT_SIZE)
-	io.WriteString(h, string(data[:DEFAULT_SIZE]))
-	hash := h.Sum(nil)
-	a := aNerdResponse{Format: "sha512", Data: fmt.Sprintf("%x", hash)}
-	j, err := json.MarshalIndent(a, "", "    ")
+	io.WriteString(checksum, string(data[:DEFAULT_SIZE]))
+	hash := checksum.Sum(nil)
+	anerd := aNerdResponse{Format: "sha512", Data: fmt.Sprintf("%x", hash)}
+	data, err := json.MarshalIndent(anerd, "", "    ")
 	if err == nil {
-		fmt.Fprintf(w, "%s", j)
-		log.Info(fmt.Sprintf("TCP Server sent hashed entropy to [%s, %x]", r.RemoteAddr, uuid))
+		fmt.Fprintf(response, "%s", data)
+		log.Info(fmt.Sprintf("TCP Server sent hashed entropy to [%s, %x]", request.RemoteAddr, uuid))
 	}
 }
 

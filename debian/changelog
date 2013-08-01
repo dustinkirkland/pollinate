@@ -5,6 +5,8 @@ anerd (2.2) unreleased; urgency=low
     - added icons
   * anerd-server-tcp.go:
     - gofmt
+  * anerd-server-tcp.go:
+    - make this code more go-like, after some code review with Tim Penney
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 29 Jul 2013 15:24:32 -0500
 
