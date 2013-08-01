@@ -3,6 +3,8 @@ anerd (2.2) unreleased; urgency=low
   * === added directory img, img/anerd_14.png, img/anerd_192.png,
     img/anerd_64.png, img/anerd.png:
     - added icons
+  * anerd-server-tcp.go:
+    - gofmt
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 29 Jul 2013 15:24:32 -0500
 

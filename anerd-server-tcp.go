@@ -37,8 +37,8 @@ var DEFAULT_SIZE int = 64
 var DEVICE string = "/dev/urandom"
 
 type aNerdResponse struct {
-	Format   string
-	Data     string
+	Format string
+	Data   string
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
