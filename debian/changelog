@@ -1,3 +1,9 @@
+anerd (2.3) unreleased; urgency=low
+
+  * UNRELEASED
+
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 01 Aug 2013 09:21:15 -0500
+
 anerd (2.2-0ubuntu1) saucy; urgency=low
 
   * === added directory img, img/anerd_14.png, img/anerd_192.png,
