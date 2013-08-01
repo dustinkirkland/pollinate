@@ -1,4 +1,4 @@
-anerd (2.2) unreleased; urgency=low
+anerd (2.2-0ubuntu1) saucy; urgency=low
 
   * === added directory img, img/anerd_14.png, img/anerd_192.png,
     img/anerd_64.png, img/anerd.png:
@@ -10,7 +10,7 @@ anerd (2.2) unreleased; urgency=low
   * anerd-server-tcp.go:
     - drop unnecessary json formatting
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 29 Jul 2013 15:24:32 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 01 Aug 2013 09:21:13 -0500
 
 anerd (2.1-0ubuntu1) saucy; urgency=low
 
