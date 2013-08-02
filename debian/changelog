@@ -1,11 +1,11 @@
-anerd (2.3) unreleased; urgency=low
+anerd (2.3-0ubuntu1) saucy; urgency=low
 
   [ Matthias Klose ]
   * debian/control: LP: #1139188
     - Don't build anerd-server on powerpc (no golang-go, prevents
       migration from raring-proposed to raring).
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 01 Aug 2013 09:21:15 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 02 Aug 2013 12:40:00 -0500
 
 anerd (2.2-0ubuntu1) saucy; urgency=low
 
