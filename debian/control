@@ -10,7 +10,7 @@ Standards-Version: 3.9.4
 Homepage: http://launchpad.net/anerd
 
 Package: anerd
-Architecture: all
+Architecture: amd64 armel armhf i386 x32
 Depends: ${misc:Depends}, anerd-server, anerd-client
 Description: client and server of a network exchanged randomness daemon
  This daemon will gather and respond to network requests for
