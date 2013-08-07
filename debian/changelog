@@ -1,6 +1,8 @@
 anerd (2.4) unreleased; urgency=low
 
-  * UNRELEASED
+  * anerd-client-tcp.go:
+    - deprecated, use the shell (curl) one for better timestamping
+      salt
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 02 Aug 2013 12:40:02 -0500
 
