@@ -20,6 +20,7 @@ Description: client and server of a network exchanged randomness daemon
 Package: anerd-server
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}, golang-go
+Recommends: haveged
 Suggests: anerd-client
 Description: server package of a network exchanged randomness daemon
  This daemon will gather and respond to network requests for
@@ -27,13 +28,12 @@ Description: server package of a network exchanged randomness daemon
  .
  There is a UDP component which can listen on any UDP port (26373 by default),
  as well as a TCP component, which can listen on an TCP Port and server web
- requests.  If the TCP port is 443, it will serve over an encrypted TLS
- connection.
+ requests over encrypted TLS connections.
 
 Package: anerd-client
 Architecture: all
-Depends: ${misc:Depends}, run-one, socat, curl
-Suggests: anerd-server, ent
+Depends: ${misc:Depends}, run-one, curl
+Suggests: anerd-server, ent, socat
 Description: client package of a network exchanged randomness daemon
  This client will connect to anerd servers over UDP port 26373 and
  exchange entropy.

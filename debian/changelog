@@ -12,6 +12,11 @@ anerd (2.4) unreleased; urgency=low
     - use a common logging function throughout
   * anerd-server-tcp.go:
     - open syslog only once
+  * anerd, debian/control:
+    - lower socat to a suggests, while still requiring curl
+    - dynamically check for socat/curl and error appropriately
+    - update package description
+    - recommend haveged on the server
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 02 Aug 2013 12:40:02 -0500
 
