@@ -10,6 +10,8 @@ anerd (2.4) unreleased; urgency=low
     - verify challenge/response, to ensure personalized communication
   * anerd:
     - use a common logging function throughout
+  * anerd-server-tcp.go:
+    - open syslog only once
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 02 Aug 2013 12:40:02 -0500
 

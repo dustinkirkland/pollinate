@@ -31,13 +31,14 @@ import (
 	"time"
 )
 
+var log *syslog.Writer
+
 const (
 	DEFAULT_SIZE = 64
 	DEVICE       = "/dev/urandom"
 )
 
 func handler(response http.ResponseWriter, request *http.Request) {
-	log, _ := syslog.New(syslog.LOG_ERR, "anerd")
 	checksum := sha512.New()
 	io.WriteString(checksum, request.FormValue("challenge"))
 	challenge_response := checksum.Sum(nil)
@@ -58,6 +59,7 @@ func handler(response http.ResponseWriter, request *http.Request) {
 }
 
 func main() {
+	log, _ = syslog.New(syslog.LOG_ERR, "anerd")
 	http.HandleFunc("/", handler)
 	port := fmt.Sprintf(":%s", os.Args[1])
 	http.ListenAndServeTLS(port, "/etc/anerd-server/cert.pem", "/etc/anerd-server/key.pem", nil)
