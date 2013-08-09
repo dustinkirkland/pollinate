@@ -23,6 +23,10 @@ error() {
 	exit 1
 }
 
+log() {
+	printf "$(date '+%b %e %T') $(hostname) anerd[$$]: ${PROTO} $@\n" 1>&2
+}
+
 random_hash() {
 	# Read and print random bytes
 	head -c "${BYTES}" "${DEVICE}" | sha512sum | awk '{print $1}'
@@ -45,7 +49,7 @@ salt_hash_and_write() {
 	local bytes=$(wc -c "${1}" | awk '{print $1}')
 	cat "${1}" "${1}.out" "${1}.err" | salt | sha512sum > "${DEVICE}"
 	rm -f "${1}"
-	printf "$(date '+%b %e %T') $(hostname) anerd[$$]: ${PROTO} client salted and hashed data from [${2}]\n" 1>&2
+	log "client salted and hashed response from [${2}]"
 }
 
 udp_exchange() {
@@ -59,7 +63,7 @@ udp_exchange() {
 		;;
 	esac
 	local f=$(mktemp -t "${PKG}.XXXXXXXXXXXX")
-	printf "$(date '+%b %e %T') $(hostname) anerd[$$]: ${PROTO} client sent hashed entropy to [${1}:${2}]\n" 1>&2
+	log "client sent hashed entropy to [${1}:${2}]"
 	(random_hash | $cmd >"${f}" 2>&1) || error "UDP network communication failed [$?]"
 	salt_hash_and_write "${f}" ${1}:${2}
 }
@@ -76,11 +80,11 @@ tcp_exchange() {
 	local challenge_response=$(printf "${challenge}" | sha512sum | awk '{print $1}')
 	printf "challenge=%s" "$challenge" > "${f2}"
 	local cmd="curl ${CURL_OPTS} -o- -v --trace-time --connect-timeout 3 --max-time 3 --data @${f1} --data @${f2} ${1}"
-	printf "$(date '+%b %e %T') $(hostname) anerd[$$]: ${PROTO} client sent hashed entropy to [${1}]\n" 1>&2
+	log "client sent hashed entropy to [${1}]"
 	local f=$(mktemp -t "${PKG}.XXXXXXXXXXXX")
 	($cmd >"${f}.out" 2>"${f}.err") || error "TCP network communication failed [$?]\n$(cat ${f})"
 	[ "${challenge_response}" = $(head -n1 "${f}.out") ] || error "TCP server failed challenge/response [expected=${challenge_response}] != [got=$(head -n1 ${f}.out)]"
-	printf "$(date '+%b %e %T') $(hostname) anerd[$$]: ${PROTO} client verified challenge/response with [${1}]\n" 1>&2
+	log "client verified challenge/response with [${1}]"
 	salt_hash_and_write "${f}" ${1}
 }
 
@@ -96,7 +100,7 @@ broadcast() {
 			cmd="socat -v -t ${WAIT} - UDP-DATAGRAM:${dest}:${1},broadcast"
 		;;
 	esac
-	printf "$(date '+%b %e %T') $(hostname) anerd[$$]: ${PROTO} client sent hashed entropy to [${dest}:${1}]\n" 1>&2
+	log "client sent hashed entropy to [${dest}:${1}]"
 	local f=$(mktemp -t "${PKG}.XXXXXXXXXXXX")
 	(random_hash | $cmd >"${f}" 2>&1) || error "UDP network communication failed [$?]"
 	salt_hash_and_write "${f}" ${dest}:${1}
