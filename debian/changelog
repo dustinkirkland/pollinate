@@ -24,6 +24,9 @@ anerd (2.4) unreleased; urgency=low
     debian/anerd-server.postrm:
     - rename uuid to tag
     - generate on package install, remove on purge
+  * anerd, debian/anerd-server.postrm => debian/anerd-client.postrm:
+    - silence search for helper utilities
+    - fix maintainer script name
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 02 Aug 2013 12:40:02 -0500
 

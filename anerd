@@ -162,7 +162,7 @@ if [ "${PROTO}" = "udp" ]; then
 			error "No servers configured in pool"
 		fi
 	fi
-	command -v socat || error "You will need to install the suggested 'socat' package to use the udp client"
+	command -v socat >/dev/null 2>&1 || error "You will need to install the suggested 'socat' package to use the udp client"
 	# Loop over servers configured in the pool
 	for i in ${POOL}; do
 		# Get the hostname/ip
@@ -184,7 +184,7 @@ elif [ "${PROTO}" = "tcp" ]; then
 			error "No servers configured in pool"
 		fi
 	fi
-	command -v curl || error "You will need to install the 'curl' package to use the udp client"
+	command -v curl >/dev/null 2>&1 || error "You will need to install the 'curl' package to use the udp client"
 	# Default is TCP
 	for i in ${POOL}; do
 		tcp_exchange "${i}"
