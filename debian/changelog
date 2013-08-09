@@ -1,4 +1,4 @@
-anerd (2.4) unreleased; urgency=low
+anerd (2.4-0ubuntu1) saucy; urgency=low
 
   * anerd-client-tcp.go:
     - deprecated, use the shell (curl) one for better timestamping
@@ -30,7 +30,7 @@ anerd (2.4) unreleased; urgency=low
   * anerd:
     - silence missing tag error messages for now
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 02 Aug 2013 12:40:02 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 09 Aug 2013 16:16:54 +0100
 
 anerd (2.3-0ubuntu1) saucy; urgency=low
 
