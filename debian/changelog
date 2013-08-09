@@ -20,6 +20,10 @@ anerd (2.4) unreleased; urgency=low
   * debian/anerd-server.default:
     - do not run the UDP, by default; local admin can enable by
       setting a port in /etc/default/anerd-server
+  * anerd, anerd-server-tcp.go, debian/anerd-client.postinst,
+    debian/anerd-server.postrm:
+    - rename uuid to tag
+    - generate on package install, remove on purge
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 02 Aug 2013 12:40:02 -0500
 

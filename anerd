@@ -71,11 +71,9 @@ udp_exchange() {
 tcp_exchange() {
 	local f1=$(mktemp -t "${PKG}.XXXXXXXXXXXX")
 	local f2=$(mktemp -t "${PKG}.XXXXXXXXXXXX")
-	printf "uuid=" > "${f1}"
-	mkdir -p "${HOME}/.cache/${PKG}/"
-	[ -r "${HOME}/.cache/${PKG}/uuid" ] || random_hash > "${HOME}/.cache/${PKG}/uuid"
-	cat "${HOME}/.cache/${PKG}/uuid" >> "${f1}"
-	# Create and enforce a challenge/response, 
+	printf "tag=" > "${f1}"
+	cat "/var/lib/${PKG}/tag" >> "${f1}" || true
+	# Create and enforce a challenge/response, to ensure personal communication
 	local challenge=$(random_hash)
 	local challenge_response=$(printf "${challenge}" | sha512sum | awk '{print $1}')
 	printf "challenge=%s" "$challenge" > "${f2}"

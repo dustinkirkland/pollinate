@@ -42,12 +42,12 @@ func handler(response http.ResponseWriter, request *http.Request) {
 	checksum := sha512.New()
 	io.WriteString(checksum, request.FormValue("challenge"))
 	challenge_response := checksum.Sum(nil)
-	io.WriteString(checksum, request.FormValue("uuid"))
-	uuid := checksum.Sum(nil)
-	log.Info(fmt.Sprintf("TCP Server received and hashed data from [%s, %s, %x] at [%v]", request.RemoteAddr, request.UserAgent(), uuid, time.Now().UnixNano()))
+	io.WriteString(checksum, request.FormValue("tag"))
+	tag := checksum.Sum(nil)
+	log.Info(fmt.Sprintf("TCP Server received and hashed data from [%s, %s, %x] at [%v]", request.RemoteAddr, request.UserAgent(), tag, time.Now().UnixNano()))
 	dev, _ := os.Create(DEVICE)
 	dev.WriteString(fmt.Sprintf("%d", time.Now().UnixNano()))
-	dev.Write(uuid)
+	dev.Write(tag)
 	dev.Write(challenge_response)
 	dev.Close()
 	data := make([]byte, DEFAULT_SIZE)
@@ -55,7 +55,7 @@ func handler(response http.ResponseWriter, request *http.Request) {
 	io.WriteString(checksum, string(data[:DEFAULT_SIZE]))
 	seed := checksum.Sum(nil)
 	fmt.Fprintf(response, "%x\n%x\n", challenge_response, seed)
-	log.Info(fmt.Sprintf("TCP Server sent hashed entropy to [%s, %s, %x] at [%v]", request.RemoteAddr, request.UserAgent(), uuid, time.Now().UnixNano()))
+	log.Info(fmt.Sprintf("TCP Server sent hashed entropy to [%s, %s, %x] at [%v]", request.RemoteAddr, request.UserAgent(), tag, time.Now().UnixNano()))
 }
 
 func main() {
