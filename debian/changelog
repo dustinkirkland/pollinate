@@ -1,3 +1,9 @@
+anerd (2.5) unreleased; urgency=low
+
+  * UNRELEASED
+
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 09 Aug 2013 16:16:57 +0100
+
 anerd (2.4-0ubuntu1) saucy; urgency=low
 
   * anerd-client-tcp.go:
