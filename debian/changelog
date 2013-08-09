@@ -27,6 +27,8 @@ anerd (2.4) unreleased; urgency=low
   * anerd, debian/anerd-server.postrm => debian/anerd-client.postrm:
     - silence search for helper utilities
     - fix maintainer script name
+  * anerd:
+    - silence missing tag error messages for now
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 02 Aug 2013 12:40:02 -0500
 

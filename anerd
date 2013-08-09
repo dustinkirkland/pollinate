@@ -72,7 +72,7 @@ tcp_exchange() {
 	local f1=$(mktemp -t "${PKG}.XXXXXXXXXXXX")
 	local f2=$(mktemp -t "${PKG}.XXXXXXXXXXXX")
 	printf "tag=" > "${f1}"
-	cat "/var/lib/${PKG}/tag" >> "${f1}" || true
+	cat "/var/lib/${PKG}/tag" 2>/dev/null >> "${f1}" || true
 	# Create and enforce a challenge/response, to ensure personal communication
 	local challenge=$(random_hash)
 	local challenge_response=$(printf "${challenge}" | sha512sum | awk '{print $1}')
