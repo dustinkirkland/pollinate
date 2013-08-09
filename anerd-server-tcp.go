@@ -43,7 +43,7 @@ func handler(response http.ResponseWriter, request *http.Request) {
 	uuid := checksum.Sum(nil)
 	io.WriteString(checksum, request.FormValue("tip"))
 	tip := checksum.Sum(nil)
-	log.Info(fmt.Sprintf("TCP Server received and hashed data from [%s, %x]", request.RemoteAddr, uuid))
+	log.Info(fmt.Sprintf("TCP Server received and hashed data from [%s, %s, %x] at [%v]", request.RemoteAddr, request.UserAgent(), uuid, time.Now().UnixNano()))
 	dev, _ := os.Create(DEVICE)
 	dev.WriteString(fmt.Sprintf("%d", time.Now().UnixNano()))
 	dev.Write(uuid)
@@ -53,7 +53,7 @@ func handler(response http.ResponseWriter, request *http.Request) {
 	io.ReadAtLeast(rand.Reader, data, DEFAULT_SIZE)
 	io.WriteString(checksum, string(data[:DEFAULT_SIZE]))
 	fmt.Fprintf(response, "%x", checksum.Sum(nil))
-	log.Info(fmt.Sprintf("TCP Server sent hashed entropy to [%s, %x]", request.RemoteAddr, uuid))
+	log.Info(fmt.Sprintf("TCP Server sent hashed entropy to [%s, %s, %x] at [%v]", request.RemoteAddr, request.UserAgent(), uuid, time.Now().UnixNano()))
 }
 
 func main() {
