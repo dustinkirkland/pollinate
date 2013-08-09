@@ -43,9 +43,9 @@ salt_hash_and_write() {
 	# Salt input, whiten with a hash, and write to device
 	[ "${DEBUG}" = "1" ] && cat "${1}" 1>&2
 	local bytes=$(wc -c "${1}" | awk '{print $1}')
-	cat "${1}" | salt | sha512sum > "${DEVICE}"
+	cat "${1}" "${1}.out" "${1}.err" | salt | sha512sum > "${DEVICE}"
 	rm -f "${1}"
-	printf "$(date '+%b %e %T') $(hostname) anerd[$$]: ${PROTO} client hashed data from [${2}]\n" 1>&2
+	printf "$(date '+%b %e %T') $(hostname) anerd[$$]: ${PROTO} client salted and hashed data from [${2}]\n" 1>&2
 }
 
 udp_exchange() {
@@ -68,16 +68,19 @@ tcp_exchange() {
 	local f1=$(mktemp -t "${PKG}.XXXXXXXXXXXX")
 	local f2=$(mktemp -t "${PKG}.XXXXXXXXXXXX")
 	printf "uuid=" > "${f1}"
-	printf "tip=" > "${f2}"
 	mkdir -p "${HOME}/.cache/${PKG}/"
 	[ -r "${HOME}/.cache/${PKG}/uuid" ] || random_hash > "${HOME}/.cache/${PKG}/uuid"
 	cat "${HOME}/.cache/${PKG}/uuid" >> "${f1}"
-	random_hash >> "${f2}"
-	local cmd="curl ${CURL_OPTS} -o- -v --trace-time --data @${f1} --data @${f2} ${1}"
+	# Create and enforce a challenge/response, 
+	local challenge=$(random_hash)
+	local challenge_response=$(printf "${challenge}" | sha512sum | awk '{print $1}')
+	printf "challenge=%s" "$challenge" > "${f2}"
+	local cmd="curl ${CURL_OPTS} -o- -v --trace-time --connect-timeout 3 --max-time 3 --data @${f1} --data @${f2} ${1}"
 	printf "$(date '+%b %e %T') $(hostname) anerd[$$]: ${PROTO} client sent hashed entropy to [${1}]\n" 1>&2
 	local f=$(mktemp -t "${PKG}.XXXXXXXXXXXX")
-	($cmd >"${f}" 2>&1) || error "TCP network communication failed [$?]\n$(cat ${f})"
-	rm "${f1}" "${f2}"
+	($cmd >"${f}.out" 2>"${f}.err") || error "TCP network communication failed [$?]\n$(cat ${f})"
+	[ "${challenge_response}" = $(head -n1 "${f}.out") ] || error "TCP server failed challenge/response [expected=${challenge_response}] != [got=$(head -n1 ${f}.out)]"
+	printf "$(date '+%b %e %T') $(hostname) anerd[$$]: ${PROTO} client verified challenge/response with [${1}]\n" 1>&2
 	salt_hash_and_write "${f}" ${1}
 }
 

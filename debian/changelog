@@ -5,6 +5,9 @@ anerd (2.4) unreleased; urgency=low
       salt
   * anerd-server-tcp.go:
     - log user-agent and nanosecond timestamp
+  * anerd, anerd-server-tcp.go:
+    - rename "tip" to "challenge", use for challenge/response
+    - verify challenge/response, to ensure personalized communication
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 02 Aug 2013 12:40:02 -0500
 
