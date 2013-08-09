@@ -17,6 +17,9 @@ anerd (2.4) unreleased; urgency=low
     - dynamically check for socat/curl and error appropriately
     - update package description
     - recommend haveged on the server
+  * debian/anerd-server.default:
+    - do not run the UDP, by default; local admin can enable by
+      setting a port in /etc/default/anerd-server
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 02 Aug 2013 12:40:02 -0500
 
