@@ -44,6 +44,8 @@ pollen (3.0) unreleased; urgency=low
     - update some documentation and descriptions
   * img/pollen_14.png, img/pollen_192.png, img/pollen_64.png:
     - added new pollen logos
+  * debian/control:
+    - drop suggests
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 09 Aug 2013 16:16:57 +0100
 
