@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# pollinate: a Network Exchanged Entropy Daemon (client)
+# pollinate: an Entropy-as-a-Service client
 #
 #  Copyright (C) 2012-2013 Dustin Kirkland <dustin.kirkland@gmail.com>
 #

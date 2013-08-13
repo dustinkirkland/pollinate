@@ -40,6 +40,8 @@ pollen (3.0) unreleased; urgency=low
     - move manpage to section 8
   * pollen.8, pollinate, pollinate.1:
     - documentation updated
+  * debian/control, pollen.8, pollinate:
+    - update some documentation and descriptions
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 09 Aug 2013 16:16:57 +0100
 
