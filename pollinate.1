@@ -1,37 +1,31 @@
 .TH pollinate 1 "28 November 2012" pollinate "pollinate"
 .SH NAME
-pollinate \- a network exchanged entropy daemon (client)
+pollinate \- an Entropy-as-a-Service client
 
 .SH SYNOPSIS
-\fBpollinate\fP
+\fBpollinate\fP [-c|--curl-opts CURL_OPTS] [-d|--device DEVICE] [-i|--insecure] [-s|--server SERVER]
 
 .SH DESCRIPTION
-\fBpollinate\fP is a network exchanged randomness daemon client.
+\fBpollinate\fP is an entropy as a service client.  It will fetch a random seed from one or more remote servers, and feed those into a (pseudo) random number generator.  This is often useful in cloud and virtual machine environments with limited sources of entropy.
 
-This client will broadcast random data to all servers listed in a pool, and then over either a ipv4 broadcast or a ipv6 multicast to all machines on the network.  This will both give the \fBpollen\fP(8) servers random data as well as prompting the servers to send random data to the client.
-
-.SH CONFIGURATION
-The configuration file is located at \fI/etc/default/pollinate\fP. The configuration is read when the client is run. Most of the configuration can be left blank or commented out, however the POOL array must be populated with the ip address or hostname of least one server or the client will not run. The configuration file is read as a bash script.
-
-.SH CONFIGURATION VARIABLES
+.SH OPTIONS
 .TP
-.B IPV6=\fItrue/false\fR
-enables or disables ipv6 support, default is false
+\fB-c|--curl-opts\fP CURL_OPTS
+options to pass through to \fBcurl\fP(1)
 .TP
-.B POOL="\fIserver1 server2 1.2.3.4 example.com\fR"
-the ip addresses or hostnames of the servers to broadcast to, separated by spaces
+\fB-d|--device\fP DEVICE
+device to seed (default is \fI/dev/urandom\fP)
 .TP
-.B PORT=\fIport\fR
-the port to broadcast on, default is 26373
+\fB-i|--insecure\fP
+ignore SSL/TLS certificate errors (use of this option is highly discouraged)
 .TP
-.B DEVICE="\fIdevice\fR"
-the source of randomness for the entropy broadcast and the destination for entropy received.
-.TP
-.B BYTES=\fIbytes\fR
-size of broadcast in bytes, default is 64 bytes
+\fB-s|--server\fP SERVER
+remote \fBpollen\fP(8) server to interact with
 
 .SH SEE ALSO
 \fBpollen\fP(8)
 
 .SH AUTHOR
-This utility was written by Dustin Kirkland <dustin.kirkland@gmail.com>. This man page was written by Wesley Wiedenmeier <magicalchicken@mail.magicalchicken.dnsdynamic.net>.
+This manpage and the utility were written by Dustin Kirkland <kirkland@ubuntu.com> for Ubuntu systems (but may be used by others).  Permission is granted to copy, distribute and/or modify this document under the terms of the GNU General Public License, Version 3 published by the Free Software Foundation.
+
+On Debian systems, the complete text of the GNU General Public License can be found in /usr/share/common-licenses/GPL, or on the web at \fIhttp://www.gnu.org/licenses/gpl.txt\fP.

@@ -10,10 +10,12 @@
 
 This daemon will gather and respond to network requests for entropy on a specified port.
 
-If the port is 443, it will serve HTTPS requests, using the key at \fI/etc/pollen/key.pem\fP and the cert at \fI/etc/pollen/cert.pem\fP.  Otherwise, it will server HTTP requests.
+All requests are serviced over HTTPS, using the key at \fI/etc/pollen/key.pem\fP and the cert at \fI/etc/pollen/cert.pem\fP.
 
 .SH SEE ALSO
 \fBpollen\fP(1), \fBpollinate\fP(1)
 
 .SH AUTHOR
-This utility and manpage was written by Dustin Kirkland <dustin.kirkland@gmail.com>.
+This manpage and the utility were written by Dustin Kirkland <kirkland@ubuntu.com> for Ubuntu systems (but may be used by others).  Permission is granted to copy, distribute and/or modify this document under the terms of the GNU General Public License, Version 3 published by the Free Software Foundation.
+
+On Debian systems, the complete text of the GNU General Public License can be found in /usr/share/common-licenses/GPL, or on the web at \fIhttp://www.gnu.org/licenses/gpl.txt\fP.

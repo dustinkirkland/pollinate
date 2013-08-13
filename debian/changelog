@@ -38,6 +38,8 @@ pollen (3.0) unreleased; urgency=low
   * debian/control, debian/pollen.manpages:
     - package maintenace for package/project rename
     - move manpage to section 8
+  * pollen.8, pollinate, pollinate.1:
+    - documentation updated
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 09 Aug 2013 16:16:57 +0100
 

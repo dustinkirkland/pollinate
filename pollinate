@@ -47,7 +47,6 @@ salt() {
 
 salt_hash_and_write() {
 	# Salt input, whiten with a hash, and write to device
-	[ "${DEBUG}" = "1" ] && cat "${1}" 1>&2
 	local bytes=$(wc -c "${1}" | awk '{print $1}')
 	cat "${1}" "${1}.out" "${1}.err" | salt | sha512sum > "${DEVICE}"
 	rm -f "${1}"
@@ -77,10 +76,6 @@ exchange() {
 [ -r "${HOME}/.${PKG}rc" ] && . "${HOME}/.${PKG}rc"
 while [ ! -z "$1" ]; do
 	case "${1}" in
-		-b|--broadcast)
-			BROADCAST="1"
-			shift
-		;;
 		-c|--curl-opts)
 			CURL_OPTS="$2"
 			shift 2
@@ -89,20 +84,12 @@ while [ ! -z "$1" ]; do
 			DEVICE="$2"
 			shift 2
 		;;
-		--debug)
-			DEBUG="1"
-			shift
-		;;
-		--insecure)
+		-i|--insecure)
 			CURL_OPTS="${CURL_OPTS} --insecure"
 			shift
 		;;
 		-s|--server)
 			POOL="${POOL} $2"
-			shift 2
-		;;
-		-w|--wget-opts)
-			WGET_OPTS="$2"
 			shift 2
 		;;
 		*)
