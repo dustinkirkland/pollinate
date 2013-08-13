@@ -12,8 +12,11 @@ Homepage: http://launchpad.net/pollen
 Package: pollen
 Architecture: amd64 armel armhf i386 x32
 Depends: ${misc:Depends}, ${shlibs:Depends}, golang-go
-Recommends: haveged
+Recommends: haveged, pollinate
 Suggests: pollinate
+Provides: anerd-server
+Replaces: anerd-server (<< 3.0)
+Breaks: anerd-server (<< 3.0)
 Description: server package of a network exchanged randomness daemon
  This daemon will gather and respond to network requests for
  entropy.  This is the server package.
@@ -25,5 +28,8 @@ Package: pollinate
 Architecture: all
 Depends: ${misc:Depends}, run-one, curl
 Suggests: pollen-server, ent
+Provides: anerd, anerd-client
+Replaces: anerd (<< 3.0), anerd-client (<< 3.0)
+Breaks: anerd (<< 3.0), anerd-client (<< 3.0)
 Description: client package of a network exchanged randomness daemon
  This client will connect to pollen servers and exchange entropy.

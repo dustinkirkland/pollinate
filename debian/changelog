@@ -35,6 +35,9 @@ pollen (3.0) unreleased; urgency=low
     - rename anerd server/client to pollen / pollinate
       to reflect that this data is intended to "seed" a random
       number generator
+  * debian/control, debian/pollen.manpages:
+    - package maintenace for package/project rename
+    - move manpage to section 8
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 09 Aug 2013 16:16:57 +0100
 
