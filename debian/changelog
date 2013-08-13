@@ -1,4 +1,4 @@
-pollen (3.0) unreleased; urgency=low
+pollen (3.0-0ubuntu1) saucy; urgency=low
 
   * anerd, anerd-server-tcp.1 => anerd-server.1, anerd-server-tcp =>
     anerd-server, anerd-server-tcp.go => anerd-server.go, anerd-server-
@@ -47,7 +47,7 @@ pollen (3.0) unreleased; urgency=low
   * debian/control:
     - drop suggests
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 09 Aug 2013 16:16:57 +0100
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 13 Aug 2013 16:34:42 -0500
 
 anerd (2.4-0ubuntu1) saucy; urgency=low
 
