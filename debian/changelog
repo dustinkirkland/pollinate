@@ -1,6 +1,18 @@
 anerd (2.5) unreleased; urgency=low
 
-  * UNRELEASED
+  * anerd, anerd-server-tcp.1 => anerd-server.1, anerd-server-tcp =>
+    anerd-server, anerd-server-tcp.go => anerd-server.go, anerd-server-
+    udp.1, anerd-server-udp.c, configure.ac, debian/anerd-
+    client.default, debian/anerd-server.anerd-server-tcp.upstart =>
+    debian/anerd-server.upstart, debian/anerd-server.anerd-server-
+    udp.upstart, debian/anerd-server.default, debian/anerd-
+    server.install, debian/anerd-server.manpages, debian/control,
+    debian/rules, Makefile.am:
+    - completely deprecate the UDP operation of both the client and
+      the server
+    - the TLS server over TCP is the only supported protocol going
+      forward
+    - this will necessitate a major version bump
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 09 Aug 2013 16:16:57 +0100
 

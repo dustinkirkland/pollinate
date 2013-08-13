@@ -8,12 +8,6 @@ IPV6=false
 # Default: https://anerd.us/
 POOL_TCP="https://anerd.us/"
 
-# POOL_UDP is a whitespace separated list of hostname/ip addresses (and ports)
-# for peers in your aNerd UDP pool. If ipv6 is enabled, please ensure that these
-# are ipv6 addresses.
-# Default: anerd.us:26373
-POOL_UDP="anerd.us:26373"
-
 # DEVICE is the source of randomness for entropy donated to the pool,
 # and the destination for received and salted entropy.
 # Default: /dev/urandom

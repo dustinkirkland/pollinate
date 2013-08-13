@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# anerd-server-tcp: a Network Exchange Randomness web server
+# anerd-server: a Network Exchange Randomness web server
 #
 #  Copyright (C) 2012-2013 Dustin Kirkland <dustin.kirkland@gmail.com>
 #
@@ -17,4 +17,4 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 set -e
-exec go run /usr/share/anerd/anerd-server-tcp.go ${1}
+exec go run /usr/share/anerd/anerd-server${1}

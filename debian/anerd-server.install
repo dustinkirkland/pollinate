@@ -1,3 +1,2 @@
-anerd-server-udp /usr/bin
-anerd-server-tcp /usr/bin/
-anerd-server-tcp.go /usr/share/anerd/
+anerd-server /usr/bin/
+anerd-server.go /usr/share/anerd/

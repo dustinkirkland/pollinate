@@ -1,8 +1,3 @@
-# UDP is the UDP port on which the aNerd server should listen and respond.
-# Note that this traffic is clear text on the network.
-# Default: disabled, by default; recommended to run on 26373
-#UDP_PORT="26373"
-
 # TCP is the TCP port on which the aNerd server should listen and respond.
 # Note that these connections will be encrypted using TLS
 # Default: 26373
