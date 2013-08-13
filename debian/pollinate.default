@@ -3,7 +3,7 @@
 IPV6=false
 
 # POOL_TCP is a whitespace separated list of hostname/ip addresses (and ports)
-# for peers in your aNerd TCP pool. If ipv6 is enabled, please ensure that these
+# for peers in your pollen pool. If ipv6 is enabled, please ensure that these
 # are ipv6 addresses.
 # Default: https://anerd.us/
 POOL_TCP="https://anerd.us/"
@@ -20,6 +20,6 @@ DEVICE="/dev/urandom"
 BYTES=64
 
 # WAIT is the amount of time in seconds you're willing to wait for each
-# response from a remote aNerd server.
+# response from a remote pollen server.
 # Default: 1
 WAIT="1"

@@ -1,0 +1,19 @@
+.TH pollen 1 "07 February 2013" pollen "pollen server"
+.SH NAME
+\fBpollen\fP \- Entropy-as-a-Service web server
+
+.SH SYNOPSIS
+\fBpollen\fP [PORT]
+
+.SH DESCRIPTION
+\fBpollen\fP is a web version of a network exchanged randomness daemon server.
+
+This daemon will gather and respond to network requests for entropy on a specified port.
+
+If the port is 443, it will serve HTTPS requests, using the key at \fI/etc/pollen/key.pem\fP and the cert at \fI/etc/pollen/cert.pem\fP.  Otherwise, it will server HTTP requests.
+
+.SH SEE ALSO
+\fBpollen\fP(1), \fBpollinate\fP(1)
+
+.SH AUTHOR
+This utility and manpage was written by Dustin Kirkland <dustin.kirkland@gmail.com>.

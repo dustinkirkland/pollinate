@@ -1,6 +1,6 @@
 #!/bin/sh -e
 
-PKG="anerd-server"
+PKG="pollen"
 DIR="/etc/$PKG"
 mkdir -p -m 700 "$DIR"
 PUB_CERT="$DIR/cert.pem"

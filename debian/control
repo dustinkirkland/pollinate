@@ -1,4 +1,4 @@
-Source: anerd
+Source: pollen
 Section: admin
 Priority: optional
 Maintainer: Dustin Kirkland <kirkland@ubuntu.com>
@@ -7,20 +7,13 @@ Build-Depends: debhelper (>= 7.0.50~),
  autoconf,
  automake,
 Standards-Version: 3.9.4
-Homepage: http://launchpad.net/anerd
+Homepage: http://launchpad.net/pollen
 
-Package: anerd
+Package: pollen
 Architecture: amd64 armel armhf i386 x32
-Depends: ${misc:Depends}, anerd-server, anerd-client
-Description: client and server of a network exchanged randomness daemon
- This daemon will gather and respond to network requests for
- entropy.  This is a metapackage that installs both the client and server.
-
-Package: anerd-server
-Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}, golang-go
 Recommends: haveged
-Suggests: anerd-client
+Suggests: pollinate
 Description: server package of a network exchanged randomness daemon
  This daemon will gather and respond to network requests for
  entropy.  This is the server package.
@@ -28,9 +21,9 @@ Description: server package of a network exchanged randomness daemon
  The server listens on an TCP Port and server web requests over encrypted
  TLS connections.
 
-Package: anerd-client
+Package: pollinate
 Architecture: all
 Depends: ${misc:Depends}, run-one, curl
-Suggests: anerd-server, ent
+Suggests: pollen-server, ent
 Description: client package of a network exchanged randomness daemon
- This client will connect to anerd servers and exchange entropy.
+ This client will connect to pollen servers and exchange entropy.

@@ -1,0 +1,16 @@
+#!/bin/sh -e
+
+# Randomize minute on which cronjob runs, so as not to overload server
+minute=$(expr $(hexdump -n 6 -e '/2 "%u"' /dev/urandom) % 60)
+sed -i -e "s/__RAND__/$minute/g" /etc/cron.d/pollinate || true
+mkdir -p /var/lib/pollinate
+if [ ! -s /var/lib/pollinate/tag ]; then
+	tag=$(head -c 128 /dev/urandom | sha512sum | awk '{print $1}')
+	printf "%s\n" "$tag" > /var/lib/pollinate/tag
+fi
+chown root:root /var/lib/pollinate
+chmod 755 /var/lib/pollinate
+chown root:root /var/lib/pollinate/
+chmod 644 /var/lib/pollinate/tag
+
+#DEBHELPER#

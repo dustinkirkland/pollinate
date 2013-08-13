@@ -1,6 +1,6 @@
 /*
 
-anerd-server: a Network Exchange Randomness Daemon Web Server
+pollen: Entropy-as-a-Server web server
 
   Copyright (C) 2012-2013 Dustin Kirkland <dustin.kirkland@gmail.com>
 
@@ -59,8 +59,8 @@ func handler(response http.ResponseWriter, request *http.Request) {
 }
 
 func main() {
-	log, _ = syslog.New(syslog.LOG_ERR, "anerd")
+	log, _ = syslog.New(syslog.LOG_ERR, "pollen")
 	http.HandleFunc("/", handler)
 	port := fmt.Sprintf(":%s", os.Args[1])
-	http.ListenAndServeTLS(port, "/etc/anerd-server/cert.pem", "/etc/anerd-server/key.pem", nil)
+	http.ListenAndServeTLS(port, "/etc/pollen/cert.pem", "/etc/pollen/key.pem", nil)
 }

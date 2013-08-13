@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# anerd: a Network Exchange Randomness Daemon client
+# pollinate: a Network Exchanged Entropy Daemon (client)
 #
 #  Copyright (C) 2012-2013 Dustin Kirkland <dustin.kirkland@gmail.com>
 #
@@ -18,13 +18,15 @@
 
 set -e
 
+PKG="pollinate"
+
 error() {
 	echo "ERROR: $@" 1>&2
 	exit 1
 }
 
 log() {
-	printf "$(date '+%b %e %T') $(hostname) anerd[$$]: $@\n" 1>&2
+	printf "$(date '+%b %e %T') $(hostname) ${PKG}[$$]: $@\n" 1>&2
 }
 
 random_hash() {
@@ -71,7 +73,6 @@ exchange() {
 }
 
 # Source configuration
-PKG="anerd"
 [ -r "/etc/default/${PKG}-client" ] && . "/etc/default/${PKG}-client"
 [ -r "${HOME}/.${PKG}rc" ] && . "${HOME}/.${PKG}rc"
 while [ ! -z "$1" ]; do

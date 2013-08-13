@@ -1,4 +1,4 @@
-anerd (2.5) unreleased; urgency=low
+pollen (3.0) unreleased; urgency=low
 
   * anerd, anerd-server-tcp.1 => anerd-server.1, anerd-server-tcp =>
     anerd-server, anerd-server-tcp.go => anerd-server.go, anerd-server-
@@ -13,6 +13,28 @@ anerd (2.5) unreleased; urgency=low
     - the TLS server over TCP is the only supported protocol going
       forward
     - this will necessitate a major version bump
+  * anerd.1 => pollinate.1, anerd => pollinate, anerd-server.1 =>
+    pollen.8, anerd-server.go => pollen.go, anerd-server => pollen,
+    ChangeLog, debian/anerd-client.cron.d => debian/pollinate.cron.d,
+    debian/anerd-client.default => debian/pollinate.default,
+    debian/anerd-client.install => debian/pollinate.install,
+    debian/anerd-client.manpages => debian/pollinate.manpages,
+    debian/anerd-client.postinst => debian/pollinate.postinst,
+    debian/anerd-client.postrm => debian/pollinate.postrm, debian/anerd-
+    server.default => debian/pollen.default, debian/anerd-server.install
+    => debian/pollen.install, debian/anerd-server.manpages =>
+    debian/pollen.manpages, debian/anerd-server.postinst =>
+    debian/pollen.postinst, debian/anerd-server.upstart =>
+    debian/pollen.upstart, debian/control, debian/copyright,
+    img/anerd_14.png, img/anerd_192.png, img/anerd_64.png,
+    img/anerd.png, initramfs/hooks/anerd-client-udp,
+    initramfs/scripts/init-bottom/anerd, NEWS, README, === removed
+    directory initramfs, === removed directory initramfs/hooks, ===
+    removed directory initramfs/scripts, === removed directory
+    initramfs/scripts/init-bottom:
+    - rename anerd server/client to pollen / pollinate
+      to reflect that this data is intended to "seed" a random
+      number generator
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 09 Aug 2013 16:16:57 +0100
 
