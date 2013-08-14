@@ -1,4 +1,4 @@
-pollen (3.1) unreleased; urgency=low
+pollen (3.1-0ubuntu1) saucy; urgency=low
 
   * pollen.go
     - use a global for the dev writer
@@ -22,7 +22,7 @@ pollen (3.1) unreleased; urgency=low
       to do the initial prng seeding
     - fix the default config file
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 13 Aug 2013 16:34:47 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 14 Aug 2013 17:45:22 -0500
 
 pollen (3.0-0ubuntu1) saucy; urgency=low
 
