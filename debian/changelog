@@ -1,3 +1,9 @@
+pollen (3.2) unreleased; urgency=low
+
+  * UNRELEASED
+
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 14 Aug 2013 17:45:24 -0500
+
 pollen (3.1-0ubuntu1) saucy; urgency=low
 
   * pollen.go
