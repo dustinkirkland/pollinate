@@ -54,22 +54,36 @@ salt_hash_and_write() {
 }
 
 exchange() {
+	local server="${1}"
 	local f1="${TMPDIR}/tag"
 	local f2="${TMPDIR}/challenge"
+	case "${server}" in
+		"http://"*)
+			error "Pollen server only responds on https"
+		;;
+		"https://"*)
+			# looks good
+			true
+		;;
+		*)
+			# prepend https
+			server="https://${server}"
+		;;
+	esac
 	printf "tag=" > "${f1}"
 	cat "/var/lib/${PKG}/tag" 2>/dev/null >> "${f1}" || true
 	# Create and enforce a challenge/response, to ensure personal communication
 	local challenge=$(random_hash)
 	local challenge_response=$(printf "${challenge}" | sha512sum | awk '{print $1}')
 	printf "challenge=%s" "$challenge" > "${f2}"
-	local cmd="curl ${CURL_OPTS} -o- -v --trace-time --connect-timeout 3 --max-time 3 --data @${f1} --data @${f2} ${1}"
+	local cmd="curl ${CURL_OPTS} -o- -v --trace-time --connect-timeout 3 --max-time 3 --data @${f1} --data @${f2} ${server}"
 	log "client sent challenge to [${1}]"
 	local out="${TMPDIR}/out"
 	local err="${TMPDIR}/err"
 	($cmd >"${out}" 2>"${err}") || error "Network communication failed [$?]\n$(cat ${out} ${err})"
 	[ "${challenge_response}" = $(head -n1 "${out}") ] || error "Server failed challenge/response [expected=${challenge_response}] != [got=$(head -n1 ${out})]"
-	log "client verified challenge/response with [${1}]"
-	salt_hash_and_write ${1}
+	log "client verified challenge/response with [${server}]"
+	salt_hash_and_write "${server}"
 }
 
 # Source configuration
