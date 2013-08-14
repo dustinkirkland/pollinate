@@ -1,7 +1,7 @@
-# TCP is the TCP port on which the pollen server should listen and respond.
+# PORT is the tcp port on which the pollen server should listen and respond.
 # Note that these connections will be encrypted using TLS
 # Default: 26373
-TCP_PORT="26373"
+PORT="26373"
 
 # DEVICE is the source of randomness for entropy donated to the pool,
 # and the destination for received and salted entropy.
