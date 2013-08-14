@@ -1,6 +1,15 @@
 pollen (3.1) unreleased; urgency=low
 
-  * UNRELEASED
+  * pollen.go
+    - use a global for the dev writer
+    - write a few more timestamps into the mix during the response
+      handler
+    - change logging verbiage
+  * pollinate:
+    - use a single temp directory, rather than multiple temp files
+    - use a trap to cleanup the temp directory
+    - uptdate the logging verbiage
+    - use an etc default file if available
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 13 Aug 2013 16:34:47 -0500
 

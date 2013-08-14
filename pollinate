@@ -19,6 +19,8 @@
 set -e
 
 PKG="pollinate"
+TMPDIR=$(mktemp -d -t "${PKG}.XXXXXXXXXXXX")
+trap "rm -rf ${TMPDIR} 2>/dev/null || true" EXIT HUP INT QUIT TERM
 
 error() {
 	echo "ERROR: $@" 1>&2
@@ -47,15 +49,13 @@ salt() {
 
 salt_hash_and_write() {
 	# Salt input, whiten with a hash, and write to device
-	local bytes=$(wc -c "${1}" | awk '{print $1}')
-	cat "${1}" "${1}.out" "${1}.err" | salt | sha512sum > "${DEVICE}"
-	rm -f "${1}"
-	log "client salted and hashed response from [${2}]"
+	cat "${TMPDIR}/out" "${TMPDIR}/err" | salt | sha512sum > "${DEVICE}"
+	log "client salted and hashed response from [${1}]"
 }
 
 exchange() {
-	local f1=$(mktemp -t "${PKG}.XXXXXXXXXXXX")
-	local f2=$(mktemp -t "${PKG}.XXXXXXXXXXXX")
+	local f1="${TMPDIR}/tag"
+	local f2="${TMPDIR}/challenge"
 	printf "tag=" > "${f1}"
 	cat "/var/lib/${PKG}/tag" 2>/dev/null >> "${f1}" || true
 	# Create and enforce a challenge/response, to ensure personal communication
@@ -63,16 +63,17 @@ exchange() {
 	local challenge_response=$(printf "${challenge}" | sha512sum | awk '{print $1}')
 	printf "challenge=%s" "$challenge" > "${f2}"
 	local cmd="curl ${CURL_OPTS} -o- -v --trace-time --connect-timeout 3 --max-time 3 --data @${f1} --data @${f2} ${1}"
-	log "client sent hashed entropy to [${1}]"
-	local f=$(mktemp -t "${PKG}.XXXXXXXXXXXX")
-	($cmd >"${f}.out" 2>"${f}.err") || error "Network communication failed [$?]\n$(cat ${f})"
-	[ "${challenge_response}" = $(head -n1 "${f}.out") ] || error "Server failed challenge/response [expected=${challenge_response}] != [got=$(head -n1 ${f}.out)]"
+	log "client sent challenge to [${1}]"
+	local out="${TMPDIR}/out"
+	local err="${TMPDIR}/err"
+	($cmd >"${out}" 2>"${err}") || error "Network communication failed [$?]\n$(cat ${out} ${err})"
+	[ "${challenge_response}" = $(head -n1 "${out}") ] || error "Server failed challenge/response [expected=${challenge_response}] != [got=$(head -n1 ${out})]"
 	log "client verified challenge/response with [${1}]"
-	salt_hash_and_write "${f}" ${1}
+	salt_hash_and_write ${1}
 }
 
 # Source configuration
-[ -r "/etc/default/${PKG}-client" ] && . "/etc/default/${PKG}-client"
+[ -r "/etc/default/pollinate" ] && . "/etc/default/pollinate"
 [ -r "${HOME}/.${PKG}rc" ] && . "${HOME}/.${PKG}rc"
 while [ ! -z "$1" ]; do
 	case "${1}" in
