@@ -1,25 +1,4 @@
-# Ipv6 support
-# Default: false
-IPV6=false
-
-# POOL_TCP is a whitespace separated list of hostname/ip addresses (and ports)
-# for peers in your pollen pool. If ipv6 is enabled, please ensure that these
-# are ipv6 addresses.
-# Default: https://anerd.us/
-POOL_TCP="https://anerd.us/"
-
-# DEVICE is the source of randomness for entropy donated to the pool,
-# and the destination for received and salted entropy.
-# Default: /dev/urandom
-DEVICE="/dev/urandom"
-
-# BYTES is the size in bytes to transmit and receive each time, to peers
-# or neighbors listening for broadcast in the pool.  It is rude to set this
-# very high.
-# Default: 64
-BYTES=64
-
-# WAIT is the amount of time in seconds you're willing to wait for each
-# response from a remote pollen server.
-# Default: 1
-WAIT="1"
+# OPTS are the options that are passed to pollinate in its upstart
+# script, which is executed at boot.
+# For option documentation, see pollinate(1)
+#OPTS="--server https://example.com/"
