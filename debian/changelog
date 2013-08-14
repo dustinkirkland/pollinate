@@ -12,6 +12,8 @@ pollen (3.1) unreleased; urgency=low
     - use an etc default file if available
   * debian/pollen.default:
     - drop "TCP_" in the TCP_PORT variable
+  * pollen.go:
+    - just use two timestamps
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 13 Aug 2013 16:34:47 -0500
 
