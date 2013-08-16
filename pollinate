@@ -28,7 +28,7 @@ error() {
 }
 
 log() {
-	printf "$(date '+%b %e %T') $(hostname) ${PKG}[$$]: $@\n" 1>&2
+	[ "${QUIET}" = "1" ] || printf "$(date '+%b %e %T') $(hostname) ${PKG}[$$]: $@\n" 1>&2
 }
 
 random_hash() {
@@ -111,8 +111,8 @@ while [ ! -z "$1" ]; do
 			POOL="${POOL} $2"
 			shift 2
 		;;
-		-o|--stdout)
-			STDOUT=1
+		-q|--quiet)
+			QUIET=1
 			shift
 		;;
 		-w|--wait)
