@@ -49,10 +49,17 @@ salt() {
 
 salt_hash_and_write() {
 	# Salt input, whiten with a hash, and write to device
-	if [ "${DEVICE}" = "-" ]; then
-		cat "${TMPDIR}/out" "${TMPDIR}/err" | salt | sha512sum | awk '{print $1}'
+	local bin= result=
+	local hex=$(cat "${TMPDIR}/out" "${TMPDIR}/err" | salt | sha512sum | awk '{print $1}')
+	if [ "${BINARY}" = "1" ]; then
+		result=$(/usr/bin/printf $(printf "${hex}" | sed -e "s/\(..\)/\\\x\1/g"))
 	else
-		cat "${TMPDIR}/out" "${TMPDIR}/err" | salt | sha512sum | awk '{print $1}' > "${DEVICE}"
+		result="${hex}"
+	fi
+	if [ "${DEVICE}" = "-" ]; then
+		printf "%s\n" "${result}"
+	else
+		printf "%s" "${result}" > "${DEVICE}"
 	fi
 	log "client salted and hashed response from [${1}]"
 }
@@ -95,6 +102,10 @@ exchange() {
 [ -r "${HOME}/.${PKG}rc" ] && . "${HOME}/.${PKG}rc"
 while [ ! -z "$1" ]; do
 	case "${1}" in
+		-b|--binary)
+			BINARY=1
+			shift
+		;;
 		-c|--curl-opts)
 			CURL_OPTS="$2"
 			shift 2
