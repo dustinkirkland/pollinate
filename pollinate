@@ -32,8 +32,8 @@ log() {
 }
 
 random_hash() {
-	# Read and print random bytes
-	head -c "${BYTES}" "${DEVICE}" | sha512sum | awk '{print $1}'
+	# Read and print urandom bytes
+	head -c "${BYTES}" /dev/urandom | sha512sum | awk '{print $1}'
 }
 
 salt() {
@@ -49,7 +49,11 @@ salt() {
 
 salt_hash_and_write() {
 	# Salt input, whiten with a hash, and write to device
-	cat "${TMPDIR}/out" "${TMPDIR}/err" | salt | sha512sum > "${DEVICE}"
+	if [ "${DEVICE}" = "-" ]; then
+		cat "${TMPDIR}/out" "${TMPDIR}/err" | salt | sha512sum | awk '{print $1}'
+	else
+		cat "${TMPDIR}/out" "${TMPDIR}/err" | salt | sha512sum | awk '{print $1}' > "${DEVICE}"
+	fi
 	log "client salted and hashed response from [${1}]"
 }
 
@@ -106,6 +110,10 @@ while [ ! -z "$1" ]; do
 		-s|--server)
 			POOL="${POOL} $2"
 			shift 2
+		;;
+		-o|--stdout)
+			STDOUT=1
+			shift
 		;;
 		-w|--wait)
 			WAIT="$2"

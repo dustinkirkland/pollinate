@@ -2,6 +2,9 @@ pollen (3.2) unreleased; urgency=low
 
   * README:
     - update design documentation
+  * pollinate, pollinate.1:
+    - support printing random seed to standard out
+    - useful for debugging
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 14 Aug 2013 17:45:24 -0500
 
