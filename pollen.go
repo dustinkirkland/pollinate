@@ -63,7 +63,10 @@ func main() {
 	log, _ = syslog.New(syslog.LOG_ERR, "pollen")
 	dev, _ = os.Create(DEVICE)
 	http.HandleFunc("/", handler)
-	port := fmt.Sprintf(":%s", os.Args[1])
-	http.ListenAndServeTLS(port, "/etc/pollen/cert.pem", "/etc/pollen/key.pem", nil)
+	http_port := fmt.Sprintf(":%s", os.Args[1])
+	https_port := fmt.Sprintf(":%s", os.Args[2])
+	go http.ListenAndServe(http_port, nil)
+	go http.ListenAndServeTLS(https_port, "/etc/pollen/cert.pem", "/etc/pollen/key.pem", nil)
+	time.Sleep(1e9 * 1e9)
 	dev.Close()
 }

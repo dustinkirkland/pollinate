@@ -3,7 +3,15 @@
 \fBpollen\fP \- an Entropy-as-a-Service web server
 
 .SH SYNOPSIS
-\fBpollen\fP [PORT]
+\fBpollen\fP HTTP_PORT HTTPS_PORT
+
+.SH OPTIONS
+
+\fBHTTP_PORT\fP - the http port on which to listen and serve clear text responses; use 0 to disable; default is 80
+
+\fBHTTPS_PORT\fP - the https port on which to listen and serve encrypted, TLS responses; use 0 to disable; default is 443
+
+\fBNOTE: Both of these must be specified\fP
 
 .SH DESCRIPTION
 \fBpollen\fP is an Entropy-as-a-Service web server, providing random seeds over a TLS encrypted connection.

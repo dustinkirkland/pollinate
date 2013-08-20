@@ -8,6 +8,11 @@ pollen (3.2) unreleased; urgency=low
     - add a -q|--quiet option to silence log messages
   * pollinate, pollinate.1:
     - add an option for binary data output
+  * debian/pollen.default, debian/pollen.upstart, pollen.8, pollen.go:
+    - re-enable support for both encrypted and non-encrypted connections
+    - use a go subroutine to serve both out of the same process
+    - document these changes
+    - default to 80 and 443, allow admin to override easily via config
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 14 Aug 2013 17:45:24 -0500
 

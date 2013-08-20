@@ -11,8 +11,12 @@ respawn limit 10 5
 
 script
 	. /etc/default/pollen
-	if [ -n "$PORT" ]; then
-		exec go run /usr/share/pollen/pollen.go $PORT
+	if [ -n "$HTTP_PORT" ] && [ -n "$HTTPS_PORT" ]; then
+		exec go run /usr/share/pollen/pollen.go $HTTP_PORT $HTTPS_PORT
+	elif [ -n "$HTTP_PORT" ] && [ -z "$HTTPS_PORT" ]; then
+		exec go run /usr/share/pollen/pollen.go $HTTP_PORT 0
+	elif [ -z "$HTTP_PORT" ] && [ -n "$HTTPS_PORT" ]; then
+		exec go run /usr/share/pollen/pollen.go 0 $HTTPS_PORT
 	else
 		exec true
 	fi

@@ -1,7 +1,12 @@
-# PORT is the tcp port on which the pollen server should listen and respond.
+# HTTP_PORT is the http port on which the pollen server should listen and respond.
+# Note that these connections will not be encrypted
+# Default: 80
+HTTP_PORT="80"
+
+# HTTPS_PORT is the https port on which the pollen server should listen and respond.
 # Note that these connections will be encrypted using TLS
-# Default: 26373
-PORT="26373"
+# Default: 443
+HTTPS_PORT="443"
 
 # DEVICE is the source of randomness for entropy donated to the pool,
 # and the destination for received and salted entropy.
