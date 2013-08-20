@@ -69,15 +69,12 @@ exchange() {
 	local f1="${TMPDIR}/tag"
 	local f2="${TMPDIR}/challenge"
 	case "${server}" in
-		"http://"*)
-			error "Pollen server only responds on https"
-		;;
-		"https://"*)
+		"http://"*|"https://"*)
 			# looks good
 			true
 		;;
 		*)
-			# prepend https
+			# otherwise, default to https://
 			server="https://${server}"
 		;;
 	esac
