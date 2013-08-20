@@ -13,6 +13,8 @@ pollen (3.2) unreleased; urgency=low
     - use a go subroutine to serve both out of the same process
     - document these changes
     - default to 80 and 443, allow admin to override easily via config
+  * debian/control:
+    - update package descriptions
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 14 Aug 2013 17:45:24 -0500
 
