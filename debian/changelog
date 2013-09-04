@@ -1,6 +1,9 @@
 pollen (3.3) unreleased; urgency=low
 
-  * UNRELEASED
+  * pollen-nagios-check:
+    - added nagios check script
+  * check_pollen, debian/pollen.install:
+    - rename check script and install in nagios plugins directory
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 20 Aug 2013 18:56:15 -0500
 

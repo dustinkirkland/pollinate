@@ -1,0 +1,26 @@
+#!/bin/sh
+#
+# check_pollen - verify the pollen server on localhost is operating correctly
+#
+#  Copyright (C) 2013 Dustin Kirkland <dustin.kirkland@gmail.com>
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Affero General Public License as published by
+#  the Free Software Foundation, version 3 of the License.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Affero General Public License for more details.
+#
+#  You should have received a copy of the GNU Affero General Public License
+#  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+if pollinate --insecure -s localhost; then
+	echo "OK - pollen server is online and responded correctly to the test request"
+	exit 0
+else
+	echo "CRITICAL - pollen server did not properly respond to the test request"
+	exit 2
+fi
