@@ -1,11 +1,11 @@
-pollen (3.3) unreleased; urgency=low
+pollen (3.3-0ubuntu1) saucy; urgency=low
 
   * pollen-nagios-check:
     - added nagios check script
   * check_pollen, debian/pollen.install:
     - rename check script and install in nagios plugins directory
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 20 Aug 2013 18:56:15 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 04 Sep 2013 14:25:49 -0500
 
 pollen (3.2-0ubuntu1) saucy; urgency=low
 
