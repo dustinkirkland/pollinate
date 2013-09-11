@@ -1,3 +1,9 @@
+pollen (3.5) unreleased; urgency=low
+
+  * UNRELEASED
+
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 11 Sep 2013 16:56:54 -0500
+
 pollen (3.4-0ubuntu1) saucy; urgency=low
 
   * check_pollen, debian/control:
