@@ -1,4 +1,4 @@
-pollen (3.4) unreleased; urgency=low
+pollen (3.4-0ubuntu1) saucy; urgency=low
 
   * check_pollen, debian/control:
     - improve the nagios check
@@ -8,7 +8,7 @@ pollen (3.4) unreleased; urgency=low
       + an out of whack arithmetic mean
     - have pollen server recommend ent, which is used by the nagios check
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 04 Sep 2013 14:25:51 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 11 Sep 2013 16:56:52 -0500
 
 pollen (3.3-0ubuntu1) saucy; urgency=low
 
