@@ -1,6 +1,12 @@
 pollen (3.4) unreleased; urgency=low
 
-  * UNRELEASED
+  * check_pollen, debian/control:
+    - improve the nagios check
+    - warn if:
+      + insufficient bytes are retrieved
+      + less than 5-bits-per-byte of entropy are calculated
+      + an out of whack arithmetic mean
+    - have pollen server recommend ent, which is used by the nagios check
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 04 Sep 2013 14:25:51 -0500
 

@@ -17,10 +17,32 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-if pollinate --insecure -s localhost; then
-	echo "OK - pollen server is online and responded correctly to the test request"
-	exit 0
-else
-	echo "CRITICAL - pollen server did not properly respond to the test request"
+PKG="pollinate"
+TMPDIR=$(mktemp -d -t "${PKG}.XXXXXXXXXXXX")
+trap "rm -rf ${TMPDIR} 2>/dev/null || true" EXIT HUP INT QUIT TERM
+
+pollinate -i -s localhost -b -d - >"$TMPDIR/out" 2>"$TMPDIR/err" && RC=0 || RC=$?
+bytes=$(wc -c "$TMPDIR/out" | awk '{print $1}')
+bpb=$(ent -t "$TMPDIR/out" | tail -n1 | awk -F, '{print $3}' | awk -F. '{print $1}')
+mean=$(ent -t "$TMPDIR/out" | tail -n1 | awk -F, '{print $5}' | awk -F. '{print $1}')
+
+if [ "$RC" != "0" ]; then
+	echo "CRITICAL - pollen server did not properly respond to the test request [$RC]"
+	cat "$TMPDIR/err" 1>&2
 	exit 2
 fi
+if [ -z "$bytes" ] || [ "$bytes" -lt 64 ]; then
+	echo "WARNING - pollen server did not respond with at least 64 bytes"
+	exit 1
+fi
+if [ -z "$bpb" ] || [ "$bpb" -lt 5 ]; then
+	echo "WARNING - pollen server did not respond with sufficient entropy bits per byte [$bpb]"
+	exit 1
+fi
+if [ -z "$mean" ] || [ "$mean" -lt 95 ] || [ "$mean" -gt 160 ]; then
+	echo "WARNING - pollen server responded with poor entropy (bad arithmetic mean [$mean])"
+	exit 1
+fi
+
+echo "OK - pollen server is online and responded correctly to the test request"
+exit 0
