@@ -1,6 +1,7 @@
 pollen (3.5) unreleased; urgency=low
 
-  * UNRELEASED
+  * README:
+    - enhance/update design documentation
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 11 Sep 2013 16:56:54 -0500
 

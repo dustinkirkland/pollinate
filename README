@@ -1,26 +1,30 @@
-Linux has an outstanding psuedo random number generator, located at /dev/urandom.  For almost all realistic purposes, /dev/urandom is a perfectly adequate source of entropy, as long as it is seeded properly at each boot.
+Linux has an excellent psuedo random number generator, located at /dev/urandom.  For almost all realistic purposes, /dev/urandom is a perfectly adequate source of entropy, as long as it is seeded properly at each boot.  See: random(4).
 
-Most Linux distributions (Debian and Ubuntu included) carry over a seed from one boot to another, in an init script, such as /etc/init.d/urandom.
+Most Linux distributions (Debian and Ubuntu included) carry over a seed from one boot to another, in an init script, such as /etc/init.d/urandom.  In Ubuntu, that init script does the following:
 
-There is, however, a bootstrapping problem, seeding /dev/urandom on the first boot.  That problem is compounded on the first boot of cloud servers and virtual machines, which typically have no access to real hardware or good entropy sources.  Several attacks have been demonstrated recently against SSH and SSL, with certificates generated with poor entropy.
+  SAVEDFILE=/var/lib/urandom/random-seed
+  POOLBYTES=512
+  dd if=/dev/urandom of=$SAVEDFILE bs=$POOLBYTES count=1 >/dev/null 2>&1
 
-It would be quite handy if virtual machines and cloud instances actually called out to a remote service to fetch a small amount of entropy at first boot (and periodically thereafter).
+There is, however, a bootstrapping problem, seeding /dev/urandom on the first boot.  That problem is compounded on the first boot of cloud servers and virtual machines, which typically have no access to real hardware or good entropy sources.  Several attacks have been demonstrated recently against SSH and SSL, with certificates generated with poor entropy, such as: https://factorable.net/weakkeys12.extended.pdf
+
+It would be quite handy if virtual machines and cloud instances opportunistically called out to a remote service to fetch a sufficient amount of entropy at first boot (and periodically thereafter) to improve the seeding of the pseudo random number generator with an external source of entropy.
 
 And that, my friends, is the very goal of this project.  It consists of two pieces:
  - pollen: an Entropy-as-a-Service server
  - pollinate: an Entropy-as-a-Service client
 
-Pollen is a very fast, efficient web service, implemented in Golang and providing a secure source of entropy to its clients.  Pollen utilizes TLS (SSL) to ensure privacy, security, and non-repudiation of connections among its clients.
+Pollen is a fast, efficient web service, implemented in Golang and providing a source of entropy to its clients over a network connection.  Pollen utilizes TLS (SSL) to ensure privacy, security, and non-repudiation of connections among its clients.
 
 Pollinate is a client utility, implement in Shell, which wraps curl(1) and communicates securely with the Pollen server.
 
-The protocol for all connections is HTTPS.  The pollen server should ideally have a CA-signed certificate, or pre-arrange the distribution of certificates to its clients.
+The default protocol for all connections is HTTPS, however HTTP is available for debug, testing, or other purposes.  The pollen server should ideally have a CA-signed certificate, or pre-arrange the distribution of certificates to its clients.
 
-An entropy request should, ideally, contain two POST arguments:
+An entropy request may optionally (ideally) contain two POST arguments:
  - tag - a voluntary identifier of the pollinate client to the pollen server
  - challenge - a randomly generated checksum to ensure unique communication with the pollen server
 
-In the normal case, these two POST arguments are hex-encoded sha512sum(1) values, which are 128 characters of [0-9a-f], representing 64 bytes of entropy.  Regardless of the values of 'tag' and 'challenge', the pollen server will treat the input as strings and calculate the sha512sum's of both.  This ensures that any malicious input from a deviant client is whitened to a simple hash before the server operates on it.
+In the normal case, these two POST arguments are hex-encoded sha512sum(1) values, which are 128 characters of [0-9a-f], representing 64 total bytes of entropy.  Regardless of the values of 'tag' and 'challenge', the pollen server will treat the input as strings and calculate the sha512sum's of both.  This ensures that any malicious input from a deviant client is whitened to a simple hash before the server operates upon it.
 
 The server then responds to the client with the sha512 checksum of the challenge on the first line, and the second line of the response will contain another sha512sum of 64 bytes of random data.
 
