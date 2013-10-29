@@ -1,7 +1,7 @@
 pollen (3.5) unreleased; urgency=low
 
   * README:
-    - enhance/update design documentation
+    - enhance and update design documentation
   * debian/copyright:
     - update to DEP-5 format
 

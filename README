@@ -1,4 +1,4 @@
-Linux has an excellent psuedo random number generator, located at /dev/urandom.  For almost all realistic purposes, /dev/urandom is a perfectly adequate source of entropy, as long as it is seeded properly at each boot.  See: random(4).
+Linux has an excellent psuedo random number generator, located at /dev/urandom.  For most practical purposes, /dev/urandom is a perfectly adequate source of entropy, as long as it is seeded properly at each boot.  See: random(4).
 
 Most Linux distributions (Debian and Ubuntu included) carry over a seed from one boot to another, in an init script, such as /etc/init.d/urandom.  In Ubuntu, that init script does the following:
 
