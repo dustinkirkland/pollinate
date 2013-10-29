@@ -1,11 +1,11 @@
-pollen (3.5) unreleased; urgency=low
+pollen (3.5-0ubuntu1) trusty; urgency=low
 
   * README:
     - enhance and update design documentation
   * debian/copyright:
     - update to DEP-5 format
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 11 Sep 2013 16:56:54 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 29 Oct 2013 16:55:28 -0500
 
 pollen (3.4-0ubuntu1) saucy; urgency=low
 
