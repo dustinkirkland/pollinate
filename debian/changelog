@@ -1,6 +1,8 @@
 pollen (3.6) unreleased; urgency=low
 
-  * UNRELEASED
+  * pollinate:
+    - remove sourcing of an rc config file from $HOME, per security
+      review from Seth Arnold
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 29 Oct 2013 16:55:31 -0500
 

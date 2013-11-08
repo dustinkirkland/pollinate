@@ -96,7 +96,6 @@ exchange() {
 
 # Source configuration
 [ -r "/etc/default/pollinate" ] && . "/etc/default/pollinate"
-[ -r "${HOME}/.${PKG}rc" ] && . "${HOME}/.${PKG}rc"
 while [ ! -z "$1" ]; do
 	case "${1}" in
 		-b|--binary)
