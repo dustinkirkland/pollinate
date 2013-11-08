@@ -1,4 +1,4 @@
-pollen (3.6) unreleased; urgency=low
+pollen (3.6-0ubuntu1) trusty; urgency=low
 
   * pollinate:
     - remove sourcing of an rc config file from $HOME, per security
@@ -24,7 +24,7 @@ pollen (3.6) unreleased; urgency=low
   * pollinate:
     - drop unused $bin variable
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 29 Oct 2013 16:55:31 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 08 Nov 2013 09:59:35 -0600
 
 pollen (3.5-0ubuntu1) trusty; urgency=low
 
