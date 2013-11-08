@@ -38,7 +38,7 @@ random_hash() {
 
 hash_and_write() {
 	# Whiten input with a hash, and write to device
-	local bin= result=
+	local result=
 	local hex=$(cat "${TMPDIR}/out" "${TMPDIR}/err" | sha512sum | awk '{print $1}')
 	if [ "${BINARY}" = "1" ]; then
 		result=$(/usr/bin/printf $(printf "${hex}" | sed -e "s/\(..\)/\\\x\1/g"))

@@ -21,6 +21,8 @@ pollen (3.6) unreleased; urgency=low
   * debian/pollen.default, pollinate:
     - drop timestamp based salting, not terribly valuable
     - per security review by Seth Arnold
+  * pollinate:
+    - drop unused $bin variable
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 29 Oct 2013 16:55:31 -0500
 
