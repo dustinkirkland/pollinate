@@ -10,6 +10,9 @@ pollen (3.6) unreleased; urgency=low
     - use the entropy.ubuntu.com beta site for testing
     - note that we're specifying the --insecure option here, as this is
       very much a work in progress
+  * debian/pollinate.upstart:
+    - start pollinate when we have networking up and running, or
+      when we start ssh
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 29 Oct 2013 16:55:31 -0500
 
