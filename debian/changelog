@@ -3,6 +3,9 @@ pollen (3.6) unreleased; urgency=low
   * pollinate:
     - remove sourcing of an rc config file from $HOME, per security
       review from Seth Arnold
+  * pollinate.1:
+    - update documentation to note that multiple servers can be specified
+      on the command line
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 29 Oct 2013 16:55:31 -0500
 

@@ -3,7 +3,7 @@
 pollinate \- an Entropy-as-a-Service client
 
 .SH SYNOPSIS
-\fBpollinate\fP [-c|--curl-opts CURL_OPTS] [-d|--device DEVICE] [-i|--insecure] [-s|--server SERVER]
+\fBpollinate\fP [-c|--curl-opts CURL_OPTS] [-d|--device DEVICE] [-i|--insecure] [-s|--server SERVER1 [-s|--server SERVER2] ...]
 
 .SH DESCRIPTION
 \fBpollinate\fP is an entropy as a service client.  It will fetch a random seed from one or more remote servers, and feed those into a (pseudo) random number generator.  This is often useful in cloud and virtual machine environments with limited sources of entropy.
@@ -23,7 +23,7 @@ device to seed (default is \fI/dev/urandom\fP); note, you can use - to print to 
 ignore SSL/TLS certificate errors (use of this option is highly discouraged)
 .TP
 \fB-s|--server\fP SERVER
-remote \fBpollen\fP(8) server to interact with
+remote \fBpollen\fP(8) server to interact with; this option can be specified multiple times to interact with multiple servers in a pool
 .TP
 \fB-q|--quiet\fP
 silence any log messages
