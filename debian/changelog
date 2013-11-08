@@ -13,6 +13,11 @@ pollen (3.6) unreleased; urgency=low
   * debian/pollinate.upstart:
     - start pollinate when we have networking up and running, or
       when we start ssh
+  * pollen.go:
+    - drop the nanosecond timestamp collection on the server
+    - a good server should have real entropy hardware, and a busy server
+      will have network traffic entropy already captured by the kernel
+    - Suggestion by Seth Arnold in a security review
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 29 Oct 2013 16:55:31 -0500
 

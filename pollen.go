@@ -41,7 +41,6 @@ const (
 )
 
 func handler(response http.ResponseWriter, request *http.Request) {
-	dev.WriteString(fmt.Sprintf("%d", time.Now().UnixNano()))
 	checksum := sha512.New()
 	io.WriteString(checksum, request.FormValue("challenge"))
 	challenge_response := checksum.Sum(nil)
@@ -56,7 +55,6 @@ func handler(response http.ResponseWriter, request *http.Request) {
 	seed := checksum.Sum(nil)
 	fmt.Fprintf(response, "%x\n%x\n", challenge_response, seed)
 	log.Info(fmt.Sprintf("Server sent response to [%s, %s, %x] at [%v]", request.RemoteAddr, request.UserAgent(), tag, time.Now().UnixNano()))
-	dev.WriteString(fmt.Sprintf("%d", time.Now().UnixNano()))
 }
 
 func main() {
