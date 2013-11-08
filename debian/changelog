@@ -18,6 +18,9 @@ pollen (3.6) unreleased; urgency=low
     - a good server should have real entropy hardware, and a busy server
       will have network traffic entropy already captured by the kernel
     - Suggestion by Seth Arnold in a security review
+  * debian/pollen.default, pollinate:
+    - drop timestamp based salting, not terribly valuable
+    - per security review by Seth Arnold
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 29 Oct 2013 16:55:31 -0500
 

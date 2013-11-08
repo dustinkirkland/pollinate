@@ -36,21 +36,10 @@ random_hash() {
 	head -c "${BYTES}" /dev/urandom | sha512sum | awk '{print $1}'
 }
 
-salt() {
-	# Append timestamp-based salt to input
-	cat
-	local i=0
-	while [ ${i} -lt ${BYTES} ] ; do
-		n=$(date +%N | sed "s/^0\+//")
-		printf "%x" ${n}
-		i=$((i+1))
-	done
-}
-
-salt_hash_and_write() {
-	# Salt input, whiten with a hash, and write to device
+hash_and_write() {
+	# Whiten input with a hash, and write to device
 	local bin= result=
-	local hex=$(cat "${TMPDIR}/out" "${TMPDIR}/err" | salt | sha512sum | awk '{print $1}')
+	local hex=$(cat "${TMPDIR}/out" "${TMPDIR}/err" | sha512sum | awk '{print $1}')
 	if [ "${BINARY}" = "1" ]; then
 		result=$(/usr/bin/printf $(printf "${hex}" | sed -e "s/\(..\)/\\\x\1/g"))
 	else
@@ -61,7 +50,7 @@ salt_hash_and_write() {
 	else
 		printf "%s" "${result}" > "${DEVICE}"
 	fi
-	log "client salted and hashed response from [${1}]"
+	log "client hashed response from [${1}]"
 }
 
 exchange() {
@@ -91,7 +80,7 @@ exchange() {
 	($cmd >"${out}" 2>"${err}") || error "Network communication failed [$?]\n$(cat ${out} ${err})"
 	[ "${challenge_response}" = $(head -n1 "${out}") ] || error "Server failed challenge/response [expected=${challenge_response}] != [got=$(head -n1 ${out})]"
 	log "client verified challenge/response with [${server}]"
-	salt_hash_and_write "${server}"
+	hash_and_write "${server}"
 }
 
 # Source configuration

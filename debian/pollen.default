@@ -9,7 +9,7 @@ HTTP_PORT="80"
 HTTPS_PORT="443"
 
 # DEVICE is the source of randomness for entropy donated to the pool,
-# and the destination for received and salted entropy.
+# and the destination for received and whitened entropy.
 # Default: /dev/urandom
 DEVICE="/dev/urandom"
 
