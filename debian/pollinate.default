@@ -1,4 +1,4 @@
 # OPTS are the options that are passed to pollinate in its upstart
 # script, which is executed at boot.
 # For option documentation, see pollinate(1)
-#OPTS="--server https://example.com/"
+OPTS="--server https://entropy.ubuntu.com/ --insecure"

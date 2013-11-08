@@ -6,6 +6,10 @@ pollen (3.6) unreleased; urgency=low
   * pollinate.1:
     - update documentation to note that multiple servers can be specified
       on the command line
+  * debian/pollinate.default:
+    - use the entropy.ubuntu.com beta site for testing
+    - note that we're specifying the --insecure option here, as this is
+      very much a work in progress
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 29 Oct 2013 16:55:31 -0500
 
