@@ -121,7 +121,6 @@ while [ ! -z "$1" ]; do
 	esac
 done
 [ -n "${DEVICE}" ] || DEVICE="/dev/urandom"
-[ -n "${IPV6}" ] || IPV6=false
 [ -n "${BYTES}" ] || BYTES=64
 [ -n "${WAIT}" ] || WAIT="3"
 if [ -z "${POOL}" ]; then
