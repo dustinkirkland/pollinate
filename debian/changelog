@@ -8,6 +8,9 @@ pollen (3.7) unreleased; urgency=low
       as identified by Seth Arnold in LP: #1246098
   * pollinate:
     - drop unused IPV6 variable, per review by Seth Arnold in LP: #1246098
+  * debian/pollen.postinst:
+    - use pollen as our fake email address, suggested by Seth Arnold
+      in LP: #1246098
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 08 Nov 2013 09:59:37 -0600
 
