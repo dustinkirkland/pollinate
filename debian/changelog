@@ -11,6 +11,13 @@ pollen (3.7) unreleased; urgency=low
   * debian/pollen.postinst:
     - use pollen as our fake email address, suggested by Seth Arnold
       in LP: #1246098
+  * debian/pollinate.cron.d:
+    - add notes in the comments about NIST DRBG Special Publication 800-90A
+      recommendations on reseeding
+    - add notes in the comments about why we choose a random minute
+    - fix a bug, that was causing the cronjob to run far more frequently
+      than desired
+    - Addresses some issues raised by Seth Arnold in LP: #1246098
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 08 Nov 2013 09:59:37 -0600
 
