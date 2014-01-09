@@ -92,7 +92,7 @@ while [ ! -z "$1" ]; do
 			shift
 		;;
 		-c|--curl-opts)
-			CURL_OPTS="$2"
+			CURL_OPTS="${CURL_OPTS} $2"
 			shift 2
 		;;
 		-d|--device)
