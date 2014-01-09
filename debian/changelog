@@ -18,6 +18,11 @@ pollen (3.7) unreleased; urgency=low
     - fix a bug, that was causing the cronjob to run far more frequently
       than desired
     - Addresses some issues raised by Seth Arnold in LP: #1246098
+  * debian/pollen.upstart, pollen.8, pollen.go:
+    - add DEVICE as the 3rd argument to the pollen server in the upstart
+      script
+    - test that DEVICE is a special in upstart
+    - document that the DEVICE is now a required argument
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 08 Nov 2013 09:59:37 -0600
 

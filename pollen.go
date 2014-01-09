@@ -37,7 +37,6 @@ var dev *os.File
 
 const (
 	DEFAULT_SIZE = 64
-	DEVICE       = "/dev/urandom"
 )
 
 func handler(response http.ResponseWriter, request *http.Request) {
@@ -59,7 +58,7 @@ func handler(response http.ResponseWriter, request *http.Request) {
 
 func main() {
 	log, _ = syslog.New(syslog.LOG_ERR, "pollen")
-	dev, _ = os.Create(DEVICE)
+	dev, _ = os.Create(os.Args[3])
 	http.HandleFunc("/", handler)
 	http_port := fmt.Sprintf(":%s", os.Args[1])
 	https_port := fmt.Sprintf(":%s", os.Args[2])
