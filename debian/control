@@ -12,7 +12,8 @@ Homepage: http://launchpad.net/pollen
 Package: pollen
 Architecture: amd64 armel armhf i386 x32
 Depends: ${misc:Depends}, ${shlibs:Depends}, golang-go
-Recommends: haveged, pollinate, ent
+Recommends: pollinate, ent
+Suggests: haveged
 Provides: anerd-server
 Replaces: anerd-server (<< 3.0)
 Breaks: anerd-server (<< 3.0)
