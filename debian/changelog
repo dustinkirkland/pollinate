@@ -23,6 +23,9 @@ pollen (3.7) unreleased; urgency=low
       script
     - test that DEVICE is a special in upstart
     - document that the DEVICE is now a required argument
+  * debian/pollen.install, Makefile, pollen:
+    - build static binary at package build time, rather than dynamically
+      compiling at each run, per feedback from Seth Arnold in LP: #1246098
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 08 Nov 2013 09:59:37 -0600
 

@@ -1,3 +1,2 @@
 pollen /usr/bin/
-pollen.go /usr/share/pollen/
 check_pollen /usr/lib/nagios/plugins/
