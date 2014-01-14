@@ -6,6 +6,7 @@ author		"Dustin Kirkland <dustin.kirkland@gmail.com>"
 start on start on runlevel [2345]
 stop on start on runlevel [!2345]
 
+setuid pollen
 respawn
 respawn limit 10 5
 
@@ -14,11 +15,11 @@ script
 	# Ensure our device exists, and is a character device, before starting our server
 	if [ -c "$DEVICE" ]; then
 		if [ -n "$HTTP_PORT" ] && [ -n "$HTTPS_PORT" ]; then
-			exec su -l pollen -c "pollen $HTTP_PORT $HTTPS_PORT $DEVICE"
+			exec pollen $HTTP_PORT $HTTPS_PORT $DEVICE
 		elif [ -n "$HTTP_PORT" ] && [ -z "$HTTPS_PORT" ]; then
-			exec su -l pollen -c "pollen $HTTP_PORT 0 $DEVICE"
+			exec pollen $HTTP_PORT 0 $DEVICE
 		elif [ -z "$HTTP_PORT" ] && [ -n "$HTTPS_PORT" ]; then
-			exec su -l pollen -c "pollen 0 $HTTPS_PORT $DEVICE"
+			exec pollen 0 $HTTPS_PORT $DEVICE
 		else
 			exec true
 		fi

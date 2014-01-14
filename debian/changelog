@@ -37,6 +37,8 @@ pollen (3.7) unreleased; urgency=low
     - use setcap to allow the pollen binary to bind to privileged ports
     - run the pollen daemon as the pollen user
     - per feedback from Seth Arnold in LP: #1246098
+  * debian/pollen.upstart:
+    - use setuid in upstart to run the pollen daemon as the pollen user
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 08 Nov 2013 09:59:37 -0600
 
