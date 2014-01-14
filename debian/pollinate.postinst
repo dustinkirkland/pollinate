@@ -8,9 +8,7 @@ if [ ! -s /var/lib/pollinate/tag ]; then
 	tag=$(head -c 128 /dev/urandom | sha512sum | awk '{print $1}')
 	printf "%s\n" "$tag" > /var/lib/pollinate/tag
 fi
-chown root:root /var/lib/pollinate
 chmod 755 /var/lib/pollinate
-chown root:root /var/lib/pollinate/
 chmod 644 /var/lib/pollinate/tag
 
 #DEBHELPER#

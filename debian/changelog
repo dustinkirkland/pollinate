@@ -46,6 +46,9 @@ pollen (3.7) unreleased; urgency=low
     - add an apparmor profile for the pollen server, per suggestion
       by Seth Arnold in LP: #1246098
     - big thanks to Jamie Strandboge and Seth Arnold for assistance
+  * debian/pollinate.postinst:
+    - these chowns are not necessary; thanks for catching Michael Terry
+      in LP: #1246098
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 08 Nov 2013 09:59:37 -0600
 
