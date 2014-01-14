@@ -39,6 +39,8 @@ pollen (3.7) unreleased; urgency=low
     - per feedback from Seth Arnold in LP: #1246098
   * debian/pollen.upstart:
     - use setuid in upstart to run the pollen daemon as the pollen user
+  * debian/pollen.postinst:
+    - change pollen user's shell to /bin/false
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 08 Nov 2013 09:59:37 -0600
 
