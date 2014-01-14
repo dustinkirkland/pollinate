@@ -29,7 +29,6 @@ pollen (3.7) unreleased; urgency=low
     - use a very simple, basic Makefile
   * debian/control:
     - move golang-go to a build-dependency, rather than a runtime dependency
-    - reduce ent to a suggests, from a recommends
   * debian/control, debian/pollen.postinst, debian/pollen.postrm,
     debian/pollen.upstart:
     - create a new user, pollen:daemon, in the postinst, remove in postrm
@@ -49,6 +48,9 @@ pollen (3.7) unreleased; urgency=low
   * debian/pollinate.postinst:
     - these chowns are not necessary; thanks for catching Michael Terry
       in LP: #1246098
+  * debian/control: LP: #1259014
+    - have the pollen server depend on ent, which is used by the
+      check_pollen nagios script
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 08 Nov 2013 09:59:37 -0600
 
