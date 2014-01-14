@@ -14,6 +14,7 @@ fi
 
 # Set capabilities on the pollen binary to bind to privileged ports
 setcap 'cap_net_bind_service=+ep' /usr/bin/pollen
+[ -e /etc/apparmor.d/local/usr.bin.pollen ] || touch /etc/apparmor.d/local/usr.bin.pollen
 
 if [ ! -r "$PUB_CERT" ] || [ ! -r "$PK" ]; then
 	install -m 600 /dev/null "$PUB_CERT"
