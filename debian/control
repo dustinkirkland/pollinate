@@ -6,14 +6,15 @@ Build-Depends: debhelper (>= 7.0.50~),
  autotools-dev,
  autoconf,
  automake,
+ golang-go
 Standards-Version: 3.9.4
 Homepage: http://launchpad.net/pollen
 
 Package: pollen
 Architecture: amd64 armel armhf i386 x32
-Depends: ${misc:Depends}, ${shlibs:Depends}, golang-go
-Recommends: pollinate, ent
-Suggests: haveged
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Recommends: pollinate
+Suggests: haveged, ent
 Provides: anerd-server
 Replaces: anerd-server (<< 3.0)
 Breaks: anerd-server (<< 3.0)

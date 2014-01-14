@@ -27,6 +27,9 @@ pollen (3.7) unreleased; urgency=low
     - build static binary at package build time, rather than dynamically
       compiling at each run, per feedback from Seth Arnold in LP: #1246098
     - use a very simple, basic Makefile
+  * debian/control:
+    - move golang-go to a build-dependency, rather than a runtime dependency
+    - reduce ent to a suggests, from a recommends
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 08 Nov 2013 09:59:37 -0600
 
