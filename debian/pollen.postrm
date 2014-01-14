@@ -1,0 +1,10 @@
+#! /bin/sh
+
+set -e
+PKG=pollen
+
+if [ "$1" = "purge" ]; then
+	deluser --quiet --system $PKG > /dev/null || true
+fi
+
+#DEBHELPER#

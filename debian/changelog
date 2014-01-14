@@ -30,6 +30,12 @@ pollen (3.7) unreleased; urgency=low
   * debian/control:
     - move golang-go to a build-dependency, rather than a runtime dependency
     - reduce ent to a suggests, from a recommends
+  * debian/control, debian/pollen.postinst, debian/pollen.postrm,
+    debian/pollen.upstart:
+    - create a new user, pollen:daemon, in the postinst, remove in postrm
+    - depend on libcap2-bin, which provides setcap
+    - use setcap to allow the pollen binary to bind to privileged ports
+    - run the pollen daemon as the pollen user
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 08 Nov 2013 09:59:37 -0600
 

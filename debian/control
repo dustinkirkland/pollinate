@@ -12,7 +12,7 @@ Homepage: http://launchpad.net/pollen
 
 Package: pollen
 Architecture: amd64 armel armhf i386 x32
-Depends: ${misc:Depends}, ${shlibs:Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}, libcap2-bin
 Recommends: pollinate
 Suggests: haveged, ent
 Provides: anerd-server

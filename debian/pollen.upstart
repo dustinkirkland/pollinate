@@ -14,11 +14,11 @@ script
 	# Ensure our device exists, and is a character device, before starting our server
 	if [ -c "$DEVICE" ]; then
 		if [ -n "$HTTP_PORT" ] && [ -n "$HTTPS_PORT" ]; then
-			exec go run /usr/share/pollen/pollen.go $HTTP_PORT $HTTPS_PORT $DEVICE
+			exec su -l pollen -c "pollen $HTTP_PORT $HTTPS_PORT $DEVICE"
 		elif [ -n "$HTTP_PORT" ] && [ -z "$HTTPS_PORT" ]; then
-			exec go run /usr/share/pollen/pollen.go $HTTP_PORT 0 $DEVICE
+			exec su -l pollen -c "pollen $HTTP_PORT 0 $DEVICE"
 		elif [ -z "$HTTP_PORT" ] && [ -n "$HTTPS_PORT" ]; then
-			exec go run /usr/share/pollen/pollen.go 0 $HTTPS_PORT $DEVICE
+			exec su -l pollen -c "pollen 0 $HTTPS_PORT $DEVICE"
 		else
 			exec true
 		fi

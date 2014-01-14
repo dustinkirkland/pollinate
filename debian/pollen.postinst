@@ -7,11 +7,21 @@ PUB_CERT="$DIR/cert.pem"
 PK="$DIR/key.pem"
 CA="$DIR/ca.pem"
 
+# Create the pollen user if necessary
+if ! getent passwd $PKG >/dev/null; then
+	adduser --disabled-password --quiet --system --home /var/lib/pollen --ingroup daemon $PKG --shell /bin/sh
+fi
+
+# Set capabilities on the pollen binary to bind to privileged ports
+setcap 'cap_net_bind_service=+ep' /usr/bin/pollen
+
 if [ ! -r "$PUB_CERT" ] || [ ! -r "$PK" ]; then
 	install -m 600 /dev/null "$PUB_CERT"
 	install -m 600 /dev/null "$PK"
 	# Auto generate self signed certs if we don't have one already in place
 	openssl req -new -newkey rsa:4096 -nodes -x509 -out "$PUB_CERT" -keyout "$PK" -days 3650 -subj "/C=XX/ST=XX/L=XXXX/CN=XXXXXXXX/emailAddress=pollen@example.com"
 fi
+
+chown -R $PKG:root $DIR
 
 #DEBHELPER#
