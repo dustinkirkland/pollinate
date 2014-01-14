@@ -26,6 +26,7 @@ pollen (3.7) unreleased; urgency=low
   * debian/pollen.install, Makefile, pollen:
     - build static binary at package build time, rather than dynamically
       compiling at each run, per feedback from Seth Arnold in LP: #1246098
+    - use a very simple, basic Makefile
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 08 Nov 2013 09:59:37 -0600
 
