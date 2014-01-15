@@ -1,4 +1,4 @@
-pollen (3.7) unreleased; urgency=low
+pollen (3.7-0ubuntu1) trusty; urgency=low
 
   * debian/control:
     - demote haveged to suggests, based on feedback from Seth Arnold
@@ -52,7 +52,7 @@ pollen (3.7) unreleased; urgency=low
     - have the pollen server depend on ent, which is used by the
       check_pollen nagios script
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 08 Nov 2013 09:59:37 -0600
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 15 Jan 2014 10:59:34 -0600
 
 pollen (3.6-0ubuntu1) trusty; urgency=low
 
