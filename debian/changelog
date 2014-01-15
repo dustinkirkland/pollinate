@@ -1,4 +1,4 @@
-pollen (3.8) unreleased; urgency=low
+pollen (3.8-0ubuntu1) trusty; urgency=low
 
   * debian/pollinate.default, debian/pollinate.postinst,
     debian/pollinate.upstart, pollinate:
@@ -14,7 +14,7 @@ pollen (3.8) unreleased; urgency=low
       per hour
     - purge pollinate files more effectively
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 15 Jan 2014 10:59:38 -0600
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 15 Jan 2014 16:49:35 -0600
 
 pollen (3.7-0ubuntu1) trusty; urgency=low
 
