@@ -3,9 +3,11 @@
 description	"Entropy-as-a-Service client"
 author		"Dustin Kirkland <dustin.kirkland@gmail.com>"
 
+setuid daemon
+
 start on (started networking or starting ssh)
 
 script
 	. /etc/default/pollinate
-	exec pollinate $OPTS
+	exec pollinate
 end script

@@ -1,6 +1,13 @@
 pollen (3.8) unreleased; urgency=low
 
-  * UNRELEASED
+  * debian/pollinate.default, debian/pollinate.postinst,
+    debian/pollinate.upstart, pollinate:
+    - fix the (broken) options setting in the pollinate default file
+    - change the tag creation to happen during the pollinate runtime,
+      rather than at package installation; this makes it more useful
+      for downstreams and remixes of Ubuntu
+    - ensure the daemon user owns the /var/lib/pollinate directory
+    - run the pollinate upstart script as the daemon user
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 15 Jan 2014 10:59:38 -0600
 

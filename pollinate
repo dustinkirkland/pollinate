@@ -53,9 +53,26 @@ hash_and_write() {
 	log "client hashed response from [${1}]"
 }
 
+tagfile() {
+	# Find the tagfile
+	if [ -e "/var/lib/${PKG}/tag" ] || [ -w "/var/lib/${PKG}/" ]; then
+		# Use the system wide one, if possible
+		_RET="/var/lib/${PKG}/tag"
+	else
+		# Use a per-user one, for per-user runs
+		_RET="${HOME}/.cache/${PKG}/tag"
+	fi
+	if [ ! -e "${_RET}" ]; then
+		mkdir -p $(dirname "${_RET}")
+		local tag=$(head -c 128 ${DEVICE} | sha512sum | awk '{print $1}')
+		printf "tag=%s\n" "${tag}" > "${_RET}"
+	fi
+}
+
 exchange() {
 	local server="${1}"
-	local f1="${TMPDIR}/tag"
+	tagfile
+	local f1="${_RET}"
 	local f2="${TMPDIR}/challenge"
 	case "${server}" in
 		"http://"*|"https://"*)
@@ -67,8 +84,6 @@ exchange() {
 			server="https://${server}"
 		;;
 	esac
-	printf "tag=" > "${f1}"
-	cat "/var/lib/${PKG}/tag" 2>/dev/null >> "${f1}" || true
 	# Create and enforce a challenge/response, to ensure personal communication
 	local challenge=$(random_hash)
 	local challenge_response=$(printf "${challenge}" | sha512sum | awk '{print $1}')
