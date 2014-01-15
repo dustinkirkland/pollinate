@@ -8,6 +8,11 @@ pollen (3.8) unreleased; urgency=low
       for downstreams and remixes of Ubuntu
     - ensure the daemon user owns the /var/lib/pollinate directory
     - run the pollinate upstart script as the daemon user
+  * debian/pollinate.cron.d, debian/pollinate.postinst,
+    debian/pollinate.postrm:
+    - run the pollinate cronjob (reseed) once per day, rather than once
+      per hour
+    - purge pollinate files more effectively
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 15 Jan 2014 10:59:38 -0600
 
