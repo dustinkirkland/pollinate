@@ -1,3 +1,9 @@
+pollen (3.11) unreleased; urgency=low
+
+  * UNRELEASED
+
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 16 Jan 2014 11:39:44 -0600
+
 pollen (3.10-0ubuntu1) trusty; urgency=low
 
   * debian/pollinate.cron.d, debian/pollinate.postinst, pollinate:
