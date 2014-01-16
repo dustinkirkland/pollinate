@@ -31,6 +31,9 @@ pollen (3.10) unreleased; urgency=low
   * debian/control:
     - no need to depend on bsdutils, it's essential
     - pollen depends on adduser
+  * usr.bin.pollen:
+    - update apparmor profile to allow reading of /usr/bin/pollen
+      - oddly, this was introduced when switching compilers
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 16 Jan 2014 08:01:31 -0600
 
