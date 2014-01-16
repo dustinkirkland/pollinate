@@ -22,8 +22,11 @@ device to seed (default is \fI/dev/urandom\fP); note, you can use - to print to 
 \fB-i|--insecure\fP
 ignore SSL/TLS certificate errors (use of this option is highly discouraged)
 .TP
+\fB-p|--pool\fP SERVER
+remote \fBpollen\fP(8) server pool to interact with; this option can be specified multiple times to interact with multiple servers in a pool
+.TP
 \fB-s|--server\fP SERVER
-remote \fBpollen\fP(8) server to interact with; this option can be specified multiple times to interact with multiple servers in a pool
+remote \fBpollen\fP(8) server to interact with; if this option is used, the pool is ignored, and only a single server is used
 .TP
 \fB-q|--quiet\fP
 silence any log messages

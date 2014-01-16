@@ -26,6 +26,8 @@ pollen (3.10) unreleased; urgency=low
   * debian/control, Makefile:
     - switch from golang-go to gcc-go, so that we can get this source
       package into Ubuntu main
+  * pollinate, pollinate.1:
+    - separate the pool and the server variables
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 16 Jan 2014 08:01:31 -0600
 

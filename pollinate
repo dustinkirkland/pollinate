@@ -99,11 +99,11 @@ exchange() {
 	log "client sent challenge to [${1}]"
 	local out="${TMPDIR}/out"
 	local err="${TMPDIR}/err"
-	$cmd >"${out}" 2>"${err}" || error "Network communication failed [$?]\n$(cat ${out} ${err})"
+	curl ${CURL_OPTS} -o- -v --trace-time --connect-timeout ${WAIT} --max-time ${WAIT} --data @${f1} --data @${f2} ${server} >"${out}" 2>"${err}" || error "Network communication failed [$?]\n$(cat ${out} ${err})"
 	[ "${challenge_response}" = $(head -n1 "${out}") ] || error "Server failed challenge/response [expected=${challenge_response}] != [got=$(head -n1 ${out})]"
 	log "client verified challenge/response with [${server}]"
 	hash_and_write "${server}"
-	log "successfully (re-)seeded [${DEVICE}]"
+	log "client successfully (re-)seeded [${DEVICE}]"
 }
 
 configure_reseed() {
@@ -147,6 +147,10 @@ while [ ! -z "$1" ]; do
 			shift
 		;;
 		-s|--server)
+			SERVER="$2"
+			shift 2
+		;;
+		-p|--pool)
 			POOL="${POOL} $2"
 			shift 2
 		;;
@@ -166,6 +170,9 @@ done
 [ -n "${DEVICE}" ] || DEVICE="/dev/urandom"
 [ -n "${BYTES}" ] || BYTES=64
 [ -n "${WAIT}" ] || WAIT="3"
+if [ -n "${SERVER}" ]; then
+	POOL="${SERVER}"
+fi
 if [ -z "${POOL}" ]; then
 	error "No servers configured in pool"
 fi
