@@ -9,7 +9,7 @@ CA="$DIR/ca.pem"
 
 # Create the pollen user if necessary
 if ! getent passwd $PKG >/dev/null; then
-	adduser --disabled-password --quiet --system --home /var/lib/pollen --ingroup daemon $PKG --shell /bin/false
+	adduser --disabled-password --quiet --system --home /var/cache/pollen --ingroup daemon $PKG --shell /bin/false
 fi
 
 # Set capabilities on the pollen binary to bind to privileged ports

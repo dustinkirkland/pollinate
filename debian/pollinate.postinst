@@ -1,6 +1,6 @@
 #!/bin/sh -e
 
-mkdir -p /var/lib/pollinate
-chown daemon /var/lib/pollinate
+mkdir -p /var/cache/pollinate
+chown daemon /var/cache/pollinate
 
 #DEBHELPER#

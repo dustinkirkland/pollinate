@@ -18,6 +18,11 @@ pollen (3.10) unreleased; urgency=low
         time, and b) update the upstart job to run as daemon
       + woot
       + this works because both are conffiles
+  * debian/pollen.postinst, debian/pollinate.postinst,
+    debian/pollinate.postrm, pollinate:
+    - use /var/cache/pollinate, rather than /var/lib/pollinate
+    - this should make it more obvious that this data can be cleared out,
+      and should be cleared out, on re-bundles or snapshots and reimages
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 16 Jan 2014 08:01:31 -0600
 

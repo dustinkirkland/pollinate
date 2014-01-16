@@ -62,9 +62,9 @@ hash_and_write() {
 
 tagfile() {
 	# Find the tagfile
-	if [ -e "/var/lib/${PKG}/tag" ] || [ -w "/var/lib/${PKG}/" ]; then
+	if [ -e "/var/cache/${PKG}/tag" ] || [ -w "/var/cache/${PKG}/" ]; then
 		# Use the system wide one, if possible
-		_RET="/var/lib/${PKG}/tag"
+		_RET="/var/cache/${PKG}/tag"
 	else
 		# Use a per-user one, for per-user runs
 		_RET="${HOME}/.cache/${PKG}/tag"
