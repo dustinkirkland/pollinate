@@ -7,7 +7,7 @@ Build-Depends: debhelper (>= 7.0.50~),
  autoconf,
  automake,
  dh-apparmor,
- golang-go
+ gccgo
 Standards-Version: 3.9.4
 Homepage: http://launchpad.net/pollen
 
