@@ -6,6 +6,10 @@ pollen (3.9) unreleased; urgency=low
     - save ourselves an unneeded fork
   * debian/control:
     - drop haveged as a suggests
+  * debian/pollinate.default, debian/pollinate.install,
+    entropy.ubuntu.com.pem:
+    - install entropy.ubuntu.com.pem's certificate and intermediate
+      chain, to get rid of --insecure curl option
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 15 Jan 2014 16:49:39 -0600
 
