@@ -1,4 +1,4 @@
-pollen (3.10) unreleased; urgency=low
+pollen (3.10-0ubuntu1) trusty; urgency=low
 
   * debian/pollinate.cron.d, debian/pollinate.postinst, pollinate:
     - have each client choose a random time of day to reseed,
@@ -37,7 +37,7 @@ pollen (3.10) unreleased; urgency=low
   * debian/copyright:
     - lintian/dep5 cleanup
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 16 Jan 2014 08:01:31 -0600
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 16 Jan 2014 11:39:42 -0600
 
 pollen (3.9-0ubuntu1) trusty; urgency=low
 
