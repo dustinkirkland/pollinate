@@ -34,6 +34,8 @@ pollen (3.10) unreleased; urgency=low
   * usr.bin.pollen:
     - update apparmor profile to allow reading of /usr/bin/pollen
       - oddly, this was introduced when switching compilers
+  * debian/copyright:
+    - lintian/dep5 cleanup
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 16 Jan 2014 08:01:31 -0600
 
