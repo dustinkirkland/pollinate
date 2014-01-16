@@ -1,4 +1,4 @@
-pollen (3.9) unreleased; urgency=low
+pollen (3.9-0ubuntu1) trusty; urgency=low
 
   * debian/pollinate.default:
     - don't use quiet by default, do use binary
@@ -15,7 +15,7 @@ pollen (3.9) unreleased; urgency=low
     - add a final message, noting successful (re-)seed
     - have pollinate depend on bsdutils, which provides logger
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 15 Jan 2014 16:49:39 -0600
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 16 Jan 2014 08:01:28 -0600
 
 pollen (3.8-0ubuntu1) trusty; urgency=low
 
