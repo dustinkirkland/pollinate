@@ -3,6 +3,21 @@ pollen (3.10) unreleased; urgency=low
   * debian/pollinate.cron.d, debian/pollinate.postinst, pollinate:
     - have each client choose a random time of day to reseed,
       at first run, rather than at package installation time
+    - this requires a very clever hack(!)
+    - install a "template" at /etc/cron.d/pollinate, with __MINUTE__
+      and __HOUR__ symbols that should be replaced by the client,
+      at first run
+    - cron requires that /etc/cron.d/pollinate be owned by root
+    - ideally we'd run the pollinate script as a non-root user (ie, daemon),
+      by specifying the daemon user in upstart and in the cronjob
+    - but daemon can't write to /etc/cron.d/pollinate, if it's owned by root
+    - so here's the hack...
+      + the upstart job installed by the package has "setuid root"
+      + on its first run (which will be either at package install time, or
+        at boot), it will run as root and: a) update the cronjob to a random
+        time, and b) update the upstart job to run as daemon
+      + woot
+      + this works because both are conffiles
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 16 Jan 2014 08:01:31 -0600
 

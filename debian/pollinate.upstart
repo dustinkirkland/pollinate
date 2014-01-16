@@ -3,7 +3,7 @@
 description	"Entropy-as-a-Service client"
 author		"Dustin Kirkland <dustin.kirkland@gmail.com>"
 
-setuid daemon
+setuid root
 
 start on (started networking or starting ssh)
 

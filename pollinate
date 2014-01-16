@@ -110,10 +110,19 @@ configure_reseed() {
 	# According to FIPS 140-2, NIST DRBG Special Publication 800-90A,
 	# pseudo random number generators should be re-seeded periodically
 	# See: http://csrc.nist.gov/groups/STM/cavp/documents/drbg/DRBGVS.pdf
-	local minute=$(expr $(hexdump -n 6 -e '/2 "%u"' ${DEVICE}) % 60)
-	local hour=$(expr $(hexdump -n 6 -e '/2 "%u"' ${DEVICE}) % 24)
-	if [ -w /etc/cron.d/${PKG} ]; then
-		sed -i -e "s/__RAND_MINUTE__/$minute/g" -e "s/__RAND_HOUR__/$hour/g" /etc/cron.d/pollinate
+	# The pollinate package uses a cronjob that runs once per day to do this.
+	# This code below creates a unique cronjob, per client, that runs at a
+	# regular but random time per day, to spread the load evenly on the
+	# pollen server.
+	if [ -w /etc/cron.d/ ] && [ ! -e /etc/cron.d/${PKG} ]; then
+		# Create our reseed cronjob
+		local minute=$(expr $(hexdump -n 6 -e '/2 "%u"' ${DEVICE}) % 60)
+		local hour=$(expr $(hexdump -n 6 -e '/2 "%u"' ${DEVICE}) % 24)
+		sed -e "s/__RAND_MINUTE__/$minute/g" -e "s/__RAND_HOUR__/$hour/g" /usr/share/${PKG}/${PKG}.cron.d > /etc/cron.d/${PKG}
+	fi
+	if [ -w /etc/init/${PKG}.conf ] && grep -qs "^setuid root" /etc/init/${PKG}.conf; then
+		# Drop root privileges in the upstart job, after the first run
+		sed -i -e "s/^setuid root/setuid daemon/" /etc/init/${PKG}.conf
 	fi
 }
 

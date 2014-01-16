@@ -2,6 +2,5 @@
 
 mkdir -p /var/lib/pollinate
 chown daemon /var/lib/pollinate
-chown daemon /etc/cron.d/pollinate
 
 #DEBHELPER#
