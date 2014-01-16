@@ -92,7 +92,7 @@ exchange() {
 	log "client sent challenge to [${1}]"
 	local out="${TMPDIR}/out"
 	local err="${TMPDIR}/err"
-	($cmd >"${out}" 2>"${err}") || error "Network communication failed [$?]\n$(cat ${out} ${err})"
+	$cmd >"${out}" 2>"${err}" || error "Network communication failed [$?]\n$(cat ${out} ${err})"
 	[ "${challenge_response}" = $(head -n1 "${out}") ] || error "Server failed challenge/response [expected=${challenge_response}] != [got=$(head -n1 ${out})]"
 	log "client verified challenge/response with [${server}]"
 	hash_and_write "${server}"
