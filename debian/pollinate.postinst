@@ -1,11 +1,7 @@
 #!/bin/sh -e
 
-# Randomize minute and hour on which cronjob runs, so as not to overload server
-minute=$(expr $(hexdump -n 6 -e '/2 "%u"' /dev/urandom) % 60)
-hour=$(expr $(hexdump -n 6 -e '/2 "%u"' /dev/urandom) % 24)
-sed -i -e "s/__RAND_MINUTE__/$minute/g" /etc/cron.d/pollinate || true
-sed -i -e "s/__RAND_HOUR__/$hour/g" /etc/cron.d/pollinate || true
 mkdir -p /var/lib/pollinate
 chown daemon /var/lib/pollinate
+chown daemon /etc/cron.d/pollinate
 
 #DEBHELPER#

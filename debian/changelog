@@ -1,6 +1,8 @@
 pollen (3.10) unreleased; urgency=low
 
-  * UNRELEASED
+  * debian/pollinate.cron.d, debian/pollinate.postinst, pollinate:
+    - have each client choose a random time of day to reseed,
+      at first run, rather than at package installation time
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 16 Jan 2014 08:01:31 -0600
 

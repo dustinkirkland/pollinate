@@ -106,6 +106,17 @@ exchange() {
 	log "successfully (re-)seeded [${DEVICE}]"
 }
 
+configure_reseed() {
+	# According to FIPS 140-2, NIST DRBG Special Publication 800-90A,
+	# pseudo random number generators should be re-seeded periodically
+	# See: http://csrc.nist.gov/groups/STM/cavp/documents/drbg/DRBGVS.pdf
+	local minute=$(expr $(hexdump -n 6 -e '/2 "%u"' ${DEVICE}) % 60)
+	local hour=$(expr $(hexdump -n 6 -e '/2 "%u"' ${DEVICE}) % 24)
+	if [ -w /etc/cron.d/${PKG} ]; then
+		sed -i -e "s/__RAND_MINUTE__/$minute/g" -e "s/__RAND_HOUR__/$hour/g" /etc/cron.d/pollinate
+	fi
+}
+
 # Source configuration
 [ -r "/etc/default/pollinate" ] && . "/etc/default/pollinate"
 while [ ! -z "$1" ]; do
@@ -149,6 +160,7 @@ done
 if [ -z "${POOL}" ]; then
 	error "No servers configured in pool"
 fi
+configure_reseed
 for i in ${POOL}; do
 	exchange "${i}"
 done
