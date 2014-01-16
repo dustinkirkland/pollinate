@@ -10,6 +10,10 @@ pollen (3.9) unreleased; urgency=low
     entropy.ubuntu.com.pem:
     - install entropy.ubuntu.com.pem's certificate and intermediate
       chain, to get rid of --insecure curl option
+  * debian/control, pollinate:
+    - log to the system log, using the logger utility
+    - add a final message, noting successful (re-)seed
+    - have pollinate depend on bsdutils, which provides logger
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 15 Jan 2014 16:49:39 -0600
 

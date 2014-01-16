@@ -28,7 +28,14 @@ error() {
 }
 
 log() {
-	[ "${QUIET}" = "1" ] || printf "$(date '+%b %e %T') $(hostname) ${PKG}[$$]: $@\n" 1>&2
+	if [ "${QUIET}" = "1" ]; then
+		# quiet mode, only log to syslog
+		logger -i -t ${PKG} "$@"
+	else
+		# log to both stderr and syslog
+		printf "$(date '+%b %e %T') $(hostname) " 1>&2
+		logger -is -t ${PKG} "$@"
+	fi
 }
 
 random_hash() {
@@ -96,6 +103,7 @@ exchange() {
 	[ "${challenge_response}" = $(head -n1 "${out}") ] || error "Server failed challenge/response [expected=${challenge_response}] != [got=$(head -n1 ${out})]"
 	log "client verified challenge/response with [${server}]"
 	hash_and_write "${server}"
+	log "successfully (re-)seeded [${DEVICE}]"
 }
 
 # Source configuration
