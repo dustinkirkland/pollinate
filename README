@@ -1,33 +1,64 @@
-Linux has an excellent psuedo random number generator, located at /dev/urandom.  For most practical purposes, /dev/urandom is a perfectly adequate source of entropy, as long as it is seeded properly at each boot.  See: random(4).
+ABSTRACT
+--------
 
-Most Linux distributions (Debian and Ubuntu included) carry over a seed from one boot to another, in an init script, such as /etc/init.d/urandom.  In Ubuntu, that init script does the following:
+Pollen is a scalable, high performance, free software (AGPL) web server, that provides small strings of entropy, over TLS-encrypted HTTPS or clear text HTTP connections.  You might think of this as 'Entropy-as-a-Service'.
 
+Pollinate is a free software (GPLv3) script that retrieves entropy from one or more Pollen servers and seeds the local Pseudo Random Number Generator (PRNG).  You might think of this as PRNG-seeding via Entropy-as-a-Service.
+
+Please understand...neither Pollen nor Pollinate increase the amount of entropy available on the system!  Rather, Pollinate adequately and securely seeds (and periodically re-seed the PRNG in cloud virtual machines through communications with a Pollen server.
+
+
+DESCRIPTION
+-----------
+
+The Linux kernel provides two special character devices interfaces to high quality entropy -- /dev/random and /dev/urandom.  The former conservatively guarantees hardware quality entropy, and userspace processes reading from /dev/random will block until sufficient bits are available to fulfill the request.  The latter is a pseudo random number generator (PRNG), and /dev/urandom provides a non-blocking, limitless supply of pseudo random numbers.
+
+The manpage random(4) has far more complete description of /dev/random and /dev/urandom.  See: http://manpg.es/random.4
+
+For most practical purposes, /dev/urandom is a perfectly adequate source of entropy, as long as it is seeded properly at each boot.
+
+Most Linux distributions (including Debian and Ubuntu) carry over a random seed from one boot to another, typically in an init script, such as /etc/init.d/urandom.  In Ubuntu, that init script does the following:
+
+  ...
   SAVEDFILE=/var/lib/urandom/random-seed
   POOLBYTES=512
   dd if=/dev/urandom of=$SAVEDFILE bs=$POOLBYTES count=1 >/dev/null 2>&1
+  ...
 
-There is, however, a bootstrapping problem, seeding /dev/urandom on the first boot.  That problem is compounded on the first boot of cloud servers and virtual machines, which typically have no access to real hardware or good entropy sources.  Several attacks have been demonstrated recently against SSH and SSL, with certificates generated with poor entropy, such as: https://factorable.net/weakkeys12.extended.pdf
+There is, you may notice, a bootstrapping problem... How does one seed /dev/urandom on a system's very first boot?
 
-It would be quite handy if virtual machines and cloud instances opportunistically called out to a remote service to fetch a sufficient amount of entropy at first boot (and periodically thereafter) to improve the seeding of the pseudo random number generator with an external source of entropy.
+On laptops, desktops, tablets, phones, and other physical systems, input devices, such as a keyboard, mouse, touch screen, or microphone can provide sufficient entropy to seed the PRNG through the kernel's collection of timers and interrupts.
 
-And that, my friends, is the very goal of this project.  It consists of two pieces:
- - pollen: an Entropy-as-a-Service server
- - pollinate: an Entropy-as-a-Service client
+However, virtual machines typically have no access to real hardware and few, if any, sufficient entropy sources.  Several real attacks have been demonstrated recently against SSH and SSL, with certificates generated with poor entropy, such as: https://factorable.net/weakkeys12.extended.pdf
 
-Pollen is a fast, efficient web service, implemented in Golang and providing a source of entropy to its clients over a network connection.  Pollen utilizes TLS (SSL) to ensure privacy, security, and non-repudiation of connections among its clients.
+The cryptographic security of virtual machines and cloud instances can be signficantly improved by fetching a sufficient amount of entropy at first boot (and periodically thereafter) to seed the PRNG with external sources of entropy.
 
-Pollinate is a client utility, implement in Shell, which wraps curl(1) and communicates securely with the Pollen server.
 
-The default protocol for all connections is HTTPS, however HTTP is available for debug, testing, or other purposes.  The pollen server should ideally have a CA-signed certificate, or pre-arrange the distribution of certificates to its clients.
+IMPLEMENTATION
+----------
 
-An entropy request may optionally (ideally) contain two POST arguments:
- - tag - a voluntary identifier of the pollinate client to the pollen server
- - challenge - a randomly generated checksum to ensure unique communication with the pollen server
+Pollen is a fast and efficient web service, implemented in Golang.  It provides small random strings to its clients over network connections.  Pollen utilizes TLS (SSL) to ensure privacy, security, and non-repudiation of connections among its clients.
 
-In the normal case, these two POST arguments are hex-encoded sha512sum(1) values, which are 128 characters of [0-9a-f], representing 64 total bytes of entropy.  Regardless of the values of 'tag' and 'challenge', the pollen server will treat the input as strings and calculate the sha512sum's of both.  This ensures that any malicious input from a deviant client is whitened to a simple hash before the server operates upon it.
+Pollinate is a client utility, implement in Shell, which wraps curl(1) and communicates securely with one or more Pollen servers.
 
-The server then responds to the client with the sha512 checksum of the challenge on the first line, and the second line of the response will contain another sha512sum of 64 bytes of random data.
+The default protocol for all connections is HTTPS, however HTTP is available for debug, testing, or other purposes.  To ensure the privacy and security of connections, the Pollen server should ideally have a CA-signed certificate, or pre-arrange the distribution of certificates to its clients.
 
-The client verifies the challenge/response, which ensures that this communication between the client and server is a custom response.
+An entropy request may optionally contain two POST arguments:
+ - tag - a voluntary identifier of the Pollinate client to the Pollen server
+ - challenge - a randomly generated checksum to ensure unique communication with the Pollen server
 
-The client uses a special option to curl(1), which details all of the communication to the server, and includes high resolution, local timestamps.  This information, which is not easily detectable or reproducible by an attacker, is combined with the server's responses, and written into the Linux pseudo random number device, /dev/urandom, which is combined with the local system entropy.
+In the default case, these two POST arguments are hex-encoded sha512sum(1) values, which are 128 ASCII characters of [0-9a-f].  Regardless of the values of 'tag' and 'challenge', the Pollen server will treat the input as strings and calculate the sha512sum's of both.  This ensures that any malicious input from a deviant client is whitened to a simple hash before the server operates upon it.
+
+The server then responds to the client with the sha512 checksum of the challenge on the first line, and the second line of the response will contain the sha512sum of the concatenation of 64 bytes of random data and the submitted tag.
+
+The client verifies the challenge/response, which is intended to help ensure that this communication between the client and server is a custom response, and that the server actually "did some work".
+
+The client uses a special option to curl(1), which details all of the communication to the server, and includes high resolution, local timestamps.  This information, which is not easily detectable or reproducible by an attacker (or the Pollen server administrator), is combined with the server's responses, and written into the Linux PRNG, /dev/urandom, which is folded into the local system entropy.
+
+
+POLLEN AND POLLINATE IN UBUNTU
+------------------------------
+
+Canonical provides a Pollen server as a service to the Ubuntu community at https://entropy.ubuntu.com.  Beginning with Ubuntu 14.04, Ubuntu cloud images include the Pollinate client, which will try (for up to 3 seconds at boot and daily thereafter) to seed the PRNG with input from https://entropy.ubuntu.com.  This service is highly available, with multiple physical servers deployed in a cluster using Juju service orchestration.  Each of these Pollen server has at least two hardware random number generators, ensuring high quality entropy as a service, and diversified against hardware failure.  Rest assured, a busy Pollen server, handling many challenge/response calculations and serving numerous concurrent connections, will have a computationally complex and impossible to reproduce entropy state.
+
+Ubuntu cloud users are welcome to add other Pollen servers to the pool and edit other default options in /etc/default/pollinate, or modify the daily re-seed cronjob in /etc/cron.d/pollinate.  Ubuntu users and other distributions are welcome to install and run their own Pollen server, with 'sudo apt-get install pollen' or 'bzr branch lp:pollen'.

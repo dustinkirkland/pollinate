@@ -1,6 +1,7 @@
 pollen (3.11) unreleased; urgency=low
 
-  * UNRELEASED
+  * README:
+    - updates to the README
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 16 Jan 2014 11:39:44 -0600
 
