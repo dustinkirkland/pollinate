@@ -4,6 +4,8 @@ pollen (3.11) unreleased; urgency=low
     - updates to the README
   * debian/copyright, pollinate:
     - the client should really be GPLv3, rather than AGPL
+  * debian/copyright:
+    - point to the local copy of GPLv3 license
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 16 Jan 2014 11:39:44 -0600
 
