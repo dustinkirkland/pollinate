@@ -1,4 +1,4 @@
-pollen (3.11) unreleased; urgency=low
+pollen (3.11-0ubuntu1) trusty; urgency=low
 
   * README:
     - updates to the README
@@ -7,7 +7,7 @@ pollen (3.11) unreleased; urgency=low
   * debian/copyright:
     - point to the local copy of GPLv3 license
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 16 Jan 2014 11:39:44 -0600
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 27 Jan 2014 13:54:16 +0000
 
 pollen (3.10-0ubuntu1) trusty; urgency=low
 
