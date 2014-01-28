@@ -1,6 +1,7 @@
 pollen (3.12) unreleased; urgency=low
 
-  * UNRELEASED
+  * README:
+    - minor documentation feedback from Kees Cook
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 27 Jan 2014 13:54:19 +0000
 
