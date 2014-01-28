@@ -1,4 +1,4 @@
-pollen (3.12) unreleased; urgency=low
+pollen (3.12-0ubuntu1) trusty; urgency=low
 
   * README:
     - minor documentation feedback from Kees Cook
@@ -6,7 +6,7 @@ pollen (3.12) unreleased; urgency=low
   * debian/control:
     - clean up package descriptions a bit
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 27 Jan 2014 13:54:19 +0000
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 28 Jan 2014 22:16:10 +0000
 
 pollen (3.11-0ubuntu1) trusty; urgency=low
 
