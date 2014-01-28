@@ -2,6 +2,7 @@ pollen (3.12) unreleased; urgency=low
 
   * README:
     - minor documentation feedback from Kees Cook
+    - note that pollen servers can of course be run internally
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 27 Jan 2014 13:54:19 +0000
 
