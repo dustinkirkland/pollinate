@@ -51,7 +51,7 @@ In the default case, these two POST arguments are hex-encoded sha512sum(1) value
 
 The server then responds to the client with the sha512 checksum of the challenge on the first line, and the second line of the response will contain the sha512sum of the concatenation of 64 bytes of random data and the submitted tag.
 
-The client verifies the challenge/response, which is intended to help ensure that this communication between the client and server is a custom response, and that the server actually "did some work".
+The client verifies the challenge/response, which is intended to help ensure that this communication between the client and server is a custom response, and that the server actually "did some work", and thus affected the entropy state on the server.
 
 The client uses a special option to curl(1), which details all of the communication to the server, and includes high resolution, local timestamps.  This information, which is not easily detectable or reproducible by an attacker (or the Pollen server administrator), is combined with the server's responses, and written into the Linux PRNG, /dev/urandom, which is folded into the local system entropy.
 
