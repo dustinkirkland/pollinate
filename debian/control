@@ -31,8 +31,10 @@ Suggests: pollen-server, ent
 Provides: anerd, anerd-client
 Replaces: anerd (<< 3.0), anerd-client (<< 3.0)
 Breaks: anerd (<< 3.0), anerd-client (<< 3.0)
-Description: Entropy-as-a-Service client
- This client will connect to one or more pollen servers over an optionally
- encrypted connection and exchange entropy.  This is extremely useful to
- seed a system's random number generator, especially in cloud and virtual
- environments.
+Description: seed the pseudo random number generator in virtual machines
+ This client will connect to one or more Pollen (entropy-as-a-service)
+ servers over an (optionally) encrypted connection and retrieve a random
+ seed over HTTP or HTTPS.
+ This is particularly useful at the first boot of cloud images and in
+ virtual machines, to seed a system's random number generator at
+ genesis, and is intended to supplement the /etc/init.d/urandom init script.
