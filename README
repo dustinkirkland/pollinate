@@ -31,7 +31,7 @@ On laptops, desktops, tablets, phones, and other physical systems, input devices
 
 However, virtual machines typically have no access to real hardware and few, if any, sufficient entropy sources.  Several real attacks have been demonstrated recently against SSH and SSL, with certificates generated with poor entropy, such as: https://factorable.net/weakkeys12.extended.pdf
 
-The cryptographic security of virtual machines and cloud instances can be signficantly improved by fetching a sufficient amount of entropy at first boot (and periodically thereafter) to seed the PRNG with external sources of entropy.
+The cryptographic security of virtual machines and cloud instances can be significantly improved by fetching a sufficient amount of entropy at first boot (and periodically thereafter) to seed the PRNG with external sources of entropy.
 
 
 IMPLEMENTATION
