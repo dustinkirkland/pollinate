@@ -1,7 +1,7 @@
 pollen (3.13) unreleased; urgency=low
 
   * README:
-    - minor typos
+    - fix minor typos
     - explain "did some work"
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 28 Jan 2014 22:16:12 +0000
