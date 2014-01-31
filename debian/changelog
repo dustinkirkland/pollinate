@@ -3,7 +3,11 @@ pollen (3.13) unreleased; urgency=low
   * README:
     - fix more minor typos
     - explain "did some work"
-  * README:
+  * debian/rules, Makefile:
+    - fix the build for gccgo
+    - must use the -g parameter
+    - don't strip binaries
+    - these are ugly, but are the result of gccgo vs golang-go
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 28 Jan 2014 22:16:12 +0000
 
