@@ -62,7 +62,7 @@ hash_and_write() {
 
 tagfile() {
 	# Find the tagfile
-	if [ -e "/var/cache/${PKG}/tag" ] || [ -w "/var/cache/${PKG}/" ]; then
+	if [ -r "/var/cache/${PKG}/tag" ] || [ -w "/var/cache/${PKG}/" ]; then
 		# Use the system wide one, if possible
 		_RET="/var/cache/${PKG}/tag"
 	else
@@ -95,7 +95,6 @@ exchange() {
 	local challenge=$(random_hash)
 	local challenge_response=$(printf "${challenge}" | sha512sum | awk '{print $1}')
 	printf "challenge=%s" "$challenge" > "${f2}"
-	local cmd="curl ${CURL_OPTS} -o- -v --trace-time --connect-timeout ${WAIT} --max-time ${WAIT} --data @${f1} --data @${f2} ${server}"
 	log "client sent challenge to [${1}]"
 	local out="${TMPDIR}/out"
 	local err="${TMPDIR}/err"
