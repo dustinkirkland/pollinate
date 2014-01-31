@@ -6,5 +6,9 @@ QUIET=0
 WAIT=3
 DEVICE="/dev/urandom"
 POOL="https://entropy.ubuntu.com/"
-CURL_OPTS="--cacert /etc/pollinate/entropy.ubuntu.com.pem -A \"pollinate/$(apt-cache policy pollinate | grep 'Installed:' | awk '{print $2}') curl/$(apt-cache policy curl | grep 'Installed:' | awk '{print $2}') $(lsb_release -ds) $(uname -m)\""
-
+VER="$(apt-cache policy pollinate | grep 'Installed:' | awk '{print $2}')"
+CURL_VER="$(apt-cache policy curl | grep 'Installed:' | awk '{print $2}')"
+LSB="$(lsb_release -is),$(lsb_release -rs)"
+ARCH="$(uname -m)"
+AGENT="pollinate/${VER},curl/${VER},${LSB},${ARCH}"
+CURL_OPTS="--cacert /etc/pollinate/entropy.ubuntu.com.pem --user-agent '${AGENT}'"
