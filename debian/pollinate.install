@@ -1,3 +1,2 @@
 pollinate /usr/bin/
 entropy.ubuntu.com.pem /etc/pollinate/
-pollinate.cron.d /usr/share/pollinate/

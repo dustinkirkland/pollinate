@@ -8,11 +8,8 @@ pollen (3.13) unreleased; urgency=low
     - must use the -g parameter
     - don't strip binaries
     - these are ugly, but are the result of gccgo vs golang-go
-  * pollen.go:
-    - calculate tag checksum first
   * pollinate:
     - remove unused variable $cmd
-    - ensure global tag file is readable
   * debian/pollinate.default:
     - add helpful debug info to user agent, similar to chrome and firefox,
       optional and configurable in /etc/pollinate/default
@@ -22,6 +19,10 @@ pollen (3.13) unreleased; urgency=low
   * debian/pollinate.upstart:
     - our upstart job should start on starting cloud-init, to ensure that
       we get run before generating SSH keys
+  * debian/pollinate.install, debian/pollinate.postrm, pollen.go,
+    pollinate, pollinate.cron.d, README:
+    - drop the tag and cronjob per feedback from sarnold in the code audit
+      in LP: #1246098
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 28 Jan 2014 22:16:12 +0000
 

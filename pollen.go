@@ -41,20 +41,17 @@ const (
 
 func handler(response http.ResponseWriter, request *http.Request) {
 	checksum := sha512.New()
-	io.WriteString(checksum, request.FormValue("tag"))
-	tag := checksum.Sum(nil)
-	dev.Write(tag)
 	checksum = sha512.New()
 	io.WriteString(checksum, request.FormValue("challenge"))
 	challenge_response := checksum.Sum(nil)
 	dev.Write(challenge_response)
-	log.Info(fmt.Sprintf("Server received challenge from [%s, %s, %x] at [%v]", request.RemoteAddr, request.UserAgent(), tag, time.Now().UnixNano()))
+	log.Info(fmt.Sprintf("Server received challenge from [%s, %s] at [%v]", request.RemoteAddr, request.UserAgent(), time.Now().UnixNano()))
 	data := make([]byte, DEFAULT_SIZE)
 	io.ReadAtLeast(rand.Reader, data, DEFAULT_SIZE)
 	io.WriteString(checksum, string(data[:DEFAULT_SIZE]))
 	seed := checksum.Sum(nil)
 	fmt.Fprintf(response, "%x\n%x\n", challenge_response, seed)
-	log.Info(fmt.Sprintf("Server sent response to [%s, %s, %x] at [%v]", request.RemoteAddr, request.UserAgent(), tag, time.Now().UnixNano()))
+	log.Info(fmt.Sprintf("Server sent response to [%s, %s] at [%v]", request.RemoteAddr, request.UserAgent(), time.Now().UnixNano()))
 }
 
 func main() {
