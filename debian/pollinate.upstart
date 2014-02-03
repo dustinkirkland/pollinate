@@ -5,7 +5,7 @@ author		"Dustin Kirkland <dustin.kirkland@gmail.com>"
 
 setuid root
 
-start on (started networking or starting ssh)
+start on (started networking or starting ssh or starting cloud-init)
 
 script
 	. /etc/default/pollinate

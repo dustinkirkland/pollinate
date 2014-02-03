@@ -19,6 +19,9 @@ pollen (3.13) unreleased; urgency=low
   * debian/pollinate.default:
     - there seem to be some odd errors (long delays) when curl uses
       whitespace in the user agent string
+  * debian/pollinate.upstart:
+    - our upstart job should start on starting cloud-init, to ensure that
+      we get run before generating SSH keys
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 28 Jan 2014 22:16:12 +0000
 
