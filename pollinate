@@ -60,6 +60,15 @@ hash_and_write() {
 	log "client hashed response from [${1}]"
 }
 
+user_agent() {
+	# Construct a user agent, with useful debug information, similar to Firefox or Chrome
+	local ver="$(apt-cache policy pollinate | grep 'Installed:' | awk '{print $2}')"
+	local curl_ver="$(apt-cache policy curl | grep 'Installed:' | awk '{print $2}')"
+	local lsb="$(lsb_release -is),$(lsb_release -rs)"
+	local arch="$(uname -m)"
+	USER_AGENT="--user-agent 'pollinate/${ver},curl/${curl_ver},${lsb},${arch}'"
+}
+
 exchange() {
 	local server="${1}"
 	local f1="${_RET}"
@@ -81,7 +90,8 @@ exchange() {
 	log "client sent challenge to [${1}]"
 	local out="${TMPDIR}/out"
 	local err="${TMPDIR}/err"
-	curl ${CURL_OPTS} -o- -v --trace-time --connect-timeout ${WAIT} --max-time ${WAIT} --data @${f1} --data @${f2} ${server} >"${out}" 2>"${err}" || error "Network communication failed [$?]\n$(cat ${out} ${err})"
+	user_agent
+	curl ${CURL_OPTS} ${USER_AGENT} -o- -v --trace-time --connect-timeout ${WAIT} --max-time ${WAIT} --data @${f1} --data @${f2} ${server} >"${out}" 2>"${err}" || error "Network communication failed [$?]\n$(cat ${out} ${err})"
 	[ "${challenge_response}" = $(head -n1 "${out}") ] || error "Server failed challenge/response [expected=${challenge_response}] != [got=$(head -n1 ${out})]"
 	log "client verified challenge/response with [${server}]"
 	hash_and_write "${server}"

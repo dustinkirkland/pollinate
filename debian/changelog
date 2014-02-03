@@ -10,12 +10,6 @@ pollen (3.13) unreleased; urgency=low
     - these are ugly, but are the result of gccgo vs golang-go
   * pollinate:
     - remove unused variable $cmd
-  * debian/pollinate.default:
-    - add helpful debug info to user agent, similar to chrome and firefox,
-      optional and configurable in /etc/pollinate/default
-  * debian/pollinate.default:
-    - there seem to be some odd errors (long delays) when curl uses
-      whitespace in the user agent string
   * debian/pollinate.upstart:
     - our upstart job should start on starting cloud-init, to ensure that
       we get run before generating SSH keys
@@ -23,6 +17,8 @@ pollen (3.13) unreleased; urgency=low
     pollinate, pollinate.cron.d, README:
     - drop the tag and cronjob per feedback from sarnold in the code audit
       in LP: #1246098
+  * debian/pollinate.default, pollinate:
+    - add helpful debug info to user agent, similar to chrome and firefox,
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 28 Jan 2014 22:16:12 +0000
 
