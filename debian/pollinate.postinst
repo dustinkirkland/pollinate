@@ -1,6 +1,13 @@
 #!/bin/sh -e
 
-mkdir -p /var/cache/pollinate
-chown daemon /var/cache/pollinate
+PKG="pollinate"
+
+# Create the user if necessary
+mkdir -p /var/cache/$PKG
+chown -R $PKG /var/cache/$PKG
+if ! getent passwd $PKG >/dev/null; then
+        adduser --disabled-password --quiet --system --home /var/cache/$PKG --ingroup daemon $PKG --shell /bin/false
+fi
+
 
 #DEBHELPER#

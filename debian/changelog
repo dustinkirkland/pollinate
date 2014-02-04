@@ -19,6 +19,11 @@ pollen (3.13) unreleased; urgency=low
       in LP: #1246098
   * debian/pollinate.default, pollinate:
     - add helpful debug info to user agent, similar to chrome and firefox,
+  * debian/pollinate.postinst, debian/pollinate.postrm,
+    debian/pollinate.upstart, pollinate, pollinate.1:
+    - use a pollinate user, rather than the daemon user
+    - by default, only run pollinate once per system instantiation
+    - offer reseeding as an option, though
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 28 Jan 2014 22:16:12 +0000
 

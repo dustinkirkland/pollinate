@@ -19,11 +19,13 @@
 set -e
 
 PKG="pollinate"
+FLAG="/var/cache/${PKG}/seeded"
 TMPDIR=$(mktemp -d -t "${PKG}.XXXXXXXXXXXX")
 trap "rm -rf ${TMPDIR} 2>/dev/null || true" EXIT HUP INT QUIT TERM
 
 error() {
-	echo "ERROR: $@" 1>&2
+	printf "$(date '+%b %e %T') $(hostname) " 1>&2
+	logger -is -t ${PKG} "ERROR: $@"
 	exit 1
 }
 
@@ -98,6 +100,9 @@ exchange() {
 	log "client successfully seeded [${DEVICE}]"
 }
 
+# Pollinate prefers to run as a privileged user
+[ -w "/var/cache/${PKG}" ] || error "should execute as a privileged user"
+
 # Source configuration
 [ -r "/etc/default/pollinate" ] && . "/etc/default/pollinate"
 while [ ! -z "$1" ]; do
@@ -117,6 +122,10 @@ while [ ! -z "$1" ]; do
 		-i|--insecure)
 			CURL_OPTS="${CURL_OPTS} --insecure"
 			shift
+		;;
+		-r|--reseed)
+			RESEED=1
+			shift 1
 		;;
 		-s|--server)
 			SERVER="$2"
@@ -139,6 +148,14 @@ while [ ! -z "$1" ]; do
 		;;
 	esac
 done
+if [ -e "${FLAG}" ]; then
+	timestamp=$(stat -c "%y" "${FLAG}")
+	log "system was previously seeded at [${timestamp}]"
+	if [ "${RESEED}" != "1" ]; then
+		log "To re-seed this system again, use the -r|--reseed option"
+		exit 0
+	fi
+fi
 [ -n "${DEVICE}" ] || DEVICE="/dev/urandom"
 [ -n "${BYTES}" ] || BYTES=64
 [ -n "${WAIT}" ] || WAIT="3"
@@ -151,3 +168,4 @@ fi
 for i in ${POOL}; do
 	exchange "${i}"
 done
+touch /var/cache/${PKG}/seeded
