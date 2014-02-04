@@ -26,7 +26,7 @@ Description: Entropy-as-a-Service web server
 
 Package: pollinate
 Architecture: all
-Depends: ${misc:Depends}, run-one, curl
+Depends: ${misc:Depends}, run-one, curl, adduser
 Suggests: pollen-server, ent
 Provides: anerd, anerd-client
 Replaces: anerd (<< 3.0), anerd-client (<< 3.0)

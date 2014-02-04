@@ -24,6 +24,8 @@ pollen (3.13) unreleased; urgency=low
     - use a pollinate user, rather than the daemon user
     - by default, only run pollinate once per system instantiation
     - offer reseeding as an option, though
+  * debian/control:
+    - need to depend on adduser
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 28 Jan 2014 22:16:12 +0000
 
