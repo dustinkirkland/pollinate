@@ -1,4 +1,4 @@
-pollen (3.13) unreleased; urgency=low
+pollen (3.13-0ubuntu1) trusty; urgency=low
 
   * README:
     - fix more minor typos
@@ -27,7 +27,7 @@ pollen (3.13) unreleased; urgency=low
   * debian/control:
     - need to depend on adduser
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 28 Jan 2014 22:16:12 +0000
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 04 Feb 2014 11:51:22 +0200
 
 pollen (3.12-0ubuntu1) trusty; urgency=low
 
