@@ -1,6 +1,7 @@
 pollen (3.14) unreleased; urgency=low
 
-  * UNRELEASED
+  * debian/pollinate.postinst:
+    - fix order of operations, packaging breakage
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 04 Feb 2014 11:51:27 +0200
 
