@@ -1,6 +1,7 @@
 pollen (3.16) unreleased; urgency=low
 
-  * UNRELEASED
+  * pollinate:
+    - minor standardization of the user agent string
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 05 Feb 2014 12:31:52 +0200
 
