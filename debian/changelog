@@ -1,9 +1,9 @@
-pollen (3.15) unreleased; urgency=low
+pollen (3.15-0ubuntu1) trusty; urgency=low
 
   * debian/control: LP: #1274074
     - build on any architecure, now that we build with gccgo
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 05 Feb 2014 11:34:39 +0200
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 05 Feb 2014 12:31:20 +0200
 
 pollen (3.14-0ubuntu1) trusty; urgency=low
 
