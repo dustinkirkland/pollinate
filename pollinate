@@ -63,12 +63,13 @@ hash_and_write() {
 }
 
 user_agent() {
-	# Construct a user agent, with useful debug information, similar to Firefox or Chrome
+	# Construct a user agent, with useful debug information
+	# Very similar to Firefox and Chrome
 	local ver="$(apt-cache policy pollinate | grep 'Installed:' | awk '{print $2}')"
 	local curl_ver="$(apt-cache policy curl | grep 'Installed:' | awk '{print $2}')"
 	local lsb="$(lsb_release -is)/$(lsb_release -rs)"
-	local arch="$(uname -m)"
-	USER_AGENT="pollinate/${ver} curl/${curl_ver} ${lsb} ${arch}"
+	local platform="$(uname -o)/$(uname -r)/$(uname -m)"
+	USER_AGENT="pollinate/${ver} curl/${curl_ver} ${lsb} ${platform}"
 }
 
 exchange() {

@@ -1,6 +1,7 @@
 pollen (3.17) unreleased; urgency=low
 
-  * UNRELEASED
+  * pollinate:
+    - improve kernel debug info
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 05 Feb 2014 13:57:45 +0200
 
