@@ -1,3 +1,9 @@
+pollen (3.18) unreleased; urgency=low
+
+  * UNRELEASED
+
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 10 Feb 2014 14:16:12 -0600
+
 pollen (3.17-0ubuntu1) trusty; urgency=low
 
   * pollinate:
