@@ -2,6 +2,11 @@ pollen (3.17) unreleased; urgency=low
 
   * pollinate:
     - improve kernel debug info
+  * debian/control, debian/pollen.install, Makefile:
+    - TEMPORARILY disabling the building of pollen, until
+      either gccgo or golang-go get promoted to main
+    - this should be reverted as soon as a go compiler
+      is available as a build dep
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 05 Feb 2014 13:57:45 +0200
 
