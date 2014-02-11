@@ -1,3 +1,9 @@
+pollinate (4.1) unreleased; urgency=low
+
+  * UNRELEASED
+
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 11 Feb 2014 09:43:26 -0600
+
 pollinate (4.0-0ubuntu1) trusty; urgency=low
 
   * ChangeLog, check_pollen, COPYING, debian/control, debian/copyright,
