@@ -8,6 +8,7 @@ if ! getent passwd $PKG >/dev/null; then
         adduser --disabled-password --quiet --system --home /var/cache/$PKG --ingroup daemon $PKG --shell /bin/false
 fi
 chown -R $PKG /var/cache/$PKG
+rm -f /var/cache/$PKG/tag
 
 
 #DEBHELPER#

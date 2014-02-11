@@ -11,6 +11,8 @@ pollinate (4.0) unreleased; urgency=low
     - split pollinate out into its own project and source package
     - pollinate is a simple shell script, whereas pollen is a compiled
       golang binary; this was proving far too complex to manage together
+  * debian/pollinate.postinst, debian/pollinate.preinst: LP: #1278770
+    - clean up busted/broken conffile, oops
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 10 Feb 2014 14:16:12 -0600
 
