@@ -1,6 +1,16 @@
-pollen (3.18) unreleased; urgency=low
+pollinate (4.0) unreleased; urgency=low
 
-  * UNRELEASED
+  * ChangeLog, check_pollen, COPYING, debian/control, debian/copyright,
+    debian/pollen.default, debian/pollen.install,
+    debian/pollen.manpages, debian/pollen.postinst,
+    debian/pollen.postrm, debian/pollen.upstart, debian/rules,
+    img/pollen_14.png, img/pollen_192.png, img/pollen_64.png,
+    img/pollinate_14.png, img/pollinate_192.png, img/pollinate_64.png,
+    img/pollinate.png, INSTALL, Makefile, pollen.8, pollen.go,
+    usr.bin.pollen:
+    - split pollinate out into its own project and source package
+    - pollinate is a simple shell script, whereas pollen is a compiled
+      golang binary; this was proving far too complex to manage together
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 10 Feb 2014 14:16:12 -0600
 

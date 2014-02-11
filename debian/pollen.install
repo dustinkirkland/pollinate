@@ -1,2 +1,0 @@
-check_pollen /usr/lib/nagios/plugins/
-usr.bin.pollen /etc/apparmor.d

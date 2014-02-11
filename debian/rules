@@ -2,10 +2,3 @@
 
 %:
 	dh $@
-
-override_dh_strip:
-	true
-
-override_dh_installdeb:
-	dh_apparmor --profile-name=usr.bin.pollen -ppollen
-	dh_installdeb
