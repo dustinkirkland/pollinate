@@ -1,6 +1,12 @@
 pollinate (4.1) unreleased; urgency=low
 
-  * UNRELEASED
+  * pollinate, pollinate.1:
+    - remove unused variable f2
+    - add support for -n|--no-challenge argument
+    - this technically makes it possible to use any arbitrary
+      URL as an entropy server
+      + e.g. random.org, news.google.com
+    - document the option in the manpage
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 11 Feb 2014 09:43:26 -0600
 

@@ -74,8 +74,7 @@ user_agent() {
 
 exchange() {
 	local server="${1}"
-	local f1="${_RET}"
-	local f2="${TMPDIR}/challenge"
+	local f1="${TMPDIR}/challenge"
 	case "${server}" in
 		"http://"*|"https://"*)
 			# looks good
@@ -86,17 +85,23 @@ exchange() {
 			server="https://${server}"
 		;;
 	esac
-	# Create and enforce a challenge/response, to ensure personal communication
-	local challenge=$(random_hash)
-	local challenge_response=$(printf "${challenge}" | sha512sum | awk '{print $1}')
-	printf "challenge=%s" "$challenge" > "${f2}"
-	log "client sent challenge to [${1}]"
+	if [ "${NO_CHALLENGE}" != "1" ]; then
+		# Create and enforce a challenge/response, to ensure personal communication
+		local challenge=$(random_hash)
+		local challenge_response=$(printf "${challenge}" | sha512sum | awk '{print $1}')
+		printf "challenge=%s" "$challenge" > "${f1}"
+		log "client sent challenge to [${1}]"
+	else
+		f1="/dev/null"
+	fi
 	local out="${TMPDIR}/out"
 	local err="${TMPDIR}/err"
 	user_agent
-	curl ${CURL_OPTS} -A "${USER_AGENT}" -o- -v --trace-time --connect-timeout ${WAIT} --max-time ${WAIT} --data @${f1} --data @${f2} ${server} >"${out}" 2>"${err}" || error "Network communication failed [$?]\n$(cat ${out} ${err})"
-	[ "${challenge_response}" = $(head -n1 "${out}") ] || error "Server failed challenge/response [expected=${challenge_response}] != [got=$(head -n1 ${out})]"
-	log "client verified challenge/response with [${server}]"
+	curl ${CURL_OPTS} -A "${USER_AGENT}" -o- -v --trace-time --connect-timeout ${WAIT} --max-time ${WAIT} --data @${f1} ${server} >"${out}" 2>"${err}" || error "Network communication failed [$?]\n$(cat ${out} ${err})"
+	if [ "${NO_CHALLENGE}" != "1" ]; then
+		[ "${challenge_response}" = $(head -n1 "${out}") ] || error "Server failed challenge/response [expected=${challenge_response}] != [got=$(head -n1 ${out})]"
+		log "client verified challenge/response with [${server}]"
+	fi
 	hash_and_write "${server}"
 	log "client successfully seeded [${DEVICE}]"
 }
@@ -122,7 +127,11 @@ while [ ! -z "$1" ]; do
 		;;
 		-i|--insecure)
 			CURL_OPTS="${CURL_OPTS} --insecure"
-			shift
+			shift 1
+		;;
+		-n|--no-challenge)
+			NO_CHALLENGE=1
+			shift 1
 		;;
 		-r|--reseed)
 			RESEED=1
