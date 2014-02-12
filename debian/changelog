@@ -7,6 +7,9 @@ pollinate (4.1) unreleased; urgency=low
       URL as an entropy server
       + e.g. random.org, news.google.com
     - document the option in the manpage
+  * pollinate:
+    - move CURL_OPTS to the end of the line, so that the admin can override
+      any curl option, such as the user-agent string in /etc/default/pollinate
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 11 Feb 2014 09:43:26 -0600
 
