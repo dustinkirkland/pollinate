@@ -1,4 +1,4 @@
-pollinate (4.1) unreleased; urgency=low
+pollinate (4.1-0ubuntu1) trusty; urgency=low
 
   * pollinate, pollinate.1:
     - remove unused variable f2
@@ -11,7 +11,7 @@ pollinate (4.1) unreleased; urgency=low
     - move CURL_OPTS to the end of the line, so that the admin can override
       any curl option, such as the user-agent string in /etc/default/pollinate
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 11 Feb 2014 09:43:26 -0600
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 11 Feb 2014 18:05:53 -0600
 
 pollinate (4.0-0ubuntu1) trusty; urgency=low
 
