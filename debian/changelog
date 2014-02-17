@@ -1,6 +1,8 @@
 pollinate (4.2) unreleased; urgency=low
 
-  * UNRELEASED
+  * debian/pollinate.default:
+    - use curl --capath /dev/null by default, to mitigate SSL CA MitM
+      attacks, since we're shipping our own public cert
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 11 Feb 2014 18:05:54 -0600
 

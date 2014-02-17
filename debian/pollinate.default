@@ -6,4 +6,4 @@ QUIET=0
 WAIT=3
 DEVICE="/dev/urandom"
 POOL="https://entropy.ubuntu.com/"
-CURL_OPTS="--cacert /etc/pollinate/entropy.ubuntu.com.pem"
+CURL_OPTS="--cacert /etc/pollinate/entropy.ubuntu.com.pem --capath /dev/null"
