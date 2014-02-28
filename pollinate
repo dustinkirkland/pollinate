@@ -69,7 +69,7 @@ user_agent() {
 	local curl_ver="$(apt-cache policy curl | grep 'Installed:' | awk '{print $2}')"
 	local lsb="$(lsb_release -is)/$(lsb_release -rs)"
 	local platform="$(uname -o)/$(uname -r)/$(uname -m)"
-	USER_AGENT="pollinate/${ver}${TESTING} curl/${curl_ver} ${lsb} ${platform}"
+	USER_AGENT="pollinate${TESTING}/${ver} curl/${curl_ver} ${lsb} ${platform}"
 }
 
 exchange() {

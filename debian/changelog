@@ -1,6 +1,7 @@
 pollinate (4.4) unreleased; urgency=low
 
-  * UNRELEASED
+  * pollinate:
+    - relocate the testing string
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 28 Feb 2014 10:43:38 -0600
 
