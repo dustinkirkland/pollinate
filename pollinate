@@ -69,7 +69,7 @@ user_agent() {
 	local curl_ver="$(apt-cache policy curl | grep 'Installed:' | awk '{print $2}')"
 	local lsb="$(lsb_release -is)/$(lsb_release -rs)"
 	local platform="$(uname -o)/$(uname -r)/$(uname -m)"
-	USER_AGENT="pollinate/${ver} curl/${curl_ver} ${lsb} ${platform}"
+	USER_AGENT="pollinate/${ver}${TESTING} curl/${curl_ver} ${lsb} ${platform}"
 }
 
 exchange() {
@@ -102,12 +102,13 @@ exchange() {
 		[ "${challenge_response}" = $(head -n1 "${out}") ] || error "Server failed challenge/response [expected=${challenge_response}] != [got=$(head -n1 ${out})]"
 		log "client verified challenge/response with [${server}]"
 	fi
-	hash_and_write "${server}"
-	log "client successfully seeded [${DEVICE}]"
+	if [ -z "${TESTING}" ]; then
+		hash_and_write "${server}"
+		log "client successfully seeded [${DEVICE}]"
+	else
+		log "client testing now skipping seeding [${DEVICE}]"
+	fi
 }
-
-# Pollinate prefers to run as a privileged user
-[ -w "/var/cache/${PKG}" ] || error "should execute as a privileged user"
 
 # Source configuration
 [ -r "/etc/default/pollinate" ] && . "/etc/default/pollinate"
@@ -149,6 +150,10 @@ while [ ! -z "$1" ]; do
 			QUIET=1
 			shift
 		;;
+		-t|--testing)
+			TESTING="-testing"
+			shift 1
+		;;
 		-w|--wait)
 			WAIT="$2"
 			shift 2
@@ -158,12 +163,19 @@ while [ ! -z "$1" ]; do
 		;;
 	esac
 done
-if [ -e "${FLAG}" ]; then
-	timestamp=$(stat -c "%y" "${FLAG}")
-	log "system was previously seeded at [${timestamp}]"
-	if [ "${RESEED}" != "1" ]; then
-		log "To re-seed this system again, use the -r|--reseed option"
-		exit 0
+
+# Pollinate prefers to run as a privileged user unless --testing communications
+if [ -z "${TESTING}" ]; then
+	if [ ! -w "$(dirname ${FLAG})" ]; then
+		error "should execute as the [${PKG}] user"
+	fi
+	if [ -e "${FLAG}" ]; then
+		timestamp=$(stat -c "%y" "${FLAG}")
+		log "system was previously seeded at [${timestamp}]"
+		if [ "${RESEED}" != "1" ]; then
+			log "To re-seed this system again, use the -r|--reseed option"
+			exit 0
+		fi
 	fi
 fi
 [ -n "${DEVICE}" ] || DEVICE="/dev/urandom"
@@ -178,4 +190,4 @@ fi
 for i in ${POOL}; do
 	exchange "${i}"
 done
-touch /var/cache/${PKG}/seeded
+[ -z "${TESTING}" ] && touch "${FLAG}"

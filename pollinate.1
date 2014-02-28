@@ -34,6 +34,9 @@ by default, \fBpollinate\fP technically only needs to run successfully once ever
 \fB-s|--server\fP SERVER
 remote \fBpollen\fP(8) server to interact with; if this option is used, the pool is ignored, and only a single server is used
 .TP
+\fB-t|--testing\fP
+test communications with the \fBpollen\fP(8) server; note that this will NOT actually seed your PRNG, but only verify that the local client can communicate with the remote servers
+.TP
 \fB-q|--quiet\fP
 silence any log messages
 .TP

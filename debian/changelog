@@ -1,6 +1,11 @@
 pollinate (4.3) unreleased; urgency=low
 
-  * UNRELEASED
+  [ JuanJo Ciarlante and Dustin Kirkland ]
+  * pollinate, pollinate.1:
+    - add a -t|--testing flag, to verify communications with a pollen
+      server; useful with the pollen nagios check
+    - can run as a non-privileged user
+    - does NOT affect the local PRNG
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 17 Feb 2014 05:52:50 -0600
 
