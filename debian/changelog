@@ -2,6 +2,8 @@ pollinate (4.4) unreleased; urgency=low
 
   * pollinate:
     - relocate the testing string
+  * pollinate, pollinate.1:
+    - when testing, force the out to stdout
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 28 Feb 2014 10:43:38 -0600
 

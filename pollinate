@@ -102,12 +102,8 @@ exchange() {
 		[ "${challenge_response}" = $(head -n1 "${out}") ] || error "Server failed challenge/response [expected=${challenge_response}] != [got=$(head -n1 ${out})]"
 		log "client verified challenge/response with [${server}]"
 	fi
-	if [ -z "${TESTING}" ]; then
-		hash_and_write "${server}"
-		log "client successfully seeded [${DEVICE}]"
-	else
-		log "client testing now skipping seeding [${DEVICE}]"
-	fi
+	hash_and_write "${server}"
+	log "client successfully seeded [${DEVICE}]"
 }
 
 # Source configuration
@@ -177,6 +173,9 @@ if [ -z "${TESTING}" ]; then
 			exit 0
 		fi
 	fi
+else
+	# Output device must be stdout if we're in testing mode
+	DEVICE="-"
 fi
 [ -n "${DEVICE}" ] || DEVICE="/dev/urandom"
 [ -n "${BYTES}" ] || BYTES=64
