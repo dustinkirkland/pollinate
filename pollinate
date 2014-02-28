@@ -189,4 +189,6 @@ fi
 for i in ${POOL}; do
 	exchange "${i}"
 done
-[ -z "${TESTING}" ] && touch "${FLAG}"
+if [ -z "${TESTING}" ]; then
+	touch "${FLAG}"
+fi

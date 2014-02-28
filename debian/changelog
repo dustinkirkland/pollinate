@@ -1,6 +1,7 @@
 pollinate (4.5) unreleased; urgency=low
 
-  * UNRELEASED
+  * pollinate:
+    - fix exit, when in testing mode
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 28 Feb 2014 13:56:13 -0600
 
