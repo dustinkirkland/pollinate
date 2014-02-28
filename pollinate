@@ -106,9 +106,6 @@ exchange() {
 	log "client successfully seeded [${DEVICE}]"
 }
 
-# Pollinate prefers to run as a privileged user
-[ -w "/var/cache/${PKG}" ] || error "should execute as a privileged user"
-
 # Source configuration
 [ -r "/etc/default/pollinate" ] && . "/etc/default/pollinate"
 while [ ! -z "$1" ]; do
@@ -149,6 +146,10 @@ while [ ! -z "$1" ]; do
 			QUIET=1
 			shift
 		;;
+		-u|--unprivileged)
+			UNPRIV=1
+			shift 1
+		;;
 		-w|--wait)
 			WAIT="$2"
 			shift 2
@@ -158,7 +159,11 @@ while [ ! -z "$1" ]; do
 		;;
 	esac
 done
-if [ -e "${FLAG}" ]; then
+
+# Pollinate prefers to run as a privileged user unless --unprivileged
+[ "${UNPRIV}" = 1 ] || [ -w "/var/cache/${PKG}" ] || error "should execute as a privileged user"
+
+if [ "${UNPRIV}" != 1 -a -e "${FLAG}" ]; then
 	timestamp=$(stat -c "%y" "${FLAG}")
 	log "system was previously seeded at [${timestamp}]"
 	if [ "${RESEED}" != "1" ]; then
@@ -178,4 +183,4 @@ fi
 for i in ${POOL}; do
 	exchange "${i}"
 done
-touch /var/cache/${PKG}/seeded
+[ "${UNPRIV}" != 1 ] && touch /var/cache/${PKG}/seeded
