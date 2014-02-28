@@ -1,11 +1,11 @@
-pollinate (4.4) unreleased; urgency=low
+pollinate (4.4-0ubuntu1) trusty; urgency=low
 
   * pollinate:
     - relocate the testing string
   * pollinate, pollinate.1:
     - when testing, force the out to stdout
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 28 Feb 2014 10:43:38 -0600
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 28 Feb 2014 13:56:11 -0600
 
 pollinate (4.3-0ubuntu1) trusty; urgency=low
 
