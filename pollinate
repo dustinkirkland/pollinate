@@ -21,10 +21,11 @@ set -e
 PKG="pollinate"
 FLAG="/var/cache/${PKG}/seeded"
 TMPDIR=$(mktemp -d -t "${PKG}.XXXXXXXXXXXX")
+HOSTNAME=$(hostname)
 trap "rm -rf ${TMPDIR} 2>/dev/null || true" EXIT HUP INT QUIT TERM
 
 error() {
-	printf "$(date '+%b %e %T') $(hostname) " 1>&2
+	printf "$(date '+%b %e %T') ${HOSTNAME} " 1>&2
 	logger -is -t ${PKG} "ERROR: $@"
 	exit 1
 }
@@ -35,7 +36,7 @@ log() {
 		logger -i -t ${PKG} "$@"
 	else
 		# log to both stderr and syslog
-		printf "$(date '+%b %e %T') $(hostname) " 1>&2
+		printf "$(date '+%b %e %T') ${HOSTNAME} " 1>&2
 		logger -is -t ${PKG} "$@"
 	fi
 }

@@ -3,6 +3,8 @@ pollinate (4.6) unreleased; urgency=low
   * debian/pollinate.default:
     - move the default from POOL to SERVER
     - this way, someone can zero out SERVER, whereas POOL is always additive
+  * pollinate:
+    - save a few forks of hostname
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 28 Feb 2014 14:12:18 -0600
 
