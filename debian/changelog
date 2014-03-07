@@ -1,4 +1,4 @@
-pollinate (4.6) unreleased; urgency=low
+pollinate (4.6-0ubuntu1) trusty; urgency=low
 
   * debian/pollinate.default:
     - move the default from POOL to SERVER
@@ -13,7 +13,7 @@ pollinate (4.6) unreleased; urgency=low
       thus we will quietly log our pollinate activity in
       /var/cache/pollinate/log
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 28 Feb 2014 14:12:18 -0600
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 07 Mar 2014 16:46:16 -0600
 
 pollinate (4.5-0ubuntu1) trusty; urgency=low
 
