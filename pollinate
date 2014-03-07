@@ -19,25 +19,35 @@
 set -e
 
 PKG="pollinate"
-FLAG="/var/cache/${PKG}/seeded"
 TMPDIR=$(mktemp -d -t "${PKG}.XXXXXXXXXXXX")
-HOSTNAME=$(hostname)
 trap "rm -rf ${TMPDIR} 2>/dev/null || true" EXIT HUP INT QUIT TERM
+CACHEDIR="/var/cache/${PKG}"
+FLAG="${CACHEDIR}/seeded"
+LOG="${CACHEDIR}/log"
+HOSTNAME=$(hostname)
+[ -r "/etc/default/${PKG}" ] && . "/etc/default/${PKG}"
 
 error() {
 	printf "$(date '+%b %e %T') ${HOSTNAME} " 1>&2
-	logger -is -t ${PKG} "ERROR: $@"
+	logger -i -s -t ${PKG} "ERROR: $@"
 	exit 1
 }
 
 log() {
 	if [ "${QUIET}" = "1" ]; then
-		# quiet mode, only log to syslog
-		logger -i -t ${PKG} "$@"
+		# quiet mode, don't log to stderr
+		if [ -w "$CACHEDIR" ]; then
+			# log to file, if we can
+			printf "$(date '+%b %e %T') ${HOSTNAME} " >> "${LOG}"
+			logger -i -s -t ${PKG} "$@" 2>>"${LOG}"
+		else
+			# log to syslog, if its up
+			logger -i -t ${PKG} "$@"
+		fi
 	else
 		# log to both stderr and syslog
 		printf "$(date '+%b %e %T') ${HOSTNAME} " 1>&2
-		logger -is -t ${PKG} "$@"
+		logger -i -s -t ${PKG} "$@"
 	fi
 }
 
@@ -163,7 +173,7 @@ done
 
 # Pollinate prefers to run as a privileged user unless --testing communications
 if [ -z "${TESTING}" ]; then
-	if [ ! -w "$(dirname ${FLAG})" ]; then
+	if [ ! -w "${CACHEDIR}" ]; then
 		error "should execute as the [${PKG}] user"
 	fi
 	if [ -e "${FLAG}" ]; then

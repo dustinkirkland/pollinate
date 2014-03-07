@@ -5,9 +5,6 @@ author		"Dustin Kirkland <kirkland@ubuntu.com>"
 
 setuid pollinate
 
-start on (started networking or starting ssh or starting cloud-init)
+start on (started networking or starting ssh)
 
-script
-	. /etc/default/pollinate
-	exec pollinate
-end script
+exec pollinate

@@ -5,6 +5,13 @@ pollinate (4.6) unreleased; urgency=low
     - this way, someone can zero out SERVER, whereas POOL is always additive
   * pollinate:
     - save a few forks of hostname
+  * debian/pollinate.upstart, pollinate: LP: #1286316
+    - now that cloud-init itself is calling pollinate, remove the
+      "start on starting cloud-init" trigger
+    - when running pollinate through cloud-init, we are not guaranteed
+      that syslog will be up, and smoser insists on running pollinate --quiet
+      thus we will quietly log our pollinate activity in
+      /var/cache/pollinate/log
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 28 Feb 2014 14:12:18 -0600
 
