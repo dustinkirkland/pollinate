@@ -1,6 +1,7 @@
 pollinate (4.7) unreleased; urgency=low
 
-  * UNRELEASED
+  * README:
+    - update documentation;  pollinate no longer runs daily
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 07 Mar 2014 16:46:18 -0600
 
