@@ -1,9 +1,12 @@
-pollinate (4.7) unreleased; urgency=low
+pollinate (4.7-0ubuntu1) trusty; urgency=low
 
   * README:
     - update documentation;  pollinate no longer runs daily
+  * entropy.ubuntu.com.pem: LP: #1304777
+    - entropy.ubuntu.com re-keyed SSL certs due to heartbleed OpenSSL
+      vulnerability
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 07 Mar 2014 16:46:18 -0600
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 09 Apr 2014 14:03:46 -0400
 
 pollinate (4.6-0ubuntu1) trusty; urgency=low
 
