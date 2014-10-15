@@ -1,6 +1,7 @@
 pollinate (4.8) unreleased; urgency=medium
 
-  * UNRELEASED
+  * entropy.ubuntu.com.pem:
+    - update the expiring SSL certificate
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 09 Apr 2014 14:03:47 -0400
 
