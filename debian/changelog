@@ -6,7 +6,7 @@ pollinate (4.9) unreleased; urgency=medium
 
 pollinate (4.8-0ubuntu1) utopic; urgency=medium
 
-  * entropy.ubuntu.com.pem:
+  * entropy.ubuntu.com.pem: LP: #1381359
     - update the expiring SSL certificate
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 15 Oct 2014 09:28:20 +0200
