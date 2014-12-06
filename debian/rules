@@ -1,4 +1,8 @@
 #!/usr/bin/make -f
 
 %:
-	dh $@
+	dh $@ --with systemd
+
+# this only needs to start at boot, not at install/upgrade
+override_dh_installinit:
+	dh_installinit --no-start
