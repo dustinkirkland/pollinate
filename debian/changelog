@@ -1,3 +1,9 @@
+pollinate (4.11) unreleased; urgency=medium
+
+  * UNRELEASED
+
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 05 Dec 2014 18:02:59 -0600
+
 pollinate (4.10-0ubuntu1) vivid; urgency=medium
 
   [ Martin Pitt ]
