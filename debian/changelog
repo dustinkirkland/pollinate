@@ -1,6 +1,9 @@
 pollinate (4.11) unreleased; urgency=medium
 
-  * UNRELEASED
+  [ Martin Pitt ]
+  * debian/pollinate.service: Avoid default dependencies as we make
+    network.target depend on pollinate, and that needs to be able to run early
+    for NFS. (LP: #1428487)
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 05 Dec 2014 18:02:59 -0600
 

@@ -1,0 +1,13 @@
+[Unit]
+Description=Seed the pseudo random number generator on first boot
+DefaultDependencies=no
+After=sysinit.target
+Before=ssh.service
+
+[Service]
+User=pollinate
+ExecStart=/usr/bin/pollinate
+Type=oneshot
+
+[Install]
+WantedBy=network.target
