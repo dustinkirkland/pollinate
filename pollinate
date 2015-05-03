@@ -80,7 +80,8 @@ user_agent() {
 	local curl_ver="$(apt-cache policy curl | grep 'Installed:' | awk '{print $2}')"
 	local lsb="$(lsb_release -is)/$(lsb_release -rs)"
 	local platform="$(uname -o)/$(uname -r)/$(uname -m)"
-	USER_AGENT="pollinate${TESTING}/${ver} curl/${curl_ver} ${lsb} ${platform}"
+	local cpu="$(grep -m1 "^model name" /proc/cpuinfo | sed -e "s/.*: //" -e "s:\s\+:/:g")"
+	USER_AGENT="pollinate${TESTING}/${ver} curl/${curl_ver} ${lsb} ${platform} ${cpu}"
 }
 
 exchange() {

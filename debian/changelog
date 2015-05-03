@@ -1,6 +1,7 @@
 pollinate (4.12) unreleased; urgency=medium
 
-  * UNRELEASED
+  * pollinate:
+    - add cpu hardware model to user agent
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 07 Mar 2015 19:04:33 -0500
 
