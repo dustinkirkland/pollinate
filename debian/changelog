@@ -1,4 +1,4 @@
-pollinate (4.12) unreleased; urgency=medium
+pollinate (4.12-0ubuntu1) wily; urgency=medium
 
   * pollinate:
     - add cpu hardware model to user agent
@@ -8,7 +8,7 @@ pollinate (4.12) unreleased; urgency=medium
     - Note that this changes the issuing CA to DigiCert, which requires
       a new intermediary.
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 07 Mar 2015 19:04:33 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 11 Aug 2015 15:33:29 -0500
 
 pollinate (4.11-0ubuntu1) vivid; urgency=medium
 
