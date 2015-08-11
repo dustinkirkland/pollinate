@@ -2,6 +2,11 @@ pollinate (4.12) unreleased; urgency=medium
 
   * pollinate:
     - add cpu hardware model to user agent
+  * entropy.ubuntu.com.pem:
+    - entropy.ubuntu.com SSL is coming up for renewal on 2015-09-15
+    - update the certs for the pollinate package
+    - Note that this changes the issuing CA to DigiCert, which requires
+      a new intermediary.
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 07 Mar 2015 19:04:33 -0500
 
