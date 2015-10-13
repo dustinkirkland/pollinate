@@ -1,4 +1,4 @@
-pollinate (4.13) unreleased; urgency=medium
+pollinate (4.13-0ubuntu1) wily; urgency=medium
 
   [ Robie Basak ]
   * entropy.ubuntu.com.pem:
@@ -6,7 +6,7 @@ pollinate (4.13) unreleased; urgency=medium
       package to entropy.ubuntu.com.pem. This is required to correctly
       verify against the new entropy.ubuntu.com SSL certificate.
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 11 Aug 2015 15:33:31 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 13 Oct 2015 10:16:07 -0700
 
 pollinate (4.12-0ubuntu1) wily; urgency=medium
 
