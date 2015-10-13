@@ -1,6 +1,10 @@
 pollinate (4.13) unreleased; urgency=medium
 
-  * UNRELEASED
+  [ Robie Basak ]
+  * entropy.ubuntu.com.pem:
+    - Add "DigiCert Global Root CA" certificate from ca-certificates
+      package to entropy.ubuntu.com.pem. This is required to correctly
+      verify against the new entropy.ubuntu.com SSL certificate.
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 11 Aug 2015 15:33:31 -0500
 
