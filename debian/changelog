@@ -1,6 +1,21 @@
 pollinate (4.14) unreleased; urgency=medium
 
-  * UNRELEASED
+  * pollinate, pollinate.1: LP: #1554152
+    - change the failure mode of pollinate, so as to more cleanly
+      tolerate network failures
+    - add a --strict option to re-enable the previous behavior,
+      ie, strictly exit non-zero if pollinate fails for any reason
+    - we've always promised that pollinate would operate on a best-effort
+      basis, improving the prng seeding when possible, but failing
+      gracefully when not possible; as such, we've made good on the first
+      half of that promise, however, the latter half has proven
+      troublesome;  this is due to the fact that if pollinate exits
+      non-zero, then its callers (cloud-init, maas, etc.) may well
+      interpret the behavior strictly as a failure to boot the system,
+      when in fact that's not the case;  instead, we'll clearly print
+      a warning to syslog, and we'll retry the seeding on next pollinate
+      service start (e.g. a reboot);  moreover, we'll carry a --strict
+      flag in the case that users want to opt into the previous behavior
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 13 Oct 2015 10:16:12 -0700
 

@@ -2,7 +2,7 @@
 #
 # pollinate: an Entropy-as-a-Service client
 #
-#  Copyright (C) 2012-2013 Dustin Kirkland <dustin.kirkland@gmail.com>
+#  Copyright (C) 2012-2016 Dustin Kirkland <dustin.kirkland@gmail.com>
 #
 #  This program is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -25,12 +25,24 @@ CACHEDIR="/var/cache/${PKG}"
 FLAG="${CACHEDIR}/seeded"
 LOG="${CACHEDIR}/log"
 HOSTNAME=$(hostname)
+STRICT=0
 [ -r "/etc/default/${PKG}" ] && . "/etc/default/${PKG}"
 
 error() {
 	printf "$(date '+%b %e %T') ${HOSTNAME} " 1>&2
 	logger -i -s -t ${PKG} "ERROR: $@"
 	exit 1
+}
+
+warning() {
+	printf "$(date '+%b %e %T') ${HOSTNAME} " 1>&2
+	if [ "$STRICT" = "1" ]; then
+		logger -i -s -t ${PKG} "ERROR: $@"
+		exit 1
+	else
+		logger -i -s -t ${PKG} "WARNING: $@"
+		exit 0
+	fi
 }
 
 log() {
@@ -109,10 +121,15 @@ exchange() {
 	local out="${TMPDIR}/out"
 	local err="${TMPDIR}/err"
 	user_agent
-	curl -A "${USER_AGENT}" -o- -v --trace-time --connect-timeout ${WAIT} --max-time ${WAIT} --data @${f1} ${CURL_OPTS} ${server} >"${out}" 2>"${err}" || error "Network communication failed [$?]\n$(cat ${out} ${err})"
+	if ! curl -A "${USER_AGENT}" -o- -v --trace-time --connect-timeout ${WAIT} --max-time ${WAIT} --data @${f1} ${CURL_OPTS} ${server} >"${out}" 2>"${err}"; then
+		warning "Network communication failed [$?]\n$(cat ${out} ${err})"
+	fi
 	if [ "${NO_CHALLENGE}" != "1" ]; then
-		[ "${challenge_response}" = $(head -n1 "${out}") ] || error "Server failed challenge/response [expected=${challenge_response}] != [got=$(head -n1 ${out})]"
-		log "client verified challenge/response with [${server}]"
+		if [ "${challenge_response}" = $(head -n1 "${out}") ]; then
+			log "client verified challenge/response with [${server}]"
+		else
+			error "Server failed challenge/response [expected=${challenge_response}] != [got=$(head -n1 ${out})]"
+		fi
 	fi
 	hash_and_write "${server}"
 	log "client successfully seeded [${DEVICE}]"
@@ -156,6 +173,10 @@ while [ ! -z "$1" ]; do
 		;;
 		-q|--quiet)
 			QUIET=1
+			shift
+		;;
+		--strict)
+			STRICT=1
 			shift
 		;;
 		-t|--testing)
