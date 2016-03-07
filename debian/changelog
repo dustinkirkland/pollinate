@@ -1,4 +1,4 @@
-pollinate (4.14) unreleased; urgency=medium
+pollinate (4.14-0ubuntu1) xenial; urgency=medium
 
   * pollinate, pollinate.1: LP: #1554152
     - change the failure mode of pollinate, so as to more cleanly
@@ -17,7 +17,7 @@ pollinate (4.14) unreleased; urgency=medium
       service start (e.g. a reboot);  moreover, we'll carry a --strict
       flag in the case that users want to opt into the previous behavior
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 13 Oct 2015 10:16:12 -0700
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 07 Mar 2016 15:32:49 -0600
 
 pollinate (4.13-0ubuntu1) wily; urgency=medium
 
