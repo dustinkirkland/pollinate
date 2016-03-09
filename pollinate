@@ -29,18 +29,17 @@ STRICT=0
 [ -r "/etc/default/${PKG}" ] && . "/etc/default/${PKG}"
 
 error() {
-	printf "$(date '+%b %e %T') ${HOSTNAME} " 1>&2
-	logger -i -s -t ${PKG} "ERROR: $@"
+	logger --id="$$" -s -t ${PKG} "ERROR: $@"
 	exit 1
 }
 
 warning() {
 	printf "$(date '+%b %e %T') ${HOSTNAME} " 1>&2
 	if [ "$STRICT" = "1" ]; then
-		logger -i -s -t ${PKG} "ERROR: $@"
+		logger --id="$$" -s -t ${PKG} "ERROR: $@"
 		exit 1
 	else
-		logger -i -s -t ${PKG} "WARNING: $@"
+		logger --id="$$" -s -t ${PKG} "WARNING: $@"
 		exit 0
 	fi
 }
@@ -50,16 +49,14 @@ log() {
 		# quiet mode, don't log to stderr
 		if [ -w "$CACHEDIR" ]; then
 			# log to file, if we can
-			printf "$(date '+%b %e %T') ${HOSTNAME} " >> "${LOG}"
-			logger -i -s -t ${PKG} "$@" 2>>"${LOG}"
+			logger --id="$$" -s -t ${PKG} "$@" >>"${LOG}" 2>&1
 		else
 			# log to syslog, if its up
-			logger -i -t ${PKG} "$@"
+			logger --id="$$" -t ${PKG} "$@"
 		fi
 	else
 		# log to both stderr and syslog
-		printf "$(date '+%b %e %T') ${HOSTNAME} " 1>&2
-		logger -i -s -t ${PKG} "$@"
+		logger --id="$$" -s -t ${PKG} "$@"
 	fi
 }
 

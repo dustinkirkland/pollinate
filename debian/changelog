@@ -1,6 +1,7 @@
 pollinate (4.15) unreleased; urgency=medium
 
-  * UNRELEASED
+  * pollinate: LP: #1555362
+    - log the right pid
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 07 Mar 2016 15:32:51 -0600
 
