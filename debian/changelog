@@ -1,9 +1,9 @@
-pollinate (4.15) unreleased; urgency=medium
+pollinate (4.15-0ubuntu1) xenial; urgency=medium
 
   * pollinate: LP: #1555362
     - log the right pid
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 07 Mar 2016 15:32:51 -0600
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 09 Mar 2016 17:38:20 -0500
 
 pollinate (4.14-0ubuntu1) xenial; urgency=medium
 
