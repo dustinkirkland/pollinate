@@ -7,7 +7,7 @@ Build-Depends: debhelper (>= 7.0.50~),
  autotools-dev,
  autoconf,
  automake,
-Standards-Version: 3.9.6
+Standards-Version: 3.9.8
 Homepage: http://launchpad.net/pollinate
 
 Package: pollinate

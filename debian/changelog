@@ -1,6 +1,10 @@
 pollinate (4.16) unreleased; urgency=medium
 
-  * UNRELEASED
+  [ Martin Pitt ]
+  * Don't run pollinate.service in containers (as containers can't and should
+    not write the host's random pool) and when we already have a saved random
+    seeds (i. e. only on first boot). (LP: #1578833)
+  * Bump Standards-Version to 3.9.8 (no changes needed).
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 09 Mar 2016 17:38:22 -0500
 

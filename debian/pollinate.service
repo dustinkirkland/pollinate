@@ -3,6 +3,8 @@ Description=Seed the pseudo random number generator on first boot
 DefaultDependencies=no
 After=sysinit.target
 Before=ssh.service
+ConditionVirtualization=!container
+ConditionPathExists=!/var/lib/systemd/random-seed
 
 [Service]
 User=pollinate
