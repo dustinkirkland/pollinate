@@ -118,7 +118,7 @@ exchange() {
 	local out="${TMPDIR}/out"
 	local err="${TMPDIR}/err"
 	user_agent
-	if ! curl -A "${USER_AGENT}" -o- -v --trace-time --connect-timeout ${WAIT} --max-time ${WAIT} --data @${f1} ${CURL_OPTS} ${server} >"${out}" 2>"${err}"; then
+	if ! timeout "${WAIT}" curl -A "${USER_AGENT}" -o- -v --trace-time --data @${f1} ${CURL_OPTS} ${server} >"${out}" 2>"${err}"; then
 		warning "Network communication failed [$?]\n$(cat ${out} ${err})"
 	fi
 	if [ "${NO_CHALLENGE}" != "1" ]; then

@@ -6,6 +6,9 @@ pollinate (4.16) unreleased; urgency=medium
     seeds (i. e. only on first boot). (LP: #1578833)
   * Bump Standards-Version to 3.9.8 (no changes needed).
 
+  [ Dustin Kirkland ]
+  * pollinate: use timeout(1) to limit curl, related to LP: #1578833
+
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 09 Mar 2016 17:38:22 -0500
 
 pollinate (4.15-0ubuntu1) xenial; urgency=medium
