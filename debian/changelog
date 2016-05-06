@@ -1,6 +1,7 @@
 pollinate (4.17) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/pollinate.service:
+    - use the right flag file for LP: #1578833
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 05 May 2016 17:12:07 -0500
 
