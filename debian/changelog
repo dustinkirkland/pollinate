@@ -1,3 +1,9 @@
+pollinate (4.19) unreleased; urgency=medium
+
+  * UNRELEASED
+
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 06 May 2016 14:00:40 -0500
+
 pollinate (4.18-0ubuntu1) yakkety; urgency=medium
 
   * debian/pollinate.service:
