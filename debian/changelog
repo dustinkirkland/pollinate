@@ -1,9 +1,9 @@
-pollinate (4.17) unreleased; urgency=medium
+pollinate (4.17-0ubuntu1) yakkety; urgency=medium
 
   * debian/pollinate.service:
     - use the right flag file for LP: #1578833
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 05 May 2016 17:12:07 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 06 May 2016 11:36:00 -0500
 
 pollinate (4.16-0ubuntu1) yakkety; urgency=medium
 
