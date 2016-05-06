@@ -1,6 +1,7 @@
 pollinate (4.18) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/pollinate.service:
+    - move to later in boot, after network starts, but before ssh starts
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 06 May 2016 11:36:02 -0500
 

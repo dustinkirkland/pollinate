@@ -1,8 +1,7 @@
 [Unit]
 Description=Seed the pseudo random number generator on first boot
-DefaultDependencies=no
-After=sysinit.target
 Before=ssh.service
+After=network-online.target
 ConditionVirtualization=!container
 ConditionPathExists=!/var/cache/pollinate/seeded
 
