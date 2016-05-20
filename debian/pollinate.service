@@ -11,4 +11,4 @@ ExecStart=/usr/bin/pollinate
 Type=oneshot
 
 [Install]
-WantedBy=network.target
+WantedBy=multi-user.target

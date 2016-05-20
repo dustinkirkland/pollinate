@@ -1,6 +1,11 @@
 pollinate (4.19) unreleased; urgency=medium
 
-  * UNRELEASED
+  [ Martin Pitt ] 
+  * debian/pollinate.service: Move installation from network.target to
+    multi-user.target. network.target is too early and causes dependency loops
+    with e. g. NFS. (LP: #1576333)
+  * debian/pollinate.preinst: Clean up old enablement symlink on upgrade. This
+    needs to be kept until after 18.04 LTS.
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 06 May 2016 14:00:40 -0500
 
