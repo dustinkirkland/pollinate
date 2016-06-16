@@ -1,6 +1,8 @@
 pollinate (4.20) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/control:
+    - drop the anerd references, hasn't existed in basically forever
+    - update description
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 19 May 2016 21:26:37 -0700
 
