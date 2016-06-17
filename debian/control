@@ -3,7 +3,7 @@ Section: admin
 Priority: optional
 Maintainer: Dustin Kirkland <kirkland@ubuntu.com>
 Build-Depends: debhelper (>= 7.0.50~),
- dh-systemd,
+ dh-systemd | dh-apparmor,
  autotools-dev,
  autoconf,
  automake,
@@ -12,7 +12,7 @@ Homepage: http://launchpad.net/pollinate
 
 Package: pollinate
 Architecture: all
-Depends: ${misc:Depends}, run-one, curl, adduser
+Depends: ${misc:Depends}, curl, adduser
 Description: seed the pseudo random number generator
  This client will connect to one or more Pollen (entropy-as-a-service)
  servers over an (optionally) encrypted connection and retrieve a random

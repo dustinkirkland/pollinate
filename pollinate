@@ -28,18 +28,22 @@ HOSTNAME=$(hostname)
 STRICT=0
 [ -r "/etc/default/${PKG}" ] && . "/etc/default/${PKG}"
 
+# Only recent logger version supports --id=[ID]
+logger_ver=$(dpkg -l util-linux | tail -n1 | awk '{print $3}')
+dpkg --compare-versions $logger_ver ge 2.27.1 && LOGGER="logger --id=$$" || LOGGER="logger"
+
 error() {
-	logger --id="$$" -s -t ${PKG} "ERROR: $@"
+	$LOGGER -s -t ${PKG} "ERROR: $@"
 	exit 1
 }
 
 warning() {
 	printf "$(date '+%b %e %T') ${HOSTNAME} " 1>&2
 	if [ "$STRICT" = "1" ]; then
-		logger --id="$$" -s -t ${PKG} "ERROR: $@"
+		$LOGGER -s -t ${PKG} "ERROR: $@"
 		exit 1
 	else
-		logger --id="$$" -s -t ${PKG} "WARNING: $@"
+		$LOGGER -s -t ${PKG} "WARNING: $@"
 		exit 0
 	fi
 }
@@ -49,14 +53,14 @@ log() {
 		# quiet mode, don't log to stderr
 		if [ -w "$CACHEDIR" ]; then
 			# log to file, if we can
-			logger --id="$$" -s -t ${PKG} "$@" >>"${LOG}" 2>&1
+			$LOGGER -s -t ${PKG} "$@" >>"${LOG}" 2>&1
 		else
 			# log to syslog, if its up
-			logger --id="$$" -t ${PKG} "$@"
+			$LOGGER -t ${PKG} "$@"
 		fi
 	else
 		# log to both stderr and syslog
-		logger --id="$$" -s -t ${PKG} "$@"
+		$LOGGER -s -t ${PKG} "$@"
 	fi
 }
 
