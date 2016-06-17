@@ -1,5 +1,5 @@
 [Unit]
-Description=Seed the pseudo random number generator on first boot
+Description=Pollinate to seed the pseudo random number generator
 Before=ssh.service
 After=network-online.target
 ConditionVirtualization=!container

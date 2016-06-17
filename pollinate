@@ -30,7 +30,7 @@ STRICT=0
 
 # Only recent logger version supports --id=[ID]
 logger_ver=$(dpkg -l bsdutils | tail -n1 | awk '{print $3}')
-dpkg --compare-versions $logger_ver ge 2.26.2 && LOGGER="logger --id=$$" || LOGGER="logger"
+dpkg --compare-versions $logger_ver ge 1:2.26.2 && LOGGER="logger --id=$$" || LOGGER="logger"
 
 error() {
 	$LOGGER -s -t ${PKG} "ERROR: $@"
@@ -94,7 +94,8 @@ user_agent() {
 	local lsb="$(lsb_release -is)/$(lsb_release -rs)"
 	local platform="$(uname -o)/$(uname -r)/$(uname -m)"
 	local cpu="$(grep -m1 "^model name" /proc/cpuinfo | sed -e "s/.*: //" -e "s:\s\+:/:g")"
-	USER_AGENT="pollinate${TESTING}/${ver} curl/${curl_ver} ${lsb} ${platform} ${cpu}"
+	local cloud_init="cloud-init/$(dpkg -l cloud-init 2>/dev/null | grep -m1 "^ii" | awk '{print $3}')"
+	USER_AGENT="pollinate${TESTING}/${ver} curl/${curl_ver} ${cloud_init} ${lsb} ${platform} ${cpu}"
 }
 
 exchange() {

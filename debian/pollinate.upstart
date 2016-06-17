@@ -1,6 +1,6 @@
 # pollinate - seed the PRNG using an Entropy-as-a-Service provider
 
-description	"Seed the pseudo random number generator on first boot"
+description	"Pollinate to seed the pseudo random number generator"
 author		"Dustin Kirkland <kirkland@ubuntu.com>"
 
 setuid pollinate
