@@ -29,8 +29,8 @@ STRICT=0
 [ -r "/etc/default/${PKG}" ] && . "/etc/default/${PKG}"
 
 # Only recent logger version supports --id=[ID]
-logger_ver=$(dpkg -l util-linux | tail -n1 | awk '{print $3}')
-dpkg --compare-versions $logger_ver ge 2.27.1 && LOGGER="logger --id=$$" || LOGGER="logger"
+logger_ver=$(dpkg -l bsdutils | tail -n1 | awk '{print $3}')
+dpkg --compare-versions $logger_ver ge 2.26.2 && LOGGER="logger --id=$$" || LOGGER="logger"
 
 error() {
 	$LOGGER -s -t ${PKG} "ERROR: $@"
