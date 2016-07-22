@@ -1,8 +1,13 @@
 pollinate (4.21) unreleased; urgency=medium
 
+  [ Dustin Kirkland ]
   * pollinate:
     - fix broken printing of binary data, this was breaking check_pollen
       nagios scripts on the server
+
+  [ Junien Fridrick ]
+  * entropy.ubuntu.com.pem:
+    - simplify CA cert to just the DigiCert chain (drop GoDaddy)
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 11 Jul 2016 10:52:57 -0500
 
