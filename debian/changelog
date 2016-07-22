@@ -1,6 +1,8 @@
 pollinate (4.21) unreleased; urgency=medium
 
-  * UNRELEASED
+  * pollinate:
+    - fix broken printing of binary data, this was breaking check_pollen
+      nagios scripts on the server
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 11 Jul 2016 10:52:57 -0500
 

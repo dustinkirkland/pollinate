@@ -71,17 +71,19 @@ random_hash() {
 
 hash_and_write() {
 	# Whiten input with a hash, and write to device
-	local result=
 	local hex=$(cat "${TMPDIR}/out" "${TMPDIR}/err" | sha512sum | awk '{print $1}')
 	if [ "${BINARY}" = "1" ]; then
-		result=$(/usr/bin/printf $(printf "${hex}" | sed -e "s/\(..\)/\\\x\1/g"))
+		if [ "${DEVICE}" = "-" ]; then
+			printf "${hex}" | xxd -r -p
+		else
+			printf "${hex}" | xxd -r -p > "${DEVICE}"
+		fi
 	else
-		result="${hex}"
-	fi
-	if [ "${DEVICE}" = "-" ]; then
-		printf "%s\n" "${result}"
-	else
-		printf "%s" "${result}" > "${DEVICE}"
+		if [ "${DEVICE}" = "-" ]; then
+			printf "%s" "${hex}"
+		else
+			printf "%s" "${hex}" > "${DEVICE}"
+		fi
 	fi
 	log "client hashed response from [${1}]"
 }
