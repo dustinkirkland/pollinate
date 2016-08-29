@@ -91,8 +91,8 @@ hash_and_write() {
 user_agent() {
 	# Construct a user agent, with useful debug information
 	# Very similar to Firefox and Chrome
-        local ver="$(dpkg -l pollinate 2>/dev/null | grep -m1 "^ii" | awk '{print $3}')"
-        local curl_ver="$(dpkg -l curl 2>/dev/null | grep -m1 "^ii" | awk '{print $3}')"
+	local ver="$(dpkg -l pollinate 2>/dev/null | grep -m1 "^ii" | awk '{print $3}')"
+	local curl_ver="$(dpkg -l curl 2>/dev/null | grep -m1 "^ii" | awk '{print $3}')"
 	local lsb="$(lsb_release -is)/$(lsb_release -rs)"
 	local platform="$(uname -o)/$(uname -r)/$(uname -m)"
 	local cpu="$(grep -m1 "^model name" /proc/cpuinfo | sed -e "s/.*: //" -e "s:\s\+:/:g")"
