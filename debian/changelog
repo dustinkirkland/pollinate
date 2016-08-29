@@ -1,6 +1,7 @@
 pollinate (4.22) unreleased; urgency=medium
 
-  * UNRELEASED
+  * pollinate:
+    - dpkg -l is way faster than apt-cache, when there is no apt cache
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 22 Jul 2016 14:03:22 +0200
 
