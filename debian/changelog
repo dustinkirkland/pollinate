@@ -14,6 +14,7 @@ pollinate (4.22) unreleased; urgency=medium
     - add -m (max-timeout) back to curl options;  removing this option
       has caused network failures in various strange ways
     - when network fails due to timeout, log accordingly
+    - ignore cloud-init package not found;  it's optional
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 22 Jul 2016 14:03:22 +0200
 

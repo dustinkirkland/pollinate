@@ -94,7 +94,7 @@ user_agent() {
 	# Very similar to Firefox and Chrome
 	local pollinate_ver="$(dpkg -l pollinate | awk '$1 == "ii" { print($3); exit(0); }')"
 	local curl_ver="$(dpkg -l curl | awk '$1 == "ii" { print($3); exit(0); }')"
-	local cloud_init_ver="$(dpkg -l cloud-init | awk '$1 == "ii" { print($3); exit(0); }')"
+	local cloud_init_ver="$(dpkg -l cloud-init 2>/dev/null | awk '$1 == "ii" { print($3); exit(0); }')"
 	. /etc/lsb-release
 	local lsb=$(echo "${DISTRIB_DESCRIPTION}" | sed -e "s/ /\//g")
 	local platform="$(uname -o)/$(uname -r)/$(uname -m)"
