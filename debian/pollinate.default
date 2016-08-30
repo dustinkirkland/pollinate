@@ -3,7 +3,7 @@
 # at invocation time.  Please see pollinate(1) for documentation.
 BINARY=1
 QUIET=0
-WAIT=3
+WAIT=10
 DEVICE="/dev/urandom"
 SERVER="https://entropy.ubuntu.com/"
 POOL=""

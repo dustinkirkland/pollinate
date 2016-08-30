@@ -31,19 +31,20 @@ STRICT=0
 # Only recent logger version supports --id=[ID]
 logger_ver=$(dpkg -l bsdutils | tail -n1 | awk '{print $3}')
 dpkg --compare-versions $logger_ver ge 1:2.26.2 && LOGGER="logger --id=$$" || LOGGER="logger"
+# Log to both syslog, and stderr, if we're on an interactive terminal
+[ -t 0 ] && LOGGER="$LOGGER -s"
 
 error() {
-	$LOGGER -s -t ${PKG} "ERROR: $@"
+	$LOGGER -t ${PKG} "ERROR: $@"
 	exit 1
 }
 
 warning() {
-	printf "$(date '+%b %e %T') ${HOSTNAME} " 1>&2
 	if [ "$STRICT" = "1" ]; then
-		$LOGGER -s -t ${PKG} "ERROR: $@"
+		$LOGGER -t ${PKG} "ERROR: $@"
 		exit 1
 	else
-		$LOGGER -s -t ${PKG} "WARNING: $@"
+		$LOGGER -t ${PKG} "WARNING: $@"
 		exit 0
 	fi
 }
@@ -53,14 +54,14 @@ log() {
 		# quiet mode, don't log to stderr
 		if [ -w "$CACHEDIR" ]; then
 			# log to file, if we can
-			$LOGGER -s -t ${PKG} "$@" >>"${LOG}" 2>&1
+			$LOGGER -t ${PKG} "$@" >>"${LOG}" 2>&1
 		else
 			# log to syslog, if its up
 			$LOGGER -t ${PKG} "$@"
 		fi
 	else
 		# log to both stderr and syslog
-		$LOGGER -s -t ${PKG} "$@"
+		$LOGGER -t ${PKG} "$@"
 	fi
 }
 
@@ -91,14 +92,14 @@ hash_and_write() {
 user_agent() {
 	# Construct a user agent, with useful debug information
 	# Very similar to Firefox and Chrome
-	local ver="$(dpkg -l pollinate 2>/dev/null | grep -m1 "^ii" | awk '{print $3}')"
-	local curl_ver="$(dpkg -l curl 2>/dev/null | grep -m1 "^ii" | awk '{print $3}')"
-	local cloud_init="cloud-init/$(dpkg -l cloud-init 2>/dev/null | grep -m1 "^ii" | awk '{print $3}')"
+	local pollinate_ver="$(dpkg -l pollinate | awk '$1 == "ii" { print($3); exit(0); }')"
+	local curl_ver="$(dpkg -l curl | awk '$1 == "ii" { print($3); exit(0); }')"
+	local cloud_init_ver="$(dpkg -l cloud-init | awk '$1 == "ii" { print($3); exit(0); }')"
 	. /etc/lsb-release
-	local lsb=$(echo "${DISTRIB_DESCRIPTION}" | sed -e "s/ /\//g") 
+	local lsb=$(echo "${DISTRIB_DESCRIPTION}" | sed -e "s/ /\//g")
 	local platform="$(uname -o)/$(uname -r)/$(uname -m)"
 	local cpu="$(grep -m1 "^model name" /proc/cpuinfo | sed -e "s/.*: //" -e "s:\s\+:/:g")"
-	USER_AGENT="pollinate${TESTING}/${ver} curl/${curl_ver} ${cloud_init} ${lsb} ${platform} ${cpu}"
+	USER_AGENT="pollinate${TESTING}/${pollinate_ver} curl/${curl_ver} cloud-init/${cloud_init_ver} ${lsb} ${platform} ${cpu}"
 }
 
 exchange() {
@@ -126,18 +127,26 @@ exchange() {
 	local out="${TMPDIR}/out"
 	local err="${TMPDIR}/err"
 	user_agent
-	if ! timeout "${WAIT}" curl -A "${USER_AGENT}" -o- -v --trace-time --data @${f1} ${CURL_OPTS} ${server} >"${out}" 2>"${err}"; then
-		warning "Network communication failed [$?]\n$(cat ${out} ${err})"
-	fi
-	if [ "${NO_CHALLENGE}" != "1" ]; then
-		if [ "${challenge_response}" = $(head -n1 "${out}") ]; then
-			log "client verified challenge/response with [${server}]"
-		else
-			error "Server failed challenge/response [expected=${challenge_response}] != [got=$(head -n1 ${out})]"
+	if timeout $((WAIT+1)) curl -m "${WAIT}" -A "${USER_AGENT}" -o- -v --trace-time --data @${f1} ${CURL_OPTS} ${server} >"${out}" 2>"${err}"; then
+		if [ "${NO_CHALLENGE}" != "1" ]; then
+			if [ "${challenge_response}" = $(head -n1 "${out}") ]; then
+				log "client verified challenge/response with [${server}]"
+			else
+				error "Server failed challenge/response [expected=${challenge_response}] != [got=$(head -n1 ${out})]"
+			fi
 		fi
+		hash_and_write "${server}"
+		log "client successfully seeded [${DEVICE}]"
+	else
+		case $? in
+			124)
+				warning "Network communication failed [$?], timeout after [${WAIT}s] $(cat ${out} ${err})"
+			;;
+			*)
+				warning "Network communication failed [$?] $(cat ${out} ${err})"
+			;;
+		esac
 	fi
-	hash_and_write "${server}"
-	log "client successfully seeded [${DEVICE}]"
 }
 
 # Source configuration
@@ -217,7 +226,7 @@ else
 fi
 [ -n "${DEVICE}" ] || DEVICE="/dev/urandom"
 [ -n "${BYTES}" ] || BYTES=64
-[ -n "${WAIT}" ] || WAIT="3"
+[ -n "${WAIT}" ] || WAIT="10"
 if [ -n "${SERVER}" ]; then
 	POOL="${SERVER}"
 fi

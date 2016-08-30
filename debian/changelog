@@ -1,7 +1,19 @@
 pollinate (4.22) unreleased; urgency=medium
 
-  * pollinate:
+  * debian/pollinate.default, pollinate: LP: #1604155
+    - fix a couple of bugs affecting how long pollinate takes, and if
+      it actually completes successfully
     - dpkg -l is way faster than apt-cache, when there is no apt cache
+    - wait a maximum of 10 seconds
+    - only log to stderr if in an interactive terminal; otherwise, just
+      log to syslog
+      + this fixes the odd double-printing to /var/log/syslog
+    - optimize obtaining version strings by saving one pipe per call
+    - source /etc/lsb/release and use $DISTRIB_DESCRIPTION, rather
+      than calling lsb-release (python, can be slow)
+    - add -m (max-timeout) back to curl options;  removing this option
+      has caused network failures in various strange ways
+    - when network fails due to timeout, log accordingly
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 22 Jul 2016 14:03:22 +0200
 
