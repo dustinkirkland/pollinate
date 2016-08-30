@@ -1,6 +1,13 @@
 pollinate (4.23) unreleased; urgency=medium
 
-  * UNRELEASED
+  * pollinate:
+    - revert revision r300, as this was the wrong fix to the slow pollinate
+      problem;  as it turns out, it was the user_agent function, which was
+      running apt-cache very early in boot, before the apt database had
+      been created
+    - as it turns out, we need the curl timeout options in order for curl
+      to work properly and be resilient against issues with the network
+      coming up early in boot
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 29 Aug 2016 22:23:39 -0500
 

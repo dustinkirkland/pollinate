@@ -127,7 +127,7 @@ exchange() {
 	local out="${TMPDIR}/out"
 	local err="${TMPDIR}/err"
 	user_agent
-	if timeout $((WAIT+1)) curl -m "${WAIT}" -A "${USER_AGENT}" -o- -v --trace-time --data @${f1} ${CURL_OPTS} ${server} >"${out}" 2>"${err}"; then
+	if curl --connect-timeout "${WAIT}" --max-time "${WAIT}" -A "${USER_AGENT}" -o- -v --trace-time --data @${f1} ${CURL_OPTS} ${server} >"${out}" 2>"${err}"; then
 		if [ "${NO_CHALLENGE}" != "1" ]; then
 			if [ "${challenge_response}" = $(head -n1 "${out}") ]; then
 				log "client verified challenge/response with [${server}]"
