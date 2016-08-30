@@ -1,4 +1,4 @@
-pollinate (4.22) unreleased; urgency=medium
+pollinate (4.22-0ubuntu1) yakkety; urgency=medium
 
   * debian/pollinate.default, pollinate: LP: #1604155
     - fix a couple of bugs affecting how long pollinate takes, and if
@@ -16,7 +16,7 @@ pollinate (4.22) unreleased; urgency=medium
     - when network fails due to timeout, log accordingly
     - ignore cloud-init package not found;  it's optional
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 22 Jul 2016 14:03:22 +0200
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 29 Aug 2016 22:23:37 -0500
 
 pollinate (4.21-0ubuntu1) yakkety; urgency=medium
 
