@@ -26,7 +26,6 @@ FLAG="${CACHEDIR}/seeded"
 LOG="${CACHEDIR}/log"
 HOSTNAME=$(hostname)
 STRICT=0
-[ -r "/etc/default/${PKG}" ] && . "/etc/default/${PKG}"
 
 # Only recent logger version supports --id=[ID]
 logger_ver=$(dpkg -l bsdutils | tail -n1 | awk '{print $3}')
@@ -150,7 +149,7 @@ exchange() {
 }
 
 # Source configuration
-[ -r "/etc/default/pollinate" ] && . "/etc/default/pollinate"
+[ -r "/etc/default/${PKG}" ] && . "/etc/default/${PKG}"
 while [ ! -z "$1" ]; do
 	case "${1}" in
 		-b|--binary)

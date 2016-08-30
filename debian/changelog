@@ -1,6 +1,7 @@
 pollinate (4.24) unreleased; urgency=medium
 
-  * UNRELEASED
+  * pollinate:
+    - remove duplicate config file sourcing
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 30 Aug 2016 13:47:14 -0500
 
