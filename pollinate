@@ -93,10 +93,11 @@ user_agent() {
 	# Very similar to Firefox and Chrome
 	local ver="$(dpkg -l pollinate 2>/dev/null | grep -m1 "^ii" | awk '{print $3}')"
 	local curl_ver="$(dpkg -l curl 2>/dev/null | grep -m1 "^ii" | awk '{print $3}')"
-	local lsb="$(lsb_release -is)/$(lsb_release -rs)"
+	local cloud_init="cloud-init/$(dpkg -l cloud-init 2>/dev/null | grep -m1 "^ii" | awk '{print $3}')"
+	. /etc/lsb-release
+	local lsb=$(echo "${DISTRIB_DESCRIPTION}" | sed -e "s/ /\//g") 
 	local platform="$(uname -o)/$(uname -r)/$(uname -m)"
 	local cpu="$(grep -m1 "^model name" /proc/cpuinfo | sed -e "s/.*: //" -e "s:\s\+:/:g")"
-	local cloud_init="cloud-init/$(dpkg -l cloud-init 2>/dev/null | grep -m1 "^ii" | awk '{print $3}')"
 	USER_AGENT="pollinate${TESTING}/${ver} curl/${curl_ver} ${cloud_init} ${lsb} ${platform} ${cpu}"
 }
 

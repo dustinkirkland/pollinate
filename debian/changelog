@@ -41,7 +41,7 @@ pollinate (4.20-0ubuntu1) yakkety; urgency=medium
 
 pollinate (4.19-0ubuntu1) yakkety; urgency=medium
 
-  [ Martin Pitt ] 
+  [ Martin Pitt ]
   * debian/pollinate.service: Move installation from network.target to
     multi-user.target. network.target is too early and causes dependency loops
     with e. g. NFS. (LP: #1576333)
