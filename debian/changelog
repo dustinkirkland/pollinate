@@ -1,4 +1,4 @@
-pollinate (4.23) unreleased; urgency=medium
+pollinate (4.23-0ubuntu1) yakkety; urgency=medium
 
   * pollinate:
     - revert revision r300, as this was the wrong fix to the slow pollinate
@@ -9,7 +9,7 @@ pollinate (4.23) unreleased; urgency=medium
       to work properly and be resilient against issues with the network
       coming up early in boot
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 29 Aug 2016 22:23:39 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 30 Aug 2016 13:47:12 -0500
 
 pollinate (4.22-0ubuntu1) yakkety; urgency=medium
 
