@@ -1,10 +1,10 @@
-pollinate (4.24) unreleased; urgency=medium
+pollinate (4.24-0ubuntu1) zesty; urgency=medium
 
   * pollinate:
     - remove duplicate config file sourcing
     - add uptime/idletime to user agent to help detect abuse, LP: #1638552
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 30 Aug 2016 13:47:14 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 02 Nov 2016 14:47:00 +0200
 
 pollinate (4.23-0ubuntu1) yakkety; urgency=medium
 
