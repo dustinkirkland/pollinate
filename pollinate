@@ -98,7 +98,10 @@ user_agent() {
 	local lsb=$(echo "${DISTRIB_DESCRIPTION}" | sed -e "s/ /\//g")
 	local platform="$(uname -o)/$(uname -r)/$(uname -m)"
 	local cpu="$(grep -m1 "^model name" /proc/cpuinfo | sed -e "s/.*: //" -e "s:\s\+:/:g")"
-	USER_AGENT="pollinate${TESTING}/${pollinate_ver} curl/${curl_ver} cloud-init/${cloud_init_ver} ${lsb} ${platform} ${cpu}"
+	local up idle
+	read up idle < /proc/uptime
+	local uptime="uptime/$up/$idle"
+	USER_AGENT="pollinate${TESTING}/${pollinate_ver} curl/${curl_ver} cloud-init/${cloud_init_ver} ${lsb} ${platform} ${cpu} ${uptime}"
 }
 
 exchange() {
