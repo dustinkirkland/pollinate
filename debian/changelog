@@ -1,3 +1,9 @@
+pollinate (4.26) unreleased; urgency=medium
+
+  * UNRELEASED
+
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 14 Jan 2017 08:45:46 +0100
+
 pollinate (4.25-0ubuntu1) zesty; urgency=medium
 
   [ Stefano Rivera ]
