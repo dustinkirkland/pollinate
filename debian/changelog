@@ -1,4 +1,4 @@
-pollinate (4.25) unreleased; urgency=medium
+pollinate (4.25-0ubuntu1) zesty; urgency=medium
 
   [ Stefano Rivera ]
   * debian/control: Add missing dependency on xxd. (LP: #1656484)
@@ -6,7 +6,7 @@ pollinate (4.25) unreleased; urgency=medium
   [ Dustin Kirkland ]
   * debian/control: xxd is provided by vim-common in older Ubuntu releases
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 02 Nov 2016 14:47:01 +0200
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 14 Jan 2017 08:45:44 +0100
 
 pollinate (4.24-0ubuntu1) zesty; urgency=medium
 
