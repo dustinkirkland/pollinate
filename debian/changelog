@@ -1,6 +1,7 @@
 pollinate (4.25) unreleased; urgency=medium
 
-  * UNRELEASED
+  [ Stefano Rivera ]
+  * debian/control: Add missing dependency on xxd. (LP: #1656484)
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 02 Nov 2016 14:47:01 +0200
 
