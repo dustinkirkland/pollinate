@@ -1,6 +1,7 @@
 pollinate (4.26) unreleased; urgency=medium
 
-  * UNRELEASED
+  [ Scott Moser ]
+  * Perform as safe read of /proc/uptime LP: #1708461
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 14 Jan 2017 08:45:46 +0100
 
