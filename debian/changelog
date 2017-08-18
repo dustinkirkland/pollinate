@@ -1,4 +1,4 @@
-pollinate (4.27) unreleased; urgency=medium
+pollinate (4.27-0ubuntu1) artful; urgency=medium
 
   * Fixup maintscript & version missmatch from the previous upload.
 
