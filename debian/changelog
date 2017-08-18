@@ -5,6 +5,8 @@ pollinate (4.26) unreleased; urgency=medium
 
   [ Dimitri John Ledkov ]
   * Drop upstart system job
+  * Drop no longer needed build-deps, and redundantly specified essential
+    bsdutils
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 14 Jan 2017 08:45:46 +0100
 

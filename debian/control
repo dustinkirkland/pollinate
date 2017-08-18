@@ -2,17 +2,13 @@ Source: pollinate
 Section: admin
 Priority: optional
 Maintainer: Dustin Kirkland <kirkland@ubuntu.com>
-Build-Depends: debhelper (>= 7.0.50~),
- dh-systemd | dh-apparmor,
- autotools-dev,
- autoconf,
- automake,
+Build-Depends: debhelper (>= 7.0.50~), dh-systemd
 Standards-Version: 3.9.8
 Homepage: http://launchpad.net/pollinate
 
 Package: pollinate
 Architecture: all
-Depends: ${misc:Depends}, curl, adduser, bsdutils, xxd | vim-common
+Depends: ${misc:Depends}, curl, adduser, xxd | vim-common
 Description: seed the pseudo random number generator
  This client will connect to one or more Pollen (entropy-as-a-service)
  servers over an (optionally) encrypted connection and retrieve a random
