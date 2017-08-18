@@ -1,3 +1,9 @@
+pollinate (4.27) unreleased; urgency=medium
+
+  * UNRELEASED
+
+ -- Dimitri John Ledkov <xnox@ubuntu.com>  Fri, 18 Aug 2017 13:13:16 +0100
+
 pollinate (4.26-0ubuntu1) artful; urgency=medium
 
   [ Scott Moser ]
