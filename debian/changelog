@@ -3,6 +3,9 @@ pollinate (4.26) unreleased; urgency=medium
   [ Scott Moser ]
   * Perform as safe read of /proc/uptime LP: #1708461
 
+  [ Dimitri John Ledkov ]
+  * Drop upstart system job
+
  -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 14 Jan 2017 08:45:46 +0100
 
 pollinate (4.25-0ubuntu1) zesty; urgency=medium

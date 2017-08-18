@@ -2,11 +2,6 @@
 
 PKG="pollinate"
 
-# Repair busted/broken conffile from 3.12-0ubuntu1, LP: #1278770
-if [ "$(md5sum /etc/init/pollinate.conf | awk '{print $1}')" = "2d63aa17344c4ed9ebd54c9abc6cd937" ]; then
-	sed -i -e "s/^setuid daemon/setuid root/" /etc/init/pollinate.conf
-fi
-
 # Clean up after moving [Install] from network.target to multi-user.target
 # LP: #1576333, keep until after 18.04 LTS
 if [ -L /etc/systemd/system/network.target.wants/pollinate.service ]; then
