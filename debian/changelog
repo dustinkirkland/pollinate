@@ -1,4 +1,4 @@
-pollinate (4.26) unreleased; urgency=medium
+pollinate (4.26-0ubuntu1) artful; urgency=medium
 
   [ Scott Moser ]
   * Perform as safe read of /proc/uptime LP: #1708461
