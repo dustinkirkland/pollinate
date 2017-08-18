@@ -1,6 +1,6 @@
 pollinate (4.27) unreleased; urgency=medium
 
-  * UNRELEASED
+  * Fixup maintscript & version missmatch from the previous upload.
 
  -- Dimitri John Ledkov <xnox@ubuntu.com>  Fri, 18 Aug 2017 13:13:16 +0100
 
