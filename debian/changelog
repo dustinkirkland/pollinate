@@ -8,6 +8,7 @@ pollinate (4.26) unreleased; urgency=medium
   * Drop no longer needed build-deps, and redundantly specified essential
     bsdutils
   * Fix spelling typo in the description
+  * Bump debhelper compat to 9, previous levels are deprecated
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 14 Jan 2017 08:45:46 +0100
 
