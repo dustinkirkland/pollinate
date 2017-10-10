@@ -99,9 +99,15 @@ user_agent() {
 	local platform="$(uname -o)/$(uname -r)/$(uname -m)"
 	local cpu="$(grep -m1 "^model name" /proc/cpuinfo | sed -e "s/.*: //" -e "s:\s\+:/:g")"
 	local up="NA" idle="NA"
+	local kvm=
+	(dmesg | grep -qs -m 1 " kvm-clock: " 2>/dev/null) && kvm="kvm/" || kvm=""
+	local lxd=
+	[ -d "/dev/lxd" ] && lxd="lxd/"
+	local xen=
+	[ -d "/dev/xen" ] && xen="xen/"
 	{ read up idle < /proc/uptime ; } >/dev/null 2>&1 || :
 	local uptime="uptime/$up/$idle"
-	USER_AGENT="pollinate${TESTING}/${pollinate_ver} curl/${curl_ver} cloud-init/${cloud_init_ver} ${lsb} ${platform} ${cpu} ${uptime}"
+	USER_AGENT="pollinate${TESTING}/${pollinate_ver} curl/${curl_ver} cloud-init/${cloud_init_ver} ${lsb} ${platform} ${cpu} ${uptime} ${kvm} ${lxd} ${xen}"
 }
 
 exchange() {

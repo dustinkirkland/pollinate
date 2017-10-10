@@ -1,6 +1,8 @@
 pollinate (4.28) unreleased; urgency=medium
 
-  * UNRELEASED
+  [ Dustin Kirkland ]
+  * pollinate:
+    - add hypervisor to useragent string
 
  -- Dimitri John Ledkov <xnox@ubuntu.com>  Fri, 18 Aug 2017 17:54:31 +0100
 
